@@ -8,7 +8,7 @@ CS 4630: Defense Against the Dark Arts (DADA)
 ### M/W/F 10:00-10:50, Rice 130
 
 **Instructor:** Aaron Bloomfield (aaron@virginia.edu). Office is Rice
-  Hall, room 403. Office hours are M/W 1:30-3:00 and other times by
+  Hall, room 403. Office hours are M/W 1:00-2:30 and other times by
   appointment
 
 **Pre-requisites:** This course requires completion of CS 2150 with a

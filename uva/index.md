@@ -18,8 +18,8 @@ Lectures (fall 2017)
 --------------------
 
 | Num | Date        | Day of week | Planned topic |Actual lecture progress (and recording) | 
-|-----|-------------|-------------|---------------|---------------|
-| 1   | Aug&nbsp;23 | Wednesday   | [course introduction][101] |               |
+|---|-----|------|---------------|------------------|
+| 1   | Aug&nbsp;23 | Wednesday   | [course introduction][101] | [course introduction][101], slides 1 to 4.10 (end) |
 | 2   | Aug&nbsp;25 | Friday      |               |               |
 | 3   | Aug&nbsp;28 | Monday      |               |               |
 | 4   | Aug&nbsp;30 | Wednesday   |               |               |
