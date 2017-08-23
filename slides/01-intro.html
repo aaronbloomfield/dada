@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CS 4630: Defense Against the Dark Arts slide set</title>
+    <meta name="description" content="A set of slides for UVa's Defense Against the Dark Arts course">
+    <meta name="author" content="Aaron Bloomfield">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../slides/reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="../slides/reveal.js/css/theme/black.css" id="theme">
+    <link rel="stylesheet" href="../slides/dada.css">
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="../slides/reveal.js/lib/css/zenburn.css">
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+      <section data-markdown><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;
+## Course Introduction
+	</script></section>
+
+      <section>
+	
+	<section data-markdown><script type="text/template">
+# Motivation
+	</script></section>
+      
+	<section data-markdown><script type="text/template">
+## First, a definition...
+> malware: software that is intended to damage or disable computers and computer systems
+	</script></section>
+      
+	<section data-markdown><script type="text/template">
+## Costs of Malware
+- Cost of malware (worldwide):
+  - 1997: $3.3 billion ([source](http://www.computereconomics.com/article.cfm?id=1225))
+  - 2006: $13.3 billion ([source](http://www.computereconomics.com/article.cfm?id=1225))
+  - 2014: $491 billion ([source](https://www.scmagazine.com/breaches-malware-to-cost-491-billion-in-2014-study-says/article/539302/))
+- Companies often cover up the worst cases
+- Does not include cost of security measures
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Malware Costs: Example 1
+- April 1999 time bomb: [Chernobyl](http://en.wikipedia.org/wiki/CIH_virus)
+  - Overwrites first megabyte of the hard drive with zeros, then overwrites the BIOS
+  - Only affects Windows 95, 98, and ME
+- $250 million lost in one day in Korea alone; widespread across Asia
+- Hard to quantify cost of lost files, time spent reinstalling OS and applications, etc.
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Malware Costs: Example 2
+- May 2000 mass mailer: [LoveLetter](http://en.wikipedia.org/wiki/Loveletter)
+  - Visual Basic script attached to email
+  - Re-mailed itself to first 500 addresses in Outlook address book and also chat software
+  - Also installed password-stealing software
+  - Finally, copied itself over numerous existing files, destroying them
+  - Caused $5.5 billion in damage
+    - Ford Motor Company, among others, shut down all email for three days
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Malware Costs: Example 3
+- Winter / spring 2009: [Conficker virus](http://en.wikipedia.org/wiki/Conficker)
+  - The largest computer worm infection since 2003
+  - More than ten million computers infected and under it's control
+  - Used many of the techniques we will learn in this course
+  - These controlled computer did not attempt to perform significant malicious action so the cost was minimal (other than removal)
+    - But it could have been very high...
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Malware Costs: Example 4
+- 2010 / 2011: [Stuxnet worm](http://en.wikipedia.org/wiki/Stuxnet)
+  - By far the most advanced piece of malware ever created at that point
+  - It's goal (and it succeeded!) was to cripple Iran's nuclear enrichment
+    - Said program was set back by 1-2 years
+  - Authors have not come forward, but speculation is a joint Israel / US team
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Malware Costs: Example 5
+- [Ashley Madison data breach](https://en.wikipedia.org/wiki/Ashley_Madison_data_breach)
+  - This is the site that peddled extra-marital affairs
+  - They threated to release the site's DB info unless the site was closed down
+    - No ransom was requested!
+  - They did reveal the information, which led to embarassment and some suicides
+  - Interestingly, almost all of the "female" members were bots...
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Malware Costs: Example 6
+- [2016 US election hacks](https://en.wikipedia.org/wiki/Russian_interference_in_the_2016_United_States_elections)
+  - "The US intelligence community has concluded with high confidence that the Russian government interfered in the ... election"
+  - Whether it affected the outcome is up for debate (and not one I want to engage in)
+  - But the fact that they were able to interfere is worrisome
+- Interfering in elections is a common tactic; the US has done so a lot as well ([source](https://www.washingtonpost.com/news/worldviews/wp/2016/10/13/the-long-history-of-the-u-s-interfering-with-elections-elsewhere/))
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Malware Costs: Conclusion
+- Computer viruses and other security attacks are very costly
+- Computer security is a hot field today; many career and research opportunities for graduates from this course
+- Knowledge of security issues is sensitive and carries an ethical responsibility with it
+- ...but how can you write a detection software for a virus that does not exist yet?
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Some more motivations
+- US bills [SOPA](https://en.wikipedia.org/wiki/Stop_Online_Piracy_Act) / [PIPA](https://en.wikipedia.org/wiki/PROTECT_IP_Act) from 2011 were intended to hinder piracy, it would allow serious security problems
+  - There have been many such attempts since
+- US drone fleet virus (see articles [here](http://www.tgdaily.com/security-features/58927-virus-infects-us-military-drones) and [here](https://www.wired.com/2011/10/virus-hits-drone-fleet/))
+  - And people thought viruses were a thing of the past!
+	</script></section>
+
+	<section>
+	  <h2>A UVa hack (2013)</h2>
+	  <img class="stretch" src="images/01-intro/root-the-box-uva-hack.png">
+	  (<a href="http://www.c-ville.com/anatomy-of-a-hack-examining-root-the-boxs-attack-on-uvas-website/#.WZz6w3XythE">source</a>)
+	</section>
+	  
+	<section>
+	  <h2>Another UVa hack (2015)</h2>
+	  <img class="stretch" src="images/01-intro/uva-chinese-hack.png">
+	  (<a href="http://www.thedailybeast.com/chinese-hackers-target-us-university-with-government-ties">source</a>)
+	</section>
+
+	<section>
+	  <h2>Yet another UVa hack (2016)</h2>
+	  <img class="stretch" src="images/01-intro/uva-phishing-hack.png">
+	  (<a href="https://www.washingtonpost.com/news/grade-point/wp/2016/01/22/phishing-hack-at-the-university-of-virginia-compromises-employee-computer-records/">source</a>)
+	</section>
+
+	
+	
+      </section>
+
+      <section>
+	
+	<section data-markdown><script type="text/template">
+# Course Information
+	</script></section>
+      
+	<section data-markdown><script type="text/template">
+## Course Objectives
+- Understand the nature and types of viruses (and other malware), and how they are threats to computer systems.
+- Learn the techniques used to prevent, detect, repair, and defend against viruses and worms.
+- Learn to use program binary examination tools to detect malicious code.
+- Understand the ethical issues surrounding computer security violations.
+	</script></section>
+      
+	<section data-markdown><script type="text/template">
+## Class Information
+- Prerequisites: CS 2150 with a grade of C- or higher
+- Grades
+  - One midterm (15% on Wednesday, October 11th)
+  - Final exam (25%)
+  - Assignments, which are mostly programming assignments (50%)
+  - Class participation, pop quizzes (10%)
+- I reserve the right to adjust the percentages based on the number of assignments and quizzes, and other factors
+	</script></section>
+      
+	<section data-markdown><script type="text/template">
+## Final exam
+- It's on Friday, December 15 at 9 a.m.
+- I know it's the last day of final exams
+  - I didn't get to choose the date and time...
+- You can't take it early, so please don't ask
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Class Information
+- No textbooks required
+  - They get outdated too quickly!
+  - Readings will be via provided PDFs and online materials
+- Late homework is docked 25% per day (or fraction thereof)
+- Thus, more than 72 hours late will receive a zero 
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Us and you
+- My office hours are M/W from 1:30-3:00; they start next week
+- We also have TAs for this course
+- I avoid e-mailing the class; announcements will be discussed each day in lecture
+- To contact me, please use the support tickets tool via the "Course Tools" tool in Collab
+  - Or directly via https://libra.cs.virginia.edu/~pedagogy/index.php
+  - It will allow for a much faster response time
+- We'll also have Piazza as well
+	</script></section>
+      
+	<section data-markdown><script type="text/template">
+## Course Materials
+- They are kept in a github repo: https://github.com/aaronbloomfield/dada
+  - Released under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/) (CC BY-SA) license
+- That repo is viewable online at http://aaronbloomfield.github.io/dada/
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Collab
+- We'll use for only a few things:
+  - Quick login to the submission system
+  - Piazza link
+  - Large file downloads
+  - Not much else...
+- It will be available later this week
+- Recall that most of the course materials are in the [github repo](https://github.com/aaronbloomfield/dada)
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Tentative schedule
+
+- Too long to list here, but a list of topics we will cover is shown in the [course syllabus](../uva/syllabus.html)
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Homeworks
+- There are expected to be one assignment every 1.5 weeks, on average
+  -  Some will be shorter and easier, some will be longer and harder
+- Both programming assignments as well as occasional pencil and paper assignments
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Completing the homeworks
+- You can use a VirtualBox image we will provide
+- You can use a docker image we will provide
+- You can run it on your own computer
+- You can use the lab computers
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Honor policy
+- All assignments are individual assignments
+- You can talk at a high level about the assignment
+- You cannot look at anybody elses code prior to either of your submissions
+  - Including a later submission!
+	</script></section>
+	
+	  <section data-markdown><script type="text/template">
+## Student support
+- [The events of 11 days ago](https://en.wikipedia.org/wiki/Unite_the_Right_rally) will have affected each of us in one way or the other
+- In addition, this year will likely be stressful
+- Remember that there are many student resources when you need support:
+  - Lisa Lampe and Julie Carrucio in the Engineering office
+  - CAPS
+  - UVa student support (from CLAS): http://college.as.virginia.edu/student-services
+  - And feel free to chat with us at any time
+	  </script></section>
+      </section>
+
+
+      <section>
+	
+	<section data-markdown><script type="text/template">
+# Ethics
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Computer Ethics
+- We must teach how attacks upon computer systems work in order to teach defenses against attacks
+- Information about attacks must NEVER be used to attack any computer system in any way
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Ethics Pledge
+- You will have to read and sign the ethics pledge
+- It should not be difficult to follow
+- Ethics will be covered in more detail later
+- You cannot continue in the course without signing the [ethics pledge](../uva/ethics-pledge.pdf)!
+- I'll collect them in the next class
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Ethics Pledge Points
+- Unauthorized use of computer resources is forbidden	
+- Even a virus or worm that does nothing but copy itself uses resources
+- Don't ever rationalize that a system owner won't object to your actions; ask permission
+  - If you are afraid to ask permission, it must be forbidden!
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Example: [1988 Morris Worm](http://en.wikipedia.org/wiki/Morris_worm)
+- Creator rationalized that the worm did no damage
+  - It only copied itself from system to system over the Internet
+- BUT: Copying monopolized system resources until they had to be shut down
+- Worm reached 10% of entire internet
+- Creator did not realize it would be that resource-intensive
+- Creator was convicted of felonies!
+  - And is now a professor at MIT.  Go figure!
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Morris Worm Lessons
+- Consequences of a virus or worm cannot always be foreseen
+- Severe damage can be done without destroying data
+- Excessive resource usage is destructive enough to be criminal
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Criminal Prosecution
+- Attackers have been prosecuted for:
+  - Stealing passwords, even if never used 
+  - Copying copyrighted materials
+  - Accessing confidential data, even if it was never used for harmful purposes
+  - Entering a system without permission, causing sys admins to spend time tracking them and securing the system, even without otherwise causing harm
+- Moral: Don't assume it is legally safe to do any of the above
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Ethics Violations
+- Violations by students endanger our ability to offer this course
+- As a result, they will be treated severely
+  - UJC (University Judiciary Committee)
+  - Course grades
+  - Criminal prosecution
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## ACM Code of Ethics
+- ACM is the primary professional organization for computer scientists
+- The entire code is available at http://www.acm.org/about/code-of-ethics 
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Ethics Questions
+- Scenario: John Doe attempts to guess the password of a user of a system on which John Doe has no account. After a few guesses, he succeeds, but finds nothing of interest on the system and logs off.
+- Q1: Has he committed a crime?
+- Q2: Are his actions analogous to any common crime not involving computers?
+	</script></section>
+
+      </section>
+
+    </div>
+  </div>
+
+    <script src="../slides/reveal.js/lib/js/head.min.js"></script> 
+    <script src="../slides/reveal.js/js/reveal.js"></script>
+    <script src="../slides/settings.js"></script> 
+  </body>
+</html>
