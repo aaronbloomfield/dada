@@ -101,7 +101,7 @@ A few options:
 - Run the command `uname -a`
 - Take a screen shot of your terminal window. Name it hw1.png or hw1.jpg.  There are several options for doing this:
     - Research, for example with web search, how to do this in your host OS
-	- Take screen shot in the VM's OS using gnome-screen shot -i
+	- Take screen shot in the VM's OS using `gnome-screenshot -i`
 	- Research an alternate way to take a screen shot in your host OS
 - Submit the screen shot via Collab as your submission for this assignment.
 
