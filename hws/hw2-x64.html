@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>DADA: HW 2: x64 assembly</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../markdown.css" type="text/css" />
+</head>
+<body>
+<h1 id="dada-hw-2-x64-assembly">DADA: HW 2: x64 assembly</h1>
+<p><a href="index.html">Go up to the main DADA homeworks page</a> (<a href="index.md">md</a>)</p>
+<h3 id="introduction">Introduction</h3>
+<p>This assignment will refresh your knowledge of x86 assembly language (which you will have to analyze in all the virus detection assignments later in this semester), expose you to the &quot;tricky jump&quot; style of code often used by virus writers, and familiarize you with a couple of key tools used in the analysis of programs in their binary form.</p>
+<p>The reference platform for this project is the 64-bit Linux VirtualBox image. Although most viruses are for the Windows platform, for reasons described in class, we are using the Linux platform to make this assignment easier to perform. Similar binary analysis tools exist on Windows (and Mac OS X) platforms.</p>
+<p>You are welcome to use Mac OS X -- or even Windows -- to write and compile your code. However, it needs to work under Linux. Your C/C++ code may have to call <code>_foo()</code> instead of <code>foo()</code> - try each one to see which one works. When you submit it, it should <strong>not</strong> have the underscore. The binary analysis will have to be done under the reference platform of 64-bit Linux.</p>
+<h3 id="part-1-x86-code">Part 1: x86 code</h3>
+<ul>
+<li>Read the <a href="../docs/tricky-jump.html">tricky jump document</a> (<a href="../docs/tricky-jump.md">md</a>)</li>
+<li>Use the C++ code shown below for the main.cpp</li>
+<li>Create an x86 assembly language file called density.s, in your favorite text editor that computes the volume and density of a rectangular solid object
+<ul>
+<li>To avoid the messiness of doing input and output in x86 assembly, the routine will be called from a C++ language <code>main()</code> function, and the numerical values of the length, width, height, and weight of the object are to be passed in as parameters to the subroutine(s).</li>
+<li>The program may assume that the dimensions are in inches and the weight in pounds, and the density is to be computed in units of pounds per cubic inch.</li>
+<li>Integer computations are expected, not floating point.</li>
+<li>The assembly routines should compute the volume (as that is the method that was called), then execute a &quot;tricky jump&quot; to a function that computes the density</li>
+<li>Return directly from this density function to <code>main()</code>, passing back the density (not volume!) as the return value.</li>
+<li>Thus, we are storing the density value into the volume variable.</li>
+</ul></li>
+<li>Create an appropriate Makefile to compile your project; see the links above for details. Your executable needs to be named <code>volume</code>!</li>
+<li>Answer the questions below about the executable that you created (<code>volume</code>), and put those answers into a file named analysis.pdf.</li>
+</ul>
+<p>Your Makefile MUST generate an executable called <code>volume</code>! Anything else will not be graded!</p>
+<p>Use the following code for your main.cpp. Note that, for the parameters given, the volume is 960 and the density is 5.</p>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+extern &quot;C&quot; int volume (int, int, int, int);
+
+int  main () {
+  int len = 12, width = 8, height = 10, weight = 4800;
+  int vol = volume(len, width, height, weight);
+  cout &lt;&lt; &quot;volume: &quot; &lt;&lt; vol &lt;&lt; endl;
+  return 0;
+}</code></pre>
+<p>The questions to answer are below. There are a number of command-line tools that can be used to generate these answers, which are listed by each question. You can type <code>man foo</code> at the Linux command prompt to see the full manual page about the 'foo' program. Some of the commands below require to to use specific flags described in the manual page for each command.</p>
+<p>See &quot;Notes on interpreting the objdump file&quot;, below, for help interpreting the output.</p>
+<ul>
+<li>What are the addresses or registers of the four local variables in <code>main()</code>?</li>
+<li>Look at the list of symbols in the executable via the <code>nm</code> command; there should be 50 or so. Which of these do you recognize? Google for some others to determine what their purpose is.</li>
+<li>View a disassembly of the executable via <code>objdump -sRrd volume</code>. <strong>WARNING:</strong> this output is <em>not</em> in the assembly format that was studied in CS 2150; see <a href="http://aaronbloomfield.github.io/pdr/slides/08-assembly-64bit.html#/9/8">here</a> for the details of the differences.
+<ul>
+<li>What are the addresses or registers of the four parameters passed into <code>volume()</code>?</li>
+<li>What shared libraries are used by your program? Briefly, what are each of these libraries? Look at the 'ldd' command.</li>
+<li><code>__libc_start_main</code> is passed several (constant) addresses. What do these appear to represent? (It is sufficient to identify what things they are addresses of.)</li>
+<li>What is the shortest x86 assembly command, in terms of bytes? If there are many, you need just list one</li>
+<li>What is the longest command? Again, if there are many, you need just list one.</li>
+<li>How could we determine if a tricky jump appears in the assembly code?</li>
+</ul></li>
+<li>Look at the information output by <code>readelf -d</code>.
+<ul>
+<li>What information can we gleam about this executable from the ELF header?</li>
+<li>Based on the &quot;entry point address&quot;, and the output from the 'nm' command, above, what is the entry point of the program?</li>
+</ul></li>
+</ul>
+<p>Answer these questions in a PDF file called analysis.pdf. Copy the questions above (you can from the web page copy of this assignment) and type your answers below each question. Below each answer, copy and paste the specific portions of the tools output that were used to answer the question.</p>
+<h3 id="part-2-detecting-tricky-jumps">Part 2: detecting tricky jumps</h3>
+<p>Write a separate C or C++ program that takes in, as the input, an objdump from the above executable. It should read it in as standard input - we are not dealing with file input and output. First, you may want to save the output of objdump to a file:</p>
+<pre><code>objdump -sRrd volume &gt; input.txt</code></pre>
+<p>Your program must read in that file via standard input:</p>
+<pre><code>./tricky &lt; input.txt</code></pre>
+<p>Your program is to detect if there is a tricky jump in that code. You can assume a few things to make this easier:</p>
+<ul>
+<li>A tricky jump will appear as a push right before a ret, as described herein (and implemented above)</li>
+<li>You can assume the EXACT format of the input file is what <code>objdump -sRrd</code> outputs; this means the commands you are looking for are <code>pushq</code> and <code>retq</code></li>
+</ul>
+<p>If a tricky jump is found, then you should output &quot;tricky jump found!&quot; for <strong>each</strong> time it's found. If there are <strong>no</strong> tricky jumps, then output &quot;tricky jump not found&quot;.</p>
+<p>We are not looking for error-proof or long-winded code! The reference solution was about 20 lines.</p>
+<p>Your Makefile MUST generate an executable called <code>tricky</code>! Anything else will not be graded!</p>
+<h3 id="part-3-makefile">Part 3: Makefile</h3>
+<p>You will need to create a Makefile that will compile the programs. There are three <strong>required</strong> aspects to the Makefile.</p>
+<ul>
+<li>The volume/density problem from part 1 must compile to an executable named <code>volume</code></li>
+<li>The tricky jump detection problem from part 2 must compile to an executable named <code>tricky</code></li>
+</ul>
+<p>You may want to start with the Makefile for the vecsum program provided in CS 2150 (see <a href="http://aaronbloomfield.github.io/pdr/labs/lab08-64bit/index.html">here</a>). That example uses clang++ as the compiler, but you can use either clang++ or g++.</p>
+<p>It's fine if your source code files are named something slightly different, as long as your Makefile can compile both of them. We just have to be able to reasonably tell which source code file name is which. But the executables need to be named exactly the same as specified herein.</p>
+<h3 id="notes-on-interpreting-the-objdump-file">Notes on interpreting the objdump file</h3>
+<p>This section (and some of the questions for analysis.pdf) was taken with permission from Charles Reiss (original was <a href="https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/re.html">here</a>).</p>
+<p><strong>General format</strong></p>
+<p>The objdump output we provide contains several parts corresponding to several parts of the executable, which are described in more detail below:</p>
+<ul>
+<li><p>Information about the type of executable file. This indicates what architecture it is for, that it is in Linux's ELF format, and the address at which execution of the program starts.</p></li>
+<li><p>The actual contents of each &quot;section&quot; of the executable that will be loaded into memory. The sections have names like &quot;.text&quot; and &quot;.dynstr&quot; depending on their purpose. These will look something like:</p>
+<pre><code>Contents of section .text:
+ 4004d0 4883ec28 ba050000 00be0c00 00004889  H..(..........H.
+ 4004e0 e764488b 04252800 00004889 44241831  .dH..%(...H.D$.1
+ 4004f0 c0e83a01 0000488d 74240c48 89e031d2  ..:...H.t$.H..1.</code></pre>
+<p>The leftmost column indicates the address (in hexadecimal) where this data will be loaded in memory. The next four columns are the hexadecimal values actually placed in memory. These values are written in the order the bytes appear in memory, so the value &quot;0x12345678&quot; in little Endian will appear as &quot;78563412&quot;. The final columns are the same values represented as characters, except a period (<code>.</code>) is used to represent bytes which do not correspond to a printable ASCII character.</p></li>
+<li><p>Disassembled versions of sections that contain executable code. These will look something like:</p>
+<pre><code>0000000000400460 &lt;_init&gt;:
+  400460:       48 83 ec 08             sub    $0x8,%rsp
+  400464:       48 8b 05 8d 0b 20 00    mov    0x200b8d(%rip),%rax        # 600ff8 &lt;_DYNAMIC+0x1d0&gt;
+  40046b:       48 85 c0                test   %rax,%rax
+  40046e:       74 05                   je     400475 &lt;_init+0x15&gt;
+  400470:       e8 3b 00 00 00          callq  4004b0 &lt;__gmon_start__@plt&gt;
+  400475:       48 83 c4 08             add    $0x8,%rsp
+  400479:       c3                      retq</code></pre>
+<p>This indicates that there is a label called <code>_init</code> which has the address &quot;0x400460&quot; when the executable is loaded. Each following line is an instruction. The value before the colon indicates the memory address in hexadecimal of the first byte of the instruction. The hexadecimal values after the colon are the bytes of the instruction in hexadecimal. Following this is the disassembled instruction itself.</p>
+<p>Within the disassembled instructions, <code>objdump</code> attempts to provide information about addresses in addition to showing the addresses encoded in the instruction. In cases where the label is exactly equal to the address, like for the label <code>__gmon_start__@plt</code> in the example above, the format is <code>address &lt;LABEL&gt;</code> with the address in hexadecimal. In cases where the address does not correspond to a label, the format is <code>address &lt;LABEL+offset&gt;</code>. For example <code>400475 &lt;_init+0x15&gt;</code> indicates the address &quot;0x400475&quot;, which is 0x15 bytes after the label <code>_init</code>.</p>
+<p>On 64-bit x86, some instructions specify an address relative to <code>%rip</code>. <code>%rip</code> represents the &quot;instruction pointer&quot;, which in 2150 and 3330 we have called the &quot;program counter&quot;. It is the address of the current instruction, so <code>0x200b8d(%rip)</code> means memory 0x200b8d bytes after the address of the current instruction. <code>objdump</code>'s disassembly includes a comment indicating what address is computed. In the case of the example above, the address is 0x600ff8, which is 0x1d0 bytes after the label <code>_DYNAMIC</code>.</p></li>
+</ul>
+<p>Note that this is not all the information in the executable and not all the information that objdump is capable of providing.</p>
+<p><strong>On dynamic linking</strong></p>
+<p>This executable is dynamically linked, so it doesn't include code for functions in the C standard library like <code>printf()</code>. These are loaded at runtime by the dynamic linker which is contained in <code>/lib64/ld-linux-x86-64.so.2</code>. The way Linux implements dynamic linking involves having this program handle loading all dynamically linked executables as an interpreter.</p>
+<p>As part of Linux's implementation of dynamic linking, there is a Procedure Linkage Table (PLT). This contains &quot;stubs&quot; for each function the executable expects to find in a dynamically linked library, like the C standard library. One of the &quot;stubs&quot; looks like:</p>
+<pre><code>00000000004004c0 &lt;__printf_chk@plt&gt;:
+  4004c0:       ff 25 6a 0b 20 00       jmpq   *0x200b6a(%rip)        # 601030 &lt;_GLOBAL_OFFSET_TABLE_+0x30&gt;
+  4004c6:       68 03 00 00 00          pushq  $0x3
+  4004cb:       e9 b0 ff ff ff          jmpq   400480 &lt;_init+0x20&gt;</code></pre>
+<p>This stub is called <code>__print_chk@plt</code> and is loaded into the program's memory at address 0x4004c0. The first instruction in this function reads the <em>address of a function</em> from memory at 0x601030, then jumps to that function. As indicated by the comment added by <code>objdump</code> this address is part of the &quot;global offset table&quot;. This is an array of pointers used to find functions like <code>printf()</code> which are loaded every time the executable runs. Using this table allows the same program to work with different implementations of <code>printf()</code>, where printf may end up at different locations in memory. For example, in this case the global offset table will eventually contain the address at which <code>__printf_chk</code>, part of the Linux C library's implementation of <code>printf()</code> is loaded into memory.</p>
+<p>By default, the values in this global offset table are initialized to point to the instruction following the jump, for example 0x601030 contains 0x4004c6. This means that the first time the &quot;stub&quot; is called, it will &quot;fall through&quot; to the code after the global offset table jump. This code pushes an indicator of what function was called on the stack, then jumps to part of the dynamic linker. (This code is not included in the executable file, and therefore not present in the objdump output.) The dynamic linker will then locate the actual routine (the implementation of <code>__printf_chk</code> in the standard library, in this case) and update the global offset table to contain its address.</p>
+<p><strong>On <code>_start</code></strong></p>
+<p>Execution of the program does not actually start in main but starts in a function called <code>_start</code> that is provided by the compiler -- this is the start address specified in the program header. This function calls a special function in the C standard library called <code>__libc_start_main</code>. It is this function that actually calls <code>main()</code> and takes care of exiting when <code>main()</code> returns.</p>
+<p><strong>On <code>%fs</code></strong></p>
+<p>x86 has a feature called &quot;segmentation&quot;. As part of this feature, the processor has several &quot;segment registers&quot; which specify a region of memory -- essentially the segment register acts as a pointer. <code>%fs:0x28</code> specifies to use segment register <code>%fs</code> and access a value 0x28 bytes from the beginning of the memory region it identifies.</p>
+<p>On Linux, the <code>%fs</code> segment register is used for &quot;thread-local storage&quot; -- to point to a block of data particular to a thread, even in a multithreaded process.</p>
+<p>On Windows, the <code>%gs</code> segment register is used for something similar.</p>
+<p>The use of a segment register for this purpose instead of a normal register is just to make sure as many registers are available to the program as possible.</p>
+<p>Segmentation was originally intended to provide functionality similar to virtual memory. These days, it is rarely used for this purpose, and its primary use is to support thread-local storage, as occurs briefly in the assembly in this assignment. It is, still, however, universally present on x86 and is entangled with x86's implementation of kernel mode and exceptions.</p>
+<h3 id="items-to-submit">Items to Submit</h3>
+<p>These files need to be submitted to the HW 2 assignment via the course tools submission.</p>
+<ul>
+<li>A PDF document called analysis.pdf with the analysis questions given above (in part 1) and their answers.</li>
+<li>File density.s with your assembly language solution for volume/density (from part 1)</li>
+<li>File main.cpp with your C++ code for the <code>main()</code> function for the volume/density code (from part 1)</li>
+<li>File tricky.cpp with your C++ code for the <code>main()</code> function for the tricky jump detection code from part 2</li>
+<li>A Makefile that compiles the programs, as explained above -- make sure the executables are named <code>volume</code> and <code>tricky</code>!</li>
+</ul>
+</body>
+</html>

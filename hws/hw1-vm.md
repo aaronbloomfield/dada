@@ -3,11 +3,13 @@ DADA: HW 1: Virtual Machine
 
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 
+### Introduction
+
 VirtualBox is a free program that allows you to run another operating system on your machine without needing to reinstall anything.  You have to install the VirtualBox client, which installs like any other program and is available for many different platforms (Windows, Mac, Linux).  We provide you with a pre-configured VirtualBox image that contains an Ubuntu Linux installation that you can use for this course.
 
 The homework part of this is at the end of this document.
 
-Parts of this document were inspired by, or copied with permission from, a similar homework by Charles Reiss (original was [here](https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/vm.html).
+Parts of this document were inspired by, or copied with permission from, a similar homework by Charles Reiss (original was [here](https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/vm.html)).
 
 ### Quick start
 
