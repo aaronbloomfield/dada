@@ -20,7 +20,7 @@ Lectures (fall 2017)
 | Num | Date        | Day of week | Planned topic |Actual lecture progress (and recording) | 
 |---|-----|------|---------------|------------------|
 | 1   | Aug&nbsp;23 | Wednesday   | [course introduction][101] | [course introduction][101], slides 1 to 4.10 (end) |
-| 2   | Aug&nbsp;25 | Friday      |               |               |
+| 2   | Aug&nbsp;25 | Friday      | [terminology][102] |               |
 | 3   | Aug&nbsp;28 | Monday      |               |               |
 | 4   | Aug&nbsp;30 | Wednesday   |               |               |
 | 5   | Sep&nbsp;1  | Friday      |               |               |
@@ -77,3 +77,4 @@ Lectures (fall 2017)
 [6]: syllabus.md
 
 [101]: ../slides/01-intro.html#/
+[102]: ../slides/02-terminology.html#/

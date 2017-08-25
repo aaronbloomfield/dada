@@ -21,6 +21,7 @@ The "md" links will work if viewed on github.com; the other links work if the re
 
 - [Slides](slides/index.html) ([md](slides/index.md))
 - [Docs](docs/index.html) ([md](docs/index.md))
+- [Homeworks](hws/index.html) ([md](hws/index.md))
 - [UVa specific material](uva/index.html) ([md](uva/index.md))
 
 Entering `make` in the cloned repo directory will convert all the .md files to .html files for local viewing (requires [pandoc](http://johnmacfarlane.net/pandoc/)).
