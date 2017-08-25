@@ -13,4 +13,5 @@ of lecture, and some of the links may not work until the lecture is
 ready to be presented.
 
 - [Daily announcements](../uva/daily-announcements.html#/) (UVa specific)
-- [Course introduction](01-intro.html#/) (UVa specific)
+- 1: [Course introduction](01-intro.html#/) (UVa specific)
+- 2: [Terminology](02-terminology.html#/)

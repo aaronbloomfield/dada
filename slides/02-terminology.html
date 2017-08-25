@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DADA: ...</title>
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css">
+  <link rel="stylesheet" href="dada.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section data-markdown><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;
+## Terminology
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+# Contents
+&nbsp;  
+[Introduction](#/introduction)  
+[Classifications of attacks](#/classification)  
+[Attack Creation Method](#/howcreated)  
+[Malware Transportation](#/howxported)  
+[Vulnerabilities Exploited](#/vulnerabilities)  
+[Damage Caused?](#/damage)  
+[Terminology](#/definitions)  
+	</script></section>
+
+	<section>
+      
+	  <section data-markdown id="introduction"><script type="text/template">
+# Introduction
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Concepts and Terminology
+- First we will learn to classify attacks, then learn the definitions of malicious code types
+- One key term first:
+  - "A computer virus is code that recursively replicates a [possibly evolved] copy of itself." (Szor, section 2.3.1)
+  - A "worm" is just a virus that spreads over networks
+  - More details on viruses, worms, etc. later
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Classifying Malicious Attacks
+- We understand malicious attacks by asking the right questions:
+  - How was the attack created?
+  - How was malicious code transported?
+  - What vulnerabilities were exploited?
+  - What damage did the attack cause?
+	  </script></section>
+
+	</section>
+
+	<section>
+	  
+	  <section data-markdown id="classification"><script type="text/template">
+# Classifications of attacks
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Characteristics of malware
+- Self-replicating: does it reproduce by itself?
+- Population growth: how does the infected population increase?
+  - Zero if it is not self-replicating
+  - But self replicating can have either a zero or positive population growth
+- Parasitic: does it need another executable in order to exist?
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Logic bomb
+- Self-replicating: 	no
+- Population growth: 	zero
+- Parasitic: 		possibly
+&nbsp;  
+&nbsp;  
+- Has a *payload*, which is an action to perform
+  - Delete files, etc. -- usually a malicious effect
+- Has a *trigger*, which is a Boolean condition as to when to execute
+  - On a given date, when somebody performs some action, etc.
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img" -->
+## Trojan Horse
+![trojan rabbit](https://s-media-cache-ak0.pinimg.com/originals/98/31/91/983191ca276eb1227fd2f85960215b8c.jpg)
+- Self-replicating:	no 
+- Population growth: 	zero
+- Parasitic: 		yes
+
+&nbsp;  
+
+- A program that looks like a valid program, but has a malicious purpose
+  - Stealing passwords, deleting files, etc.
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img" -->
+## Back door
+![back door](http://img11.deviantart.net/8549/i/2012/129/b/b/door_ajar_by_layall-d4z3odw.jpg)
+- Self-replicating:	no 
+- Population growth: 	zero
+- Parasitic: 		possibly
+
+&nbsp;  
+
+- Any mechanism that allows bypassing of the normal security checks
+  - If you are logging in from this IP address, or enter a specific username, don't ask for a password
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img" -->
+## Virus
+![virus](https://cdn1.medicalnewstoday.com/content/images/articles/158/158179/virus.jpg)
+- Self-replicating:		yes 
+- Population growth: 	positive
+- Parasitic: 			yes
+
+&nbsp;  
+
+- Malware that, when executed, tries to replicate itself into other executable code
+  - This self-replication into existing executable code is the defining characteristic of a virus
+- Often has a destructive payload
+- Does not *propagate* using a network as an attack vector
+  - But infected files can be downloaded, emailed or etc. by a network
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img" -->
+## Worm
+![worm](http://img.aws.livestrongcdn.com/ls-article-image-400/cpi.studiod.com/www_livestrong_com/photos.demandstudios.com/getty/article/144/167/476944921_XS.jpg)
+- Self-replicating:	yes 
+- Population growth: 	positive
+- Parasitic: 		no
+
+&nbsp;  
+
+- Similar to a virus, but:
+  - Worms are standalone (does not need an executable to be parasitic on)
+  - Spread from machine to machine via a network
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img" -->
+## Rabbit
+![rabbit](http://prod-upp-image-read.ft.com/bf331d1e-f909-11e6-bd4e-68d53499ed71)
+- Self-replicating:	yes 
+- Population growth: 	zero
+- Parasitic: 		no
+
+&nbsp;  
+
+- A rapidly reproducing program  that consumes all of the available computer resources
+  - A fork bomb, for example
+- Leaves lots of traces, and doesn't accomplish much
+  - So they aren't seen very often
+- See the [Wikipedia article on "fork bomb"](https://en.wikipedia.org/wiki/Fork_bomb) for more
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Some fork bombs
+```
+#include <stdio.h>
+#include <sys/types.h>
+int main() {
+  while(1) fork();
+  return 0;
+}
+```
+
+```
+import os
+while(1):
+    os.fork()
+```
+
+```
+#!/bin/bash
+:(){ :|:& };:
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img" -->
+## Spyware
+![spyware](http://4.bp.blogspot.com/-OdK2rCo-g9s/VGRyT8EwP6I/AAAAAAAAAK0/pSxTUYy699g/s1600/spyware.gif)
+- Self-replicating:	no
+- Population growth: 	zero
+- Parasitic: 		no
+
+&nbsp;  
+
+- Software that collects information from a computer and transmits it to somebody else
+  - Usernames and passwords, e-mail addresses, financial information, software license keys, etc.
+- Viruses and worms can do similar things
+  - Spyware is software that doesn't self replicate
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img" -->
+## Adware
+![adware](http://s.culturacion.com/wp-content/uploads/2012/03/figura55.jpg)
+- Self-replicating:	no 
+- Population growth: 	zero
+- Parasitic: 		no
+
+&nbsp;  
+
+- Similar to spyware:
+  - Gathers information about the user
+- But it has differences:
+  - It's more marketing-focused (pops up ads, redirects a browser, etc.)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Hybrids, droppers, and blended threats
+- Self-replicating:	n/a
+- Population growth: 	n/a
+- Parasitic: 		n/a
+&nbsp;  
+&nbsp;  
+- Hybrid example: Ken Thompson's UNIX back door
+  - Was a Trojan horse, replicated like a virus, created back doors
+- A dropper is a program that deposits malware on a computer
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img" -->
+## Zombies
+![zombies](http://www.geeklegacy.com/wp-content/uploads/2015/06/game-of-thrones-night-king-600x3561-e1433179642653.jpg)
+- Self-replicating:	?
+- Population growth: 	?
+- Parasitic: 		?
+
+&nbsp;  
+
+- A zombie is a computer that somebody else can (partially) control
+  - Often Windows machines
+  - Can send spam, perform DoS attacks
+  - User is often unaware of the zombie
+- A zombie is often a drop of another piece of malware
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Ransomware
+- Ransomware is very common these days
+- It usually is the payload of another attack
+- It requires one to pay an entity to "release" files/resources
+- Stats ([source](http://www.businessinsider.com/doj-and-dhs-ransomware-attacks-government-2016-4)) from an April 2015 report:
+  - The DOJ received 7,700 public complains in the last decade, totalling $57.6 million paid
+    - Generally $200 to $10,000 per "episode"
+  - $24 million in 2,500 cases in 2015 alone
+	  </script></section>
+
+	</section>
+
+	<section>
+
+	  <section data-markdown id="howcreated"><script type="text/template">
+# Attack Creation Method
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Assembly language code
+- Very common
+- Security professionals must be expert in assembly language to analyze attacks
+- High level language or scripts
+- Virus generator kits
+  - Attackers distribute kits to generate most of the code of common viruses, ready for alteration and enhancement
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Creation in Assembly Language
+- Easier to use assembly language to create the typical virus code that hides inside a user application 
+  - Space available can be tight
+  - Must analyze existing object code, deposit virus object code inside it
+  - Virus must perform its own assembler/linker work, e.g. relocations 
+- Easier to *obfuscate* assembly code
+  - Obfuscate: to make obscure or unclear
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Creation in HLL or Script
+- Most useful for standalone attack code
+  - Root kits (exploit OS weakness to run commands as root, or admin)
+  - DOS (denial of service) attacks that flood a website
+  - Program attached to email, opened by unsuspecting user
+  - Macros in Word, Excel, etc. files
+- Increasing due to spread of scripting and macro languages
+  - Especially through APIs
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Script Attacks
+- Script and macro languages are popular because they are high-level
+- Scripts are useful because they can call basic operating system functions 
+  - This is what makes them dangerous!
+- OS designers must carefully decide what functions can be called by user-level scripts
+  - Permission errors are common, allowing attacks to succeed
+  - LoveLetter spread because Outlook gave it high permissions
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Virus Construction Kits
+- First was VCS (Virus Construction Set) in Germany in 1990
+- Dozens have followed, creating assembly and HLL code, 16-bit and 32-bit DOS and Windows viruses, malicious scripts of many kinds, worms, etc.
+- Usually create standalone programs, but these can embed viruses in applications when they are first executed
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Virus Construction Kits
+- VCL (Virus Creation Laboratory) in 1992 produced the first viruses to become widespread
+- Produced assembly language code
+- User could select among different payloads, infection strategies, and encryption techniques
+- Very hard for antivirus software to detect all possible  combinations
+- Graphical IDE made it possible for "script kiddies" to create viruses
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Virus Construction Kits
+![virus construction kit 1](http://computervirus.uw.hu/images/0321304543/graphics/07fig11_alt.jpg)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Virus Construction Kits
+![virus construction kit 2](http://computervirus.uw.hu/images/0321304543/graphics/07fig12.gif)
+	  </script></section>
+
+	</section>
+
+	<section>
+
+	  <section data-markdown id="howxported"><script type="text/template">
+# Malware Transportation
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## How was Malicious Code Transported?
+- Early viruses were on floppy disks shared among users
+- Email attachments are common
+  - Self-remailing viruses have been among the most costly
+- Worms send themselves over network
+- Also: chat/IM transport; free software downloads from web or FTP sites, malicious apps for portable devices
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Floppy Diskette Transport
+- Pre-internet viruses were on floppy disks shared among users
+  - Virus lived on hard disk or in memory
+  - Sometimes infected the OS utilities that are called whenever a diskette is formatted or written
+  - Infected system then created infected diskettes
+- CD-ROMs are being infected in an analogous way today
+  - Not as common, because email programs and internet access provide a greater opportunity for wider and faster malicious code transport
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Floppy Diskette Transport
+- What is a floppy today?
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Email Transport
+- Viruses can use an email program and associated address books to re-mail to many users
+- Usually starts by opening an attachment that is executable
+- Virus creators try to disguise the file type so it does not look executable
+- Even spreadsheet and document files can contain macros that are executable viruses
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Email Transport cont'd.
+- Why would anyone open an email attachment that is obviously an executable?
+- The virus creator can make it look like the file is NOT executable
+- Example: The "I Love You" mass mailer virus came in an attachment called LOVE-LETTER-FOR-YOU.TXT.vbs
+- "User-friendly" Windows OS suppresses file extensions for known file types unless you prevent it, so it removed the ".vbs"extension
+  - Attachment now looks like a *.txt file 
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Internet Transport
+- Internet provides great opportunities for malicious code transport
+  - Virus can access OS networking commands, e.g. sendmail and rlogin
+  - Networking utilities allow virus to probe the Internet for the next victim machine
+  - Broadband access means many machines are always on and always connected
+  - FTP sites and public web sites are, by nature, accessible to outsiders to some degree
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Internet Transport cont'd.
+- Internet provides great opportunities for malicious code transport (cont'd.)
+  - Browsers have hidden background tasks, cookies, spyware and other information-gathering software
+  - Data packets over the internet can be "snooped" by attackers, and are usually unencrypted
+  - Sensitive information is stored all over the internet on various servers
+  - Network file systems permit remote access to files
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Downloaded Software Transport
+- Free software has become widely available
+- Contributors can post infected files, knowingly or not, for others to download
+- How do you know you can trust what you are downloading?
+  - Trust in downloaded software comes from data authentication, discussed later in the semester, along with antivirus scanning on the client AND server side.
+	  </script></section>
+
+	</section>
+
+	<section>
+
+	  <section data-markdown id="vulnerabilities"><script type="text/template">
+# Vulnerabilities Exploited
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## What Vulnerabilities Were Exploited?
+- "Vulnerability" often refers only to vulnerable code in an OS or applications
+  - E.g. Unguarded buffer overflow in OS command allows attacker to run arbitrary command, gain root access, etc.
+  - Failure to validate user input
+  - Allowing ActiveX controls to be run from scripts
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## What Vulnerabilities Were Exploited?
+- More generally, a vulnerability is whatever weakness in an overall system that makes it open to attack
+  - System administration and configuration flaws
+  - Dangerous user behavior
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Code Vulnerabilities
+- Buffer overflow is the most common
+  - Array bounds not usually checked at run time (Why not?)
+- What comes *after* the buffer being overflowed determines what can be attacked
+  - Return address can be changed to malicious code
+  - Function pointer can point to malicious code
+  - Output file name for a program can be overwritten with file name desired by attacker
+- Buffer overflows are simple to guard against, yet they remain the most common code vulnerability
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Buffer Overflow Example
+
+```
+void bogus(void) {
+   int i;
+   char buffer[256];      // Return address follows!
+
+   printf("Enter your data as a string.\n");
+   scanf("%s", buffer);   // No bounds check!
+
+   process_data(buffer);
+   return;
+
+   // Returns to the return address that 
+   // follows buffer[] on the stack frame
+}
+```
+When writing beyond the size of `buffer` one will (eventually) overwrite the return address
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Buffer Overflow cont'd.
+- Notice that the program does not check to make sure that the user inputs 255 characters or less
+- Source code is available for many operating systems and applications; OR they can be disassembled and analyzed by the attacker
+- Attacker can see that it is possible to overflow the buffer
+- Buffer is last data item on the stack frame; the return address from this function will be at a defined distance after it
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Buffer Overflow cont'd.
+- Attacker can enter a character string representation of his malicious object code, long enough to fill the buffer
+- At the end of the malicious code, the attacker passes the address of variable "buffer" so that it overwrites the return address of function bogus() on the stack frame
+- When bogus() returns, it will cause a return to the buffer address, executing the malicious code in it
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## User Behavior Vulnerabilities
+- Poor password selection
+  - Too short; all alphabetic; common words
+  - 1988 Morris worm used a list of only 432 common passwords, and succeeded in cracking many user accounts all over the internet
+  - This was the main reason the worm spread more than the creator thought it would; he did not realize that password selection was that bad!
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## User Behavior Vulnerabilities cont'd.
+- Opening executable email attachments
+  - "This email is from my friend; it must be safe." But, the friend's PC has a virus!
+  - Knowing the sender is not enough to make it safe to open
+  - Virus creator can disguise the attachment to look like it is not executable
+  - Remember the "Love Letter" virus!
+- So only open the attachment if you know the sender, right?
+  - What could be wrong with that?
+	  </script></section>
+
+	</section>
+
+	<section>
+
+	  <section data-markdown id="damage"><script type="text/template">
+# Damage Caused
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Types of Damage
+- Loss of data
+- Loss of computer resources
+- Lost time
+- Loss of privacy
+- Loss of confidentiality
+- Monetary loss
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Classification by Payload
+- Szor, Chapter 8, has another set of criteria for classifying viruses by *payload*
+- The payload is the malicious code that is delivered into the system by the virus
+- Rather than categorizing by privacy, time loss, data loss, etc., the severity of the damage is the primary classifier
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Classification by Payload cont'd.
+- No payload
+- Nondestructive payload
+- Accidentally destructive payload
+- Somewhat destructive payload
+- Highly destructive payload
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## No payload
+- Virus just replicates
+- Creator might just be testing a concept: Can I infect systems in a certain way?
+- Creator often is playing a game with antivirus researchers; leaves a message in the body of the virus
+- More viruses in this category than in any other
+- Still wastes some resources
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Nondestructive payload
+- Payload displays a message on the screen for a few seconds
+- No other action is taken
+- About half of all viruses are either "no payload" or "nondestructive payload"
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Accidentally destructive payload
+- "Stoned" virus was an example
+- Tried to save the disk boot sector, infect and replicate, then restore the boot sector
+- Accidentally copied the boot sector, on certain systems only, on top of useful data when saving it
+- Some users lost their file system entirely as a result
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Somewhat destructive payload
+- Some viruses try to disable a particular antivirus program, but attack nothing else
+- HPS was a Windows 95 virus that only activated if you booted up on a Saturday; then it did a horizontal reversal of Windows bitmap files
+- Wazzu virus of 1996 randomly scrambled 3 words in documents, and inserted the word *wazzu* into sentences
+  - MS shipped infected CD's!
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Highly destructive payload
+- Includes the examples we already classified, such as loss of data, loss of privacy, DOS (denial of service), etc.
+- Also: *data diddlers*, which slowly change data on disk, eluding detection until damaged data has probably infected backup tapes
+- *Hardware destroyers*: e.g. 1998 Taiwanese virus, Chernobyl, overwrote the flash BIOS of more than 10,000 PCs
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Payload Question
+- Why would a somewhat destructive payload sometimes be more damaging than a highly destructive payload?
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Payload Question
+- Why would a somewhat destructive payload sometimes be more damaging than a highly destructive payload?
+- Answer: 
+  - It could take longer to detect
+  - Could work its way into backups before detection
+  - Damaged documents could be transmitted offsite
+  - Etc.
+- A highly destructive payload would be detected immediately, and the system restored from backups
+	  </script></section>
+
+	</section>
+
+	<section>
+
+	  <section data-markdown id="definitions"><script type="text/template">
+# Terminology
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Security Terminology
+- Virus: self-replicating code
+- Worm: a virus that replicates over a network
+- Time bomb: malicious code that awakens itself on a certain date and/or time
+- Logic bomb: malicious code that becomes active when certain conditions are met
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Security Terminology cont'd.
+- Trojan Horse: code that seems to be benign and useful (e.g. a screen saver) that performs replication and/or malicious operations in the background
+- Mailer: a worm that emails itself to another user
+- Mass Mailer: a worm that emails itself to multiple recipients
+- Backdoor: hidden access method in software, known only to an attacker
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Security Terminology cont'd.
+- Exploit: an attack that takes advantage of a specific vulnerability
+- Kit: a virus generator program
+- Flooder: program that generates a large amount of network traffic to a certain server
+- DOS (denial of service): an attack that bogs down a server with a generated workload, generally a network packet load from a flooder
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Security Terminology cont'd.
+- Keylogger: a malicious program that captures keystrokes on an infected system, usually to steal passwords, credit card numbers, ATM PINs (personal identification numbers), etc.
+- Spyware: a background program that collects data on a computer user's browsing and computing habits, often installed without explicit permission
+- Malware: any form of malicious software
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Security Terminology cont'd.
+- Firewall: hardware and/or software used to enforce a network access policy by filtering out some packets before they get routed by the network router
+- Payload: the malicious code that performs operations other than replication, e.g. deleting files, modifying files, stealing passwords
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Security Terminology cont'd.
+- Notice that most of our key terms (e.g. virus, worm, mailer, mass mailer) only refer to the means of transport and replication, not the actual payload!
+- Malware can lack any payload at all and still cause damage due to resource usage during replication, e.g. the Morris worm
+	</script></section>
+
+      </section>
+      
+    </div>
+  </div>
+  <script src="reveal.js/lib/js/head.min.js"></script> 
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="settings.js"></script> 
+</body>
+</html>

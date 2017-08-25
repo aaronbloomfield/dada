@@ -174,3 +174,9 @@ span.green { color:green; }
 span.lightgreen { color:lightgreen; }
 span.orange { color:orange; }
 span.yellow { color:yellow; }
+
+.right-float-img img {
+    float:right;
+    max-width:400px;
+    max-height:200px;
+}
