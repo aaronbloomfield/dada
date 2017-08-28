@@ -15,3 +15,4 @@ ready to be presented.
 - [Daily announcements](../uva/daily-announcements.html#/) (UVa specific)
 - 1: [Course introduction](01-intro.html#/) (UVa specific)
 - 2: [Terminology](02-terminology.html#/)
+- 3: [Virtual Machines](03-vms.html#/)

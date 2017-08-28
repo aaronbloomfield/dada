@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DADA: Virtual Machines</title>
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css">
+  <link rel="stylesheet" href="dada.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section data-markdown><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;
+## Virtual Machines
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+# Contents
+&nbsp;  
+[History](#/history)  
+[Concepts](#/concepts)  
+[Terminology](#/terminology)  
+[VM Basics](#/basics)  
+[Taxonomy](#/taxonomy)  
+[Examples](#/examples)  
+	</script></section>
+
+	<section>
+      
+	<section data-markdown id="history"><script type="text/template">
+## History
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Hardware utilization
+- During the 1960s and 1970s
+- IBM [VM/370 operating system](https://en.wikipedia.org/wiki/VM_(operating_system))
+  - Hypervisor (control program) creates virtual machine environment
+    - Each user has own virtual machine with guest OS, own address space, virtual devices, etc.
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Decline
+- In the 1980s and 1990s, VMs decline in popularity
+  - Poor performance
+  - Client-server applications
+  - Inexpensive PCs
+  - Distributed computing
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Renewed Interest
+- In the late 1990s
+-  WWW
+  - Servers
+  - Cross-platform support
+  - Extending desktop computing environments
+  - Security
+- Issues/Challenges
+  - Low Infrastructure Utilization
+  - Physical infrastructure costs
+  - IT management costs
+  - Failover/disaster protection
+  - High maintenance end-user desktops
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Renewed Interest cont'd
+- Virtual machines
+  - Software compatibility
+  - Isolation capability
+  - Encapsulation
+  - Low overhead/high performance
+	</script></section>
+
+	</section>
+
+	<section>
+	  
+	<section data-markdown id="concepts"><script type="text/template">
+# Concepts
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Virtual machine types
+- Process level
+  - Desined for a programming language or shared system
+  - Example: Java Virtual Machine
+- Operating System level
+  - The OS kernel "splits" to run the VM
+  - Example: Docker
+- System level
+  - Designed to emulate "real" hardware
+  - Example: VirtualBox
+</script></section>
+
+<section data-markdown><script type="text/template">
+## Levels of Abstraction
+- Allow implementation details at lower levels of a design to be ignored or simplified
+- Arranged in a hierarchy
+  - Lower levels - Hardware
+    - Physical components with real properties
+  -  Higher levels - Software
+    - Logical components
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Levels of Abstraction: HW/SW Interface
+- High level language (HLL) -> Assembly language
+  - Compiler (translation)
+- Assembly Language -> Operating System
+  - Assembler (translation/mapping to ISA)
+- Operating System -> Instruction Set Architecture (ISA)
+  - Partial Interpretation (device drivers, etc)
+- Instruction Set Architecture -> Digital logic
+  - Hardware
+- Digital logic -> Electronics (transistors, etc.)
+  - Hardware
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Levels of Abstraction: Java
+- Java (HLL) -> Java Byte Code (ISA)
+  - Java Compiler
+- Java Byte Code (ISA) -> Java Virtual Machine (JVM)
+  - Interpreter and JIT compiler
+- Java Virtual Machine (JVM) -> OS
+- Machine ISA
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Well-defined Interfaces
+- Decouple design tasks
+  - Instruction set
+    - Intel and AMD
+      - IA-32 instruction set
+    - Compilers
+      - Map high level language to ISA
+  - Operating system interface
+    - Application development
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Well-defined interfaces: Challenges
+- Reduced interoperability
+  - Processors support limited instruction sets
+    - IA-32 vs. PowerPC
+  - Different operating systems
+    - Windows vs. Linux
+  - Application binaries
+    - Dependent on OS and instruction set
+- Hardware resource considerations
+  - OS
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Virtualization
+- Formally:
+  - Virtualization involves the construction of an isomorphism that maps a virtual guest system to a real host. ([Popek and Goldberg](https://en.wikipedia.org/wiki/Popek_and_Goldberg_virtualization_requirements), 1974)
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Virtualization
+- Mapping of virtual resources or state to real resources on underlying machine
+  - E.g., registers, memory, files
+- Emulation of the virtual machine ABI or ISA
+  - Use of real machine instructions and/or system calls to carry out actions specified by virtual machine instructions and/or system calls
+	</script></section>
+
+	</section>
+
+	<section>
+
+	  
+	
+	<section data-markdown><script type="text/template">
+# Terminology
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Terminology
+- Computer architecture
+  - Functionality and appearance of a computer or subsystem
+- Implementation
+  - Actual embodiment of an architecture
+  - Architectures may have several implementations
+    - E.g., high-performance or low-power
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Terminology (cont'd)
+- Implementation layers
+  - Correspond to levels of abstraction in a computer
+system
+High Level Language (HLL)
+Assembly Language
+Compiler (translation)
+Assembler (translation/mapping to ISA)
+Operating System (OS)
+Partial Interpretation (device drivers, etc)
+Instruction Set Architecture (ISA)
+Hardware
+Digital Logic
+Hardware
+Electronics -- transistors, etc
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Terminology (cont'd)
+- Instruction set
+architecture (ISA)
+  - User ISA
+    - aspects visible to the
+application program
+  - System ISA
+    - aspects visible to the
+supervisor software ISA
+(e.g., OS)
+Application Software
+Operating System
+System ISA
+User ISA
+Machine
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Terminology (cont'd)
+- Application binary
+interface (ABI)
+  - Provides program with
+access to hardware
+ABI
+resources and system
+services
+    - All user instructions
+(user ISA)
+    - System call interface
+Application Software
+System Calls
+User ISA
+Machine
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Terminology (cont'd)
+- Application programming interface (API)
+  - Defined with respect to high-level language (HLL)
+    - source code level
+  - Standard libraries
+    - E.g., C standard library (stdio.h, stdlib.h,
+signal.h, math.h, string.h, etc.)
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Terminology: Virtual Machine (VM)
+  - Example: VMWare Fusion
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Terminology
+- Machine
+  - Matter of perspective
+    - process: OS and underlying user-level hardware
+    - OS: underlying hardware with ISA as the interface
+- Host
+  - Underlying platform
+- Guest
+  - Software that runs in the VM environment
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Terminology
+- Process virtual machine
+  - Supports an individual process
+Application Process
+Application Process
+Guest
+Virtualizing
+Software
+Runtime
+Operating System
+Virtual Machine
+Host
+Hardware
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Process Virtual Machine Examples
+- Multiprogramming
+  - Each user process given the illusion of having complete machine to itself
+    - OS supporting multiple user processes
+- Emulators and dynamic binary translators
+  - Emulate one instruction set on hardware designed for different instruction set
+    - Digital FX!32 (IA-32(WinNT) binaries on Alpha (WinNT))
+  - Dynamic binary translation: convert blocks of source instructions to target instructions that perform equivalent functions
+    - Strata (later)
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Process Virtual Machine Examples (cont'd)
+- Same-ISA binary optimizers
+  - Optimization
+    - Dynamo (HP 2000)
+- High-level language VMs
+  - Cross-platform portability
+  - Minimize hardware-specific and OS-specific features
+    - Java VM
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## HLL VM: Java Virtual Machine
+Java (HLL)
+Java Compiler
+Java Byte Code (ISA)
+Interpreter and JIT compiler
+Java Virtual Machine (JVM)
+OS
+:
+Machine ISA
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Terminology (cont'd)
+- System virtual machine
+  - Provides complete system environment
+Applications
+Applications
+Guest
+Operating System
+Operating System
+Virtualizing
+Software
+VMM
+:
+Virtual Machine
+Hardware
+Host
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## System Virtual Machine Examples
+- Classic system
+  - Virtual machine monitor (VMM) on bare hardware
+    - IBM VM/370
+- Hosted VM
+  - Virtualizing software built on top of existing host operating system
+    - VMWare
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## System Virtual Machine Examples (cont'd)
+- Whole System VMs (Emulation)
+  - Complete software system (OS and applications) supported on a host system running a different ISA and OS
+    - VirtualPC (Windows on Mac)
+- Codesigned VMs (Hardware optimization)
+  - No native applications. VM software is part of hardware implementation
+    - Transmeta Crusoe
+	</script></section>
+
+	</section>
+
+	<section>
+	
+	<section data-markdown><script type="text/template">
+# Taxonomy
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Taxonomy
+- Process vs. system
+- Same ISA vs. different ISA
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## ...
+
+ne
+ht
+:
+Process VMs
+Same
+ISA
+Different
+ISA
+Multiprogrammed
+Systems
+Dynamic Binary
+Optimizers
+System VMs
+Same
+ISA
+Dynamic
+Translators Classic-System
+VMs
+HLL VMs Hosted
+VMs
+Different
+ISA
+Whole-System
+VMs
+Codesigned
+VMs
+	</script></section>
+
+	</section>
+
+	<section>
+	
+	<section data-markdown><script type="text/template">
+# VM Examples
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Hosted VM: VMWare
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## VMWare Workstation
+- Virtual machine software suite for x86 and x86-64 computers
+- Supported host OS's
+  - Windows and Linux
+- Supported guest OS's
+  - > 200 supported
+  - Windows, Linux, BSD variants
+- Allows one physical machine to run multiple operating systems simultaneously
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## VMWare Workstation
+- Uses bridging to provide mapping to
+  - Network adaptors
+  - CD-ROMs
+  - Hard disk drives
+  - USB devices
+- Simulation capability for some hardware
+  - Mounting ISO as CD-ROM
+  - Mounting .vmdk files as hard disks
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## VMWare Workstation
+- Snapshot functionality
+  - Enables rollback to saved status
+- VMWare Tools
+- Package with drivers and other software that can be installed in guest operating systems to increase their performance
+    - Drivers for emulated hardware
+    - Drag and drop file support
+    - Clipboard sharing between host and guest
+	</script></section>
+	
+      </section>
+      
+    </div>
+  </div>
+  <script src="reveal.js/lib/js/head.min.js"></script> 
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="settings.js"></script> 
+</body>
+</html>
