@@ -21,7 +21,7 @@ Lectures (fall 2017)
 |---|-----|------|---------------|------------------|
 | 1   | Aug&nbsp;23 | Wednesday   | [course introduction][101] | [course introduction][101], slides 1 to 4.10 (end) |
 | 2   | Aug&nbsp;25 | Friday      | [terminology][102] | [terminology][102], slides 1 to 5.9 |
-| 3   | Aug&nbsp;28 | Monday      |               |               |
+| 3   | Aug&nbsp;28 | Monday      | [terminology][102] | [terminology][102], slides 6.1 to 8.11 |
 | 4   | Aug&nbsp;30 | Wednesday   |               |               |
 | 5   | Sep&nbsp;1  | Friday      |               |               |
 | 6   | Sep&nbsp;4  | Monday      |               |               |
