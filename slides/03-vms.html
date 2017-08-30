@@ -49,7 +49,7 @@
 	<section>
       
 	<section data-markdown id="history"><script type="text/template">
-## History
+# History
 	</script></section>
 
 	<section data-markdown><script type="text/template">
@@ -67,6 +67,8 @@
   - Client-server applications
   - Inexpensive PCs
   - Distributed computing
+- VMs started as mainframes (one computer for the entire company)
+  - Then cheap PCs showed up
 	</script></section>
 
 	<section data-markdown><script type="text/template">
@@ -104,18 +106,205 @@
 
 	<section data-markdown><script type="text/template">
 ## Virtual machine types
-- Process level
-  - Desined for a programming language or shared system
+- Language level
   - Example: Java Virtual Machine
+- Process level
+  - Example: Wine
 - Operating System level
-  - The OS kernel "splits" to run the VM
-  - Example: Docker
+  - Example: Docker, BSD jails
 - System level
-  - Designed to emulate "real" hardware
-  - Example: VirtualBox
-</script></section>
+  - Example: VirtualBox, VMware, Hyper-V
+	</script></section>
 
-<section data-markdown><script type="text/template">
+	<section data-markdown><script type="text/template">
+## Terminology
+- Host OS: the operating system that booted the computer
+- Guest *thing*: what is being run in the virtual machine
+  - Here, *thing* could be a process, operating system, etc.
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Language virtual machine
+- The Java Virtual Machine is a classic example
+  - Compiler translates .java files to bytecode (.class) files
+- Any interpreter is really a language virtual machine
+  - Python, Ruby, PHP, etc.
+- The interpreter / langauge VM can:
+  - Handle memory issues (including garbage collection)
+  - Do lots of error checking and tracing
+  - Still be reasonably fast
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## JVM diagram
+![jvm](https://qph.ec.quoracdn.net/main-qimg-3d375760a6564a7b34c5936dfd66a814)
+From [here](https://www.quora.com/What-is-difference-between-JDK-JRE-and-JVM)
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Process virtual machine
+- Allows one to run a single process
+- Meant to provied a platform independent environment for a process to run
+  - Abstracting away things like the hardware, host OS, etc.
+- Wine (Windows emulator for Linux) is an example
+  - The binary executes, but Windows system calls are translated into Linux system calls
+  - A library (Winelib) fills in for Windows system calls that do not have Linux equivalents
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Process VM examples
+- Multiprogramming
+  - Each user process given the illusion of having complete machine to itself
+    - OS supporting multiple user processes
+- Emulators and dynamic binary translators
+  - Emulate one instruction set on hardware designed for different instruction set
+  - Dynamic binary translation: convert blocks of source instructions to target instructions that perform equivalent functions
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Process VM Examples (cont'd)
+- Same-ISA binary optimizers
+  - Optimization
+    - Dynamo (HP 2000)
+- High-level language VMs
+  - Cross-platform portability
+  - Minimize hardware-specific and OS-specific features
+    - Java VM
+- So one can argue that a language VM is really a process VM...
+  - But we'll differentiate them
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## OS virtual machine
+- The host OS shares the same kernel with all the guest OSes
+- But each guest OS has it's own memory space
+  - This separates the different guest OSes from each other and the host OS
+- First implementation was FreeBSD jails; Linux's first implementation was LXC
+- Most common known example now is Docker
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## OS virtual machine
+- FreeBSD jails are a first-class concept in an OS
+  - Meaning something the OS directly supports and implements
+- Containers are not
+  - They are built from other first-class concepts (namespaces, cgroups, etc.)
+  - That means you can do more, but there are more bugs and complexity
+- See [jfrazelle's blog post](https://blog.jessfraz.com/post/containers-zones-jails-vms/) for more
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## System virtual machine
+- Designed to emulate "real" hardwre
+- Presents hardware, not drivers, to the guest
+  - Whereas the other VMs will present network connections to the guest, a system VM will present an Ethernet device
+  - Likewise, not memory allocation calls, but page tables
+- These run entire operating systems, and take the most resources
+- VirtualBox is the example we all know and love
+  - Hyper-V is for Windows
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## System VM examples
+- Classic system
+  - Virtual machine monitor (VMM) on bare hardware
+    - IBM VM/370
+- Hosted VM
+  - Virtualizing software built on top of existing host operating system
+    - VMWare, VirtualBox
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## System VM examples (cont'd)
+- Whole System VMs (Emulation)
+  - Complete software system (OS and applications) supported on a host system running a different ISA and OS
+    - VirtualPC (Windows on Mac)
+- Codesigned VMs (Hardware optimization)
+  - No native applications. VM software is part of hardware implementation
+    - Transmeta Crusoe
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Terminology confusion
+- Some will eliminate OS level, since that's just process level on steroids
+- Others will combine language level and process level, since they are both for a single process
+  - [Wikipedia VM article](https://en.wikipedia.org/wiki/Virtual_machine) does this
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## Virtualization
+- Formally:
+  - Virtualization involves the construction of an isomorphism that maps a virtual guest system to a real host. ([Popek and Goldberg](https://en.wikipedia.org/wiki/Popek_and_Goldberg_virtualization_requirements), 1974)
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## Virtualization
+- Mapping of virtual resources or state to real resources on underlying machine
+  - E.g., registers, memory, files
+- Emulation of the virtual machine ABI or ISA
+  - Use of real machine instructions and/or system calls to carry out actions specified by virtual machine instructions and/or system calls
+	</script></section>
+
+	</section>
+
+        <section>
+
+	<section data-markdown><script type="text/template">
+# VM Operations
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## OS refresher
+- User programs run in *user mode*
+  - Where a crash (segfault) will kill the process, but not the entire OS
+  - Programs are restricted in what they can do
+    - They can't directly access hardware; they have to go through the OS
+- The OS itself runs in *kernel mode*
+  - Where a crash will, in fact, crash the entire OS
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## User mode vs Kernel mode
+- Boundary is defined by:
+  - System calls
+    - Called by user-mode programs, but the function body is completed in kernel mode
+  - Device drivers
+    - Code written by somebody other than the OS writer, but runs in kernel mode
+    - (whether they are in kernel mode fully or not varies by OS)
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## User mode vs Kernel mode
+- If a guest OS tries a priviledged operation:
+  - The VM forwards to the VMM
+  - The VMM handles it by a system call if possible
+    - But it's in kernel mode, so it can do it directly
+	</script></section>
+	
+	<section data-markdown><script type="text/template">
+## VMs and kernel mode
+- VMs tend to run the guest OS in user mode
+  - But the OSs think they are running on hardware, so they will attempt to do "priviledged" things (like access hardware directly)
+- The Virtual Machine Monitor (VMM) handles this
+  - It is tyipcally a device driver running in kernel mode
+- Exceptions from the OS are passed, through the VMM, back to the VM
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+## VMM diagram
+![vmm diagram](http://www.ni.com/cms/images/devzone/tut/HostedVirtualizationSmall_20090325191230.PNG)
+From [here](http://www.ni.com/white-paper/8709/en/)
+	</script></section>
+	
+</section>
+
+<section>
+	
+	<section data-markdown><script type="text/template">
+# Abstraction
+	</script></section>
+
+	<section data-markdown><script type="text/template">
 ## Levels of Abstraction
 - Allow implementation details at lower levels of a design to be ignored or simplified
 - Arranged in a hierarchy
@@ -174,20 +363,6 @@
   - OS
 	</script></section>
 	
-	<section data-markdown><script type="text/template">
-## Virtualization
-- Formally:
-  - Virtualization involves the construction of an isomorphism that maps a virtual guest system to a real host. ([Popek and Goldberg](https://en.wikipedia.org/wiki/Popek_and_Goldberg_virtualization_requirements), 1974)
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
-## Virtualization
-- Mapping of virtual resources or state to real resources on underlying machine
-  - E.g., registers, memory, files
-- Emulation of the virtual machine ABI or ISA
-  - Use of real machine instructions and/or system calls to carry out actions specified by virtual machine instructions and/or system calls
-	</script></section>
-
 	</section>
 
 	<section>
@@ -210,56 +385,22 @@
 	
 	<section data-markdown><script type="text/template">
 ## Terminology (cont'd)
-- Implementation layers
-  - Correspond to levels of abstraction in a computer
-system
-High Level Language (HLL)
-Assembly Language
-Compiler (translation)
-Assembler (translation/mapping to ISA)
-Operating System (OS)
-Partial Interpretation (device drivers, etc)
-Instruction Set Architecture (ISA)
-Hardware
-Digital Logic
-Hardware
-Electronics -- transistors, etc
+- Instruction set architecture (ISA)
+  - In a given program:
+    - Some code will run directly on the hardware
+    - Other code will call the OS, which will execute code on the hardware
+- User ISA
+  - aspects visible to the application program
+- System ISA
+  - aspects visible to the supervisor software (e.g., OS)
 	</script></section>
 	
 	<section data-markdown><script type="text/template">
 ## Terminology (cont'd)
-- Instruction set
-architecture (ISA)
-  - User ISA
-    - aspects visible to the
-application program
-  - System ISA
-    - aspects visible to the
-supervisor software ISA
-(e.g., OS)
-Application Software
-Operating System
-System ISA
-User ISA
-Machine
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
-## Terminology (cont'd)
-- Application binary
-interface (ABI)
-  - Provides program with
-access to hardware
-ABI
-resources and system
-services
-    - All user instructions
-(user ISA)
+- Application binary interface (ABI)
+  - Provides program with access to hardware resources and system services
+    - All user instructions (user ISA)
     - System call interface
-Application Software
-System Calls
-User ISA
-Machine
 	</script></section>
 	
 	<section data-markdown><script type="text/template">
@@ -268,13 +409,7 @@ Machine
   - Defined with respect to high-level language (HLL)
     - source code level
   - Standard libraries
-    - E.g., C standard library (stdio.h, stdlib.h,
-signal.h, math.h, string.h, etc.)
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
-## Terminology: Virtual Machine (VM)
-  - Example: VMWare Fusion
+    - E.g., C standard library (stdio.h, stdlib.h, signal.h, math.h, string.h, etc.)
 	</script></section>
 	
 	<section data-markdown><script type="text/template">
@@ -290,45 +425,6 @@ signal.h, math.h, string.h, etc.)
 	</script></section>
 	
 	<section data-markdown><script type="text/template">
-## Terminology
-- Process virtual machine
-  - Supports an individual process
-Application Process
-Application Process
-Guest
-Virtualizing
-Software
-Runtime
-Operating System
-Virtual Machine
-Host
-Hardware
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
-## Process Virtual Machine Examples
-- Multiprogramming
-  - Each user process given the illusion of having complete machine to itself
-    - OS supporting multiple user processes
-- Emulators and dynamic binary translators
-  - Emulate one instruction set on hardware designed for different instruction set
-    - Digital FX!32 (IA-32(WinNT) binaries on Alpha (WinNT))
-  - Dynamic binary translation: convert blocks of source instructions to target instructions that perform equivalent functions
-    - Strata (later)
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
-## Process Virtual Machine Examples (cont'd)
-- Same-ISA binary optimizers
-  - Optimization
-    - Dynamo (HP 2000)
-- High-level language VMs
-  - Cross-platform portability
-  - Minimize hardware-specific and OS-specific features
-    - Java VM
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
 ## HLL VM: Java Virtual Machine
 Java (HLL)
 Java Compiler
@@ -340,89 +436,6 @@ OS
 Machine ISA
 	</script></section>
 	
-	<section data-markdown><script type="text/template">
-## Terminology (cont'd)
-- System virtual machine
-  - Provides complete system environment
-Applications
-Applications
-Guest
-Operating System
-Operating System
-Virtualizing
-Software
-VMM
-:
-Virtual Machine
-Hardware
-Host
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
-## System Virtual Machine Examples
-- Classic system
-  - Virtual machine monitor (VMM) on bare hardware
-    - IBM VM/370
-- Hosted VM
-  - Virtualizing software built on top of existing host operating system
-    - VMWare
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
-## System Virtual Machine Examples (cont'd)
-- Whole System VMs (Emulation)
-  - Complete software system (OS and applications) supported on a host system running a different ISA and OS
-    - VirtualPC (Windows on Mac)
-- Codesigned VMs (Hardware optimization)
-  - No native applications. VM software is part of hardware implementation
-    - Transmeta Crusoe
-	</script></section>
-
-	</section>
-
-	<section>
-	
-	<section data-markdown><script type="text/template">
-# Taxonomy
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
-## Taxonomy
-- Process vs. system
-- Same ISA vs. different ISA
-	</script></section>
-	
-	<section data-markdown><script type="text/template">
-## ...
-
-ne
-ht
-:
-Process VMs
-Same
-ISA
-Different
-ISA
-Multiprogrammed
-Systems
-Dynamic Binary
-Optimizers
-System VMs
-Same
-ISA
-Dynamic
-Translators Classic-System
-VMs
-HLL VMs Hosted
-VMs
-Different
-ISA
-Whole-System
-VMs
-Codesigned
-VMs
-	</script></section>
-
 	</section>
 
 	<section>
