@@ -23,7 +23,7 @@ Lectures (fall 2017)
 | 2   | Aug&nbsp;25 | Friday      | [terminology][102] | [terminology][102], slides 1 to 5.9 |
 | 3   | Aug&nbsp;28 | Monday      | [terminology][102] | [terminology][102], slides 6.1 to 8.11 |
 | 4   | Aug&nbsp;30 | Wednesday   | [terminology][102], [vms][103] | [terminology][102], slides 9.1 to 9.7 (end); [vms][103], slides 1 to 4.10 |
-| 5   | Sep&nbsp;1  | Friday      | [vms][103], ... |               |
+| 5   | Sep&nbsp;1  | Friday      |               |               |
 | 6   | Sep&nbsp;4  | Monday      |               |               |
 | 7   | Sep&nbsp;6  | Wednesday   |               |               |
 | 8   | Sep&nbsp;8  | Friday      |               |               |
