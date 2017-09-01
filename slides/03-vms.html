@@ -194,6 +194,18 @@ From [here](https://www.quora.com/What-is-difference-between-JDK-JRE-and-JVM)
 	</script></section>
 
 	<section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img-800" -->
+## OS VM examples
+![docker image](https://cdn-images-1.medium.com/max/1600/1*V5N9gJdnToIrgAgVJTtl_w.png)
+- Docker is popular
+  - Also LXC, LXD
+- FreeBSD jails
+- Solaris Zones
+
+Image from [here](https://medium.freecodecamp.org/a-beginner-friendly-introduction-to-containers-vms-and-docker-79a9e3e119b)
+	</script></section>
+
+	<section data-markdown><script type="text/template">
 ## System virtual machine
 - Designed to emulate "real" hardwre
 - Presents hardware, not drivers, to the guest
@@ -201,17 +213,28 @@ From [here](https://www.quora.com/What-is-difference-between-JDK-JRE-and-JVM)
   - Likewise, not memory allocation calls, but page tables
 - These run entire operating systems, and take the most resources
 - VirtualBox is the example we all know and love
-  - Hyper-V is for Windows
+  - VMWare is popular; Hyper-V is for Windows
 	</script></section>
 
 	<section data-markdown><script type="text/template">
 ## System VM examples
 - Classic system
   - Virtual machine monitor (VMM) on bare hardware
-    - IBM VM/370
+  - IBM VM/370
+![vm/370 diagram](http://flylib.com/books/3/275/1/html/2/images/01fig19.jpg)
+
+Image from [here](http://flylib.com/books/en/3.275.1.11/1/)
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img-800" -->
+## System VM examples
+![hosted vm](https://cdn-images-1.medium.com/max/1600/1*RKPXdVaqHRzmQ5RPBH_d-g.png)
 - Hosted VM
-  - Virtualizing software built on top of existing host operating system
-    - VMWare, VirtualBox
+  - VM runs on OS
+  - VMWare, VirtualBox
+
+Image from [here](https://medium.freecodecamp.org/a-beginner-friendly-introduction-to-containers-vms-and-docker-79a9e3e119b)
 	</script></section>
 	
 	<section data-markdown><script type="text/template">
@@ -220,7 +243,7 @@ From [here](https://www.quora.com/What-is-difference-between-JDK-JRE-and-JVM)
   - Complete software system (OS and applications) supported on a host system running a different ISA and OS
     - VirtualPC (Windows on Mac)
 - Codesigned VMs (Hardware optimization)
-  - No native applications. VM software is part of hardware implementation
+  - No native applications; VM software is part of hardware implementation
     - Transmeta Crusoe
 	</script></section>
 
@@ -242,6 +265,7 @@ From [here](https://www.quora.com/What-is-difference-between-JDK-JRE-and-JVM)
 - Mapping of virtual resources or state to real resources on underlying machine
   - E.g., registers, memory, files
 - Emulation of the virtual machine ABI or ISA
+  - ABI: Application Binary Interface: how an executable interacts with a library or the OS
   - Use of real machine instructions and/or system calls to carry out actions specified by virtual machine instructions and/or system calls
 	</script></section>
 
@@ -293,7 +317,7 @@ From [here](https://www.quora.com/What-is-difference-between-JDK-JRE-and-JVM)
 	<section data-markdown><script type="text/template">
 ## VMM diagram
 ![vmm diagram](http://www.ni.com/cms/images/devzone/tut/HostedVirtualizationSmall_20090325191230.PNG)
-From [here](http://www.ni.com/white-paper/8709/en/)
+Image from [here](http://www.ni.com/white-paper/8709/en/)
 	</script></section>
 	
 </section>
@@ -411,6 +435,12 @@ From [here](http://www.ni.com/white-paper/8709/en/)
   - Standard libraries
     - E.g., C standard library (stdio.h, stdlib.h, signal.h, math.h, string.h, etc.)
 	</script></section>
+
+	<section data-markdown><script type="text/template">
+## ABI vs API
+![abi vs abi](https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Linux_API_and_Linux_ABI.svg/800px-Linux_API_and_Linux_ABI.svg.png)
+From [wikipedia](https://en.wikipedia.org/wiki/Application_binary_interface)
+	</script></section>
 	
 	<section data-markdown><script type="text/template">
 ## Terminology
@@ -471,7 +501,50 @@ From [here](http://www.ni.com/white-paper/8709/en/)
     - Clipboard sharing between host and guest
 	</script></section>
 	
-      </section>
+	</section>
+
+	<section>
+
+	  <section data-markdown><script type="text/template">
+# VMs and Malware
+	  </script></section>
+	
+	  <section data-markdown><script type="text/template">
+## Why do we care about VMs?
+- We can run malware within them to 'sandbox' them
+  - This allows pausing the execution at various points
+- We can simulate other architectures / software systems to study malware
+- If we are trying to "break" things, that "breaking" is contained
+  - Experimenting with `fork()` for example -- we don't want to fork bomb our host machine
+	  </script></section>
+	
+	  <section data-markdown><script type="text/template">
+## But are you in a VM?
+- Meta-question: [are you living in a computer simulation](https://www.simulation-argument.com/)
+  - We'll leave that question for the philosophy classes...
+- In Linux, you can install and run `virt-what`, which will determine if you are in a VM or not
+	  </script></section>
+	
+	  <section data-markdown><script type="text/template">
+## virt-what
+![virt-what](images/03-vms/virt-what.png)
+	  </script></section>
+	
+	  <section data-markdown><script type="text/template">
+## VM Security
+- Docker is known to be rather insecure
+  - Containers use the same OS, so a kernel bug will exist in both
+- There have been "break-outs" of system VMs as well
+  - One from March 2017
+	  </script></section>
+	
+	  <section data-markdown><script type="text/template">
+## VM Break-out
+![vm break out](images/03-vms/vm-breakout.png)
+Article is [here](file:///home/aaron/Dropbox/git/dada/slides/03-vms.html#/8/3)
+	  </script></section>
+	
+	</section>
       
     </div>
   </div>
