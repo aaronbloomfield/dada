@@ -16,3 +16,4 @@ ready to be presented.
 - 1: [Course introduction](01-intro.html#/) (UVa specific)
 - 2: [Terminology](02-terminology.html#/)
 - 3: [Virtual Machines](03-vms.html#/)
+- 4: [Assembly](04-assembly.html#/)

@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <title>DADA: assembly slide set</title>
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
+  <link rel="stylesheet" href="dada.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+	<section data-markdown id="cover"><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;  
+## Assembly Language
+	</script></section>
+
+	<section data-markdown><script type="text/template">
+# Contents
+&nbsp;  
+[Calling Conventions](#/callingconv)  
+[Callee Rules](#/callee)  
+[Caller Rules](#/caller)  
+	</script></section>
+
+	<section>
+
+	  <section id="callingconv" data-markdown><script type="text/template">
+# Calling Conventions
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Calling of a subroutine
+```
+int max(int x, int y) {
+    int theMax = (x > y) ? x : y;
+    return theMax;
+}
+
+int main() {
+    int a = 5, b = 6;
+    int maxVal = max(a,b);
+    cout << "Max value: " << maxVal << endl;
+    return 0;
+}
+```
+Recall callee vs. caller
+	   </script></section>
+
+	  <section data-markdown><script type="text/template">
+## C Calling Convention
+- Uses hardware stack (memory)
+  - Stack *grows down*, toward the lower memory addresses
+  - x86 instructions used for calling convention
+    - `pop`
+    - `push`
+    - `call`
+    - `ret`
+  - Using a stack for calling convention is implemented on most processors.  Why?
+    - Recursion
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## C Calling Convention Overview
+- Answers to questions
+  - Parameters: passed in registers
+  	- If more than 6, then params 7-*n* placed on stack
+  	- If passing a large object, then placed on stack (doesn't fit in 64-bit register)
+  - Registers: saved on the stack
+  - Local variables: placed in memory on the stack
+  	- Or in registers if room available
+  - Return value: rax register
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Register usage
+- One register is used for the return value: rax
+- Six registers are used for parameter passing:
+  - rdi, rsi, rdx, rcx, r8, r9
+- Two registers may be modified by the callee: r10 and r11
+  - If the caller wants to keep those values, they need to be saved by pushing them onto the stack
+  - Actually, these two have specific uses depending on the language, so are often not used for this reason.
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Register usage, cont'd
+- Six registers may not be modified by a subroutine callee:
+  - rbx, rbp, r12-r15
+  - If it wans to use them, the subroutine must back them up (onto the stack) and restore them later
+- rsp should almost never be modified directly, as it points to the top of the stack
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Varying number of parameters
+- Three ways to have a variable number of parameters:
+  - Method overloading
+    - `Foo::bar(int)` and `Foo::bar(int, float)`
+  - Default parameters
+    - `Foo::bar (int x = 3)`
+  - Variable arguments
+    - As seen next...
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Variable number of arguments in C/C++
+
+This code adapted from [here](http://www.cprogramming.com/tutorial/lesson17.html)
+
+```
+#include <cstdarg>
+#include <iostream>
+using namespace std;
+double average (int num, ...) {
+  va_list arguments;
+  double sum = 0;
+  va_start (arguments, num);
+  for ( int x = 0; x < num; x++ )
+    sum += va_arg (arguments, double);
+  va_end (arguments);
+  return sum / num;
+}
+int main() {
+  cout << average(3, 12.2, 22.3, 4.5) << endl;
+  cout << average(5, 3.3, 2.2, 1.1, 5.5, 3.3) << endl;
+}
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Dissection of the average() function
+- Create a data structure to hold the list of arguments:
+```
+va_list arguments;
+```
+- Initialize the arguments to store all values after num:
+```
+va_start ( arguments, num );
+```
+- Loop until all numbers are added:
+```
+for ( int x = 0; x < num; x++ )
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Dissection of the average() function
+- Adds the next value in argument list to sum:
+```
+      sum += va_arg ( arguments, double );
+```
+- Clean up the list:
+```
+va_end ( arguments );
+```
+- Return the average:
+```
+return sum / num;
+```
+	  </script></section>
+
+
+	  <section data-markdown><script type="text/template">
+## Example: Output in C
+The C equivalent of cout is a function called `printf`
+```
+printf ("A %s, a %s, a %s: %s!\n", "man", 
+		"plan", "canal", "Panama");
+printf ("A percent sign: %%\n");
+printf ("An int: %d\n", i);
+printf ("A float with 2 decimal digits: %.2f\n", 
+		float_value);
+```
+Output:
+```
+A man, a plan, a canal: Panama!
+A percent sign: %
+An int: 3
+A float with 2 decimal digits: 3.14
+```
+	  </script></section>
+
+	</section>
+
+
+	<section>
+
+	  <section id="caller" data-markdown><script type="text/template">
+# Caller Rules
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Caller Rules
+- *Before* calling the function (the prologue)
+  - Save registers that might be needed after the call (r10, r11, or param registers if applicable)
+  - Place parameters in registers / on stack
+  	- rdi, rsi, rdx, rcx, r8, r9
+  	- Then push extra params onto stack
+- *Call* the function
+  - `call` instruction places return address on stack
+- *After* the called function returns (the epilogue)
+  - Remove parameters from stack (if applicable)
+  - Restore saved registers (if applicable)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Caller Rules ("Prologue")
+1. Caller-saved registers
+   - Registers which the caller must save (push onto the stack) ONLY if it wants the values preserved.
+   - r10, r11, and registers used for parameters if need value saved
+2. Parameters
+  - First six are passed in through registers (see previous slide); params 7-n pushed in *reverse order* (last parameter first) onto stack
+3. Call the subroutine
+  - Use the `call` instruction (pushes the return address onto the stack and branches to the subroutine)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Caller Rules ("Epilogue")
+1. Remove parameters
+   - Parameters pushed onto stack must be removed
+     - Restore stack to the state before the call
+   - What is done with the parameters?
+2. Return value
+   - If any, held in rax
+3. Restore caller-saved registers
+   - `pop` them off the stack (Caller can assume no other registers were modified)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Caller Rules Example
+We'll see this code in the following slides:
+```
+long myFunc(long a, long b, long c) {
+    long result;
+    // some code
+    return result;
+}
+
+int main() {
+    long x = 1, z = 3;
+    long retVal = myFunc(x, 123, z);
+    //...
+    return 0;
+}
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Caller Rules Example
+```
+; To call "myFunc" that takes 3 int parameters.
+; 1st in rax, 2nd is constant 123, 3rd in "var"
+
+push rdi         ; rdi will be a param, so saving it
+
+                 ; long retVal = myFunc(x, 123, z);
+mov rdi, rax     ; put first param in rdi
+mov rsi, 123     ; put second param in rsi
+mov rdx, [var]   ; put third param in rdx
+
+call myFunc      ; call the function
+
+pop rdi          ; restore saved rdi value
+
+; return value of myFunc is now available in rax 
+; (if there is any return value)
+```
+	  </script></section>
+
+	  <section>
+<h2>Stack Memory for myFunc</h2>
+<p>This is just before the <code>call</code> opcode is invoked.</p>
+<hr>
+<table class="transparent">
+<tr><td>&uarr;</td><td style="width:50px"></td><td class="border" style="width:300px">value of rdi</td><td style="width:25px"></td><td>&larr; rsp</td></tr>
+<tr><td>To higher addresses</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>(to 0xffffffff)</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>To lower addresses</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>(to 0x00000000)</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>&darr;</td><td style="width:50px"></td><td class="border" style="width:300px;border-bottom:medium solid;">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+</table>
+	  </section>
+
+	  <section data-transition="fade" data-transition-speed="fast">
+<h2>Stack Memory for myFunc</h2>
+<p>This is just <i><b>after</b></i> the <code>call</code> opcode is invoked.</p>
+<hr>
+<table class="transparent">
+<tr><td>&uarr;</td><td style="width:50px"></td><td class="border" style="width:300px">value of rdi</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>To higher addresses</td><td style="width:50px"></td><td class="border" style="width:300px">return address</td><td style="width:25px"></td><td>&larr; rsp</td></tr>
+<tr><td>(to 0xffffffff)</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>To lower addresses</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>(to 0x00000000)</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>&darr;</td><td style="width:50px"></td><td class="border" style="width:300px;border-bottom:medium solid;">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+</table>
+	  </section>
+
+	</section>
+
+
+	<section>
+
+	  <section id="callee" data-markdown><script type="text/template">
+# Callee Rules
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Callee Summary (again)
+- Prologue
+  - Tasks to perform BEFORE executing the function body
+- Function body
+- Epilogue
+  - Tasks to perform AFTER executing function body, but BEFORE leaving function
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Caller Rules Example
+We will see this code in the following slides:
+```
+long myFunc(long a, long b, long c) {
+    long result;
+    // some code
+    return result;
+}
+
+int main() {
+    long x = 1, z = 3;
+    long retVal = myFunc(x, 123, z);
+    //...
+    return 0;
+}
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Callee Rules (Prologue)
+Before the body of the function:
+
+1. Allocate local variables
+   - Make space on stack (decrement stack pointer)
+```
+sub rsp, 8
+```
+That is it. NOTE: caller is also allowed to use valid registers for local variables, so sometimes you will see that instead.
+
+
+	  </script></section>
+
+	  <section data-markdown id="pushrbp"><script type="text/template">
+## PUBLIC SERVICE ANNOUNCEMENT!
+- Note that you might see the following:
+```
+push rbp       ; at the start of the callee
+mov rbp, rsp
+...
+pop rbp        ; just before the ending 'ret'
+```
+- This is a 32-bit x86 convention that is no longer officially used, but is sometimes seen anyway.
+- To omit it, add the `-fomit-frame-pointer` flag to the compilation line
+	  </script></section>
+
+	  <section>
+<h2>Callee Rules (Prologue)</h2>
+<ol start="3">
+<li>Save callee-save registers<ul>
+    <li>rbx, rbp, r12-r15</li>
+    <li>only need to do this if callee intends to use them, otherwise, no need to save their contents</li>
+</ul></li></ol>
+<p>&nbsp;</p>
+<p>THEN, perform body of the function</p>
+	  </section>
+
+	  <section data-markdown><script type="text/template">
+## Callee Rules (Epilogue)
+1. Return value saved to rax
+2. Restore callee-saved registers
+   - `pop` from stack (in reverse order from which pushed)
+3. Deallocate local variables
+```
+add rsp, 8 //constant here depends on size of locals
+```
+5. Return
+```
+ret
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Callee Rules Example
+With a bit more code in the `myFunc()` body (NOTE the use of long here because they are 64-bit):
+```
+long myFunc(long a, long b, long c) {
+    long result;
+    result = c;
+    result += b;
+    return result;
+}
+
+int main() {
+    long x = 1, z = 3;
+    long retVal = myFunc(x, 123, z);
+    //...
+    return 0;
+}
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Callee Rules Example (1)
+```
+section .text
+myFunc:
+                ; prologue
+sub rsp, 8      ; room for a 64-bit local var (result)
+push rbx        ; save callee-save registers
+push rbp        ; both will be used by myFunc
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Callee Rules Example (2)
+```
+                     ; subroutine body
+mov rax, rdi	     ; param 1 to rax
+mov rbp, rsi         ; param 2 to rbp
+mov rbx, rdx         ; param 3 to rbx
+mov [rsp+16], rbx    ; put rbx into local var
+add [rsp+16], rbp    ; add rbp into local var
+mov rax, [rsp+16]    ; mov contents of local var to rax
+                     ; (return value/final result)
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Callee Rules Example (3)
+```
+                ; subroutine epilogue
+pop rbp         ; recover callee save registers
+pop rbx         ; REVERSE of when pushed
+add rsp, 8      ; deallocate local var(s)
+ret             ; pop top value from stack, jump there
+```
+	  </script></section>
+
+	  <section>
+<h2>Stack Memory for myFunc</h2>
+<p>This is just <i>after</i> the caller invokes the <code>call</code> opcode.</p>
+<hr>
+<table class="transparent">
+<tr><td>&uarr;</td><td style="width:50px"></td><td class="border" style="width:300px">value of rdi</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>To higher addresses</td><td style="width:50px"></td><td class="border" style="width:300px">return address</td><td style="width:25px"></td><td>&larr; rsp</td></tr>
+<tr><td>(to 0xffffffff)</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>To lower addresses</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>(to 0x00000000)</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>&darr;</td><td style="width:50px"></td><td class="border" style="width:300px;border-bottom:medium solid;">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+</table>
+	  </section>
+
+	  <section data-transition="fade" data-transition-speed="fast">
+<h2>Stack Memory for myFunc</h2>
+<p>This is just after the callee invokes <code>sub rsp, 8</code></p>
+<hr>
+<table class="transparent">
+<tr><td>&uarr;</td><td style="width:50px"></td><td class="border" style="width:300px">value of rdi</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>To higher addresses</td><td style="width:50px"></td><td class="border" style="width:300px">return address</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>(to 0xffffffff)</td><td style="width:50px"></td><td class="border" style="width:300px">local var (result)</td><td style="width:25px"></td><td>&larr; rsp</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>To lower addresses</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>(to 0x00000000)</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>&darr;</td><td style="width:50px"></td><td class="border" style="width:300px;border-bottom:medium solid;">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+</table>
+	  </section>
+
+	  <section data-transition="fade" data-transition-speed="fast">
+<h2>Stack Memory for myFunc</h2>
+<p>This is after the <code>myFunc()</code> prologue is completed.</p>
+<hr>
+<table class="transparent">
+<tr><td>&uarr;</td><td style="width:50px"></td><td class="border" style="width:300px">value of rdi</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>To higher addresses</td><td style="width:50px"></td><td class="border" style="width:300px">return address</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>(to 0xffffffff)</td><td style="width:50px"></td><td class="border" style="width:300px">local var (result)</td><td style="width:25px"></td><td>&larr;&nbsp;[rsp+16]</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">value of rbx</td><td style="width:25px"></td><td>&larr; [rsp+8]</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">value of rbp</td><td style="width:25px"></td><td>&larr; [rsp]</td></tr>
+<tr><td></td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>To lower addresses</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>(to 0x00000000)</td><td style="width:50px"></td><td class="border" style="width:300px">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+<tr><td>&darr;</td><td style="width:50px"></td><td class="border" style="width:300px;border-bottom:medium solid;">&nbsp;</td><td style="width:25px"></td><td>&nbsp;</td></tr>
+</table>
+	  </section>
+
+	  <section>
+    <table class="transparent">
+      <tr>
+	<td>
+
+	  <!-- code block table -->
+	  <small>
+	  <table class="transparent">
+	    <tr><td><span style="font-size:larger">Code</span></td></tr>
+	    <tr><td style="vertical-align:top">
+		<table class="transparent" style="padding:0;spacing:0;border-spacing:0;border-collapse:collapse">
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>sub rsp, 8</code></pre></td>         <td><span class="fragment" data-fragment-index="1"><span class="fragment fade-out" data-fragment-index="3"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>push rbx</code></pre></td>     <td><span class="fragment" data-fragment-index="3"><span class="fragment fade-out" data-fragment-index="5"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>push rbp</code></pre></td>       <td><span class="fragment" data-fragment-index="5"><span class="fragment fade-out" data-fragment-index="7"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>mov rax, rdi</code></pre></td>         <td><span class="fragment" data-fragment-index="7"><span class="fragment fade-out" data-fragment-index="9"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>mov rbp, rsi</code></pre></td>         <td><span class="fragment" data-fragment-index="9"><span class="fragment fade-out" data-fragment-index="11"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>mov rbx, rdx</code></pre></td> <td><span class="fragment" data-fragment-index="11"><span class="fragment fade-out" data-fragment-index="13"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>mov [rsp+16], rbx</code></pre></td><td><span class="fragment" data-fragment-index="13"><span class="fragment fade-out" data-fragment-index="15"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>add [rsp+16], rbp</code></pre></td><td><span class="fragment" data-fragment-index="15"><span class="fragment fade-out" data-fragment-index="17"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>mov rax, [rsp+16]</code></pre></td> <td><span class="fragment" data-fragment-index="17"><span class="fragment fade-out" data-fragment-index="19"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>pop rbp</code></pre></td> <td><span class="fragment" data-fragment-index="19"><span class="fragment fade-out" data-fragment-index="21"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>pop rbx</code></pre></td> <td><span class="fragment" data-fragment-index="21"><span class="fragment fade-out" data-fragment-index="23"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>add rsp, 8</code></pre></td>          <td><span class="fragment" data-fragment-index="23"><span class="fragment fade-out" data-fragment-index="25"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		  <tr><td><pre style="margin-top:0px;margin-bottom:0px"><code>ret</code></pre></td>          <td><span class="fragment" data-fragment-index="25"><span class="fragment fade-out" data-fragment-index="27"><span style="font-size:larger">&larr;</span></span></span></td></tr>
+		</table>
+	    </td></tr>
+	  </table>
+	  </small>
+
+	</td>
+	<td>
+
+	  <table class="transparent">
+	    <tr><td colspan="3"><h2>Callee Animation</h2></td></tr>
+	    <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+	    <tr><td>Stack</td><td colspan="2">Registers</td></tr>
+	    <tr>
+	      <td style="vertical-align:top">
+		<div style="position:relative;left:0;top:0">
+		  <img alt="cc animation" class="fragment fade-out" data-fragment-index="2" src="images/04-assembly/x86-cc-stack.dot.3.svg" style="position:relative;left:0px;top:0px">
+		  <span class="fragment fade-out" data-fragment-index="4"><img alt="cc animation" class="fragment" data-fragment-index="2" src="images/04-assembly/x86-cc-stack.dot.4.svg" style="position:absolute;left:0;top:0px"></span>
+		  <span class="fragment fade-out" data-fragment-index="6"><img alt="cc animation" class="fragment" data-fragment-index="4" src="images/04-assembly/x86-cc-stack.dot.5.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="14"><img alt="cc animation" class="fragment" data-fragment-index="6" src="images/04-assembly/x86-cc-stack.dot.6.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="16"><img alt="cc animation" class="fragment" data-fragment-index="14" src="images/04-assembly/x86-cc-stack.dot.7.svg" style="position:absolute;left:0;top:0"></span>
+		  <img alt="cc animation" class="fragment" data-fragment-index="16" src="images/04-assembly/x86-cc-stack.dot.8.svg" style="position:absolute;left:0;top:0">
+		</div>
+	      </td>
+	      
+	      <td style="vertical-align:top">
+		<div style="position:relative;left:0;top:0">
+		  <img alt="cc animation" class="fragment fade-out" data-fragment-index="2" src="images/04-assembly/x86-cc-rsp.dot.3.svg" style="position:relative;left:0;top:0">
+		  <span class="fragment fade-out" data-fragment-index="4"><img alt="cc animation" class="fragment" data-fragment-index="2" src="images/04-assembly/x86-cc-rsp.dot.4.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="6"><img alt="cc animation" class="fragment" data-fragment-index="4" src="images/04-assembly/x86-cc-rsp.dot.5.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="20"><img alt="cc animation" class="fragment" data-fragment-index="6" src="images/04-assembly/x86-cc-rsp.dot.6.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="22"><img alt="cc animation" class="fragment" data-fragment-index="20" src="images/04-assembly/x86-cc-rsp.dot.5.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="24"><img alt="cc animation" class="fragment" data-fragment-index="22" src="images/04-assembly/x86-cc-rsp.dot.4.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="26"><img alt="cc animation" class="fragment" data-fragment-index="24" src="images/04-assembly/x86-cc-rsp.dot.3.svg" style="position:absolute;left:0;top:0"></span>
+		  <img alt="cc animation" class="fragment" data-fragment-index="26" src="images/04-assembly/x86-cc-rsp.dot.2.svg" style="position:absolute;left:0;top:0">
+		</div>
+	      </td>
+
+	      <td style="vertical-align:top">
+		<div style="position:relative;left:0;top:0">
+		  <img alt="cc animation" class="fragment fade-out" data-fragment-index="8" src="images/04-assembly/x86-cc-regs.dot.svg" style="position:relative;left:0;top:0">
+		  <span class="fragment fade-out" data-fragment-index="10"><img alt="cc animation" class="fragment" data-fragment-index="8" src="images/04-assembly/x86-cc-regs.dot.2.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="12"><img alt="cc animation" class="fragment" data-fragment-index="10" src="images/04-assembly/x86-cc-regs.dot.3.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="18"><img alt="cc animation" class="fragment" data-fragment-index="12" src="images/04-assembly/x86-cc-regs.dot.4.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="20"><img alt="cc animation" class="fragment" data-fragment-index="18" src="images/04-assembly/x86-cc-regs.dot.5.svg" style="position:absolute;left:0;top:0"></span>
+		  <span class="fragment fade-out" data-fragment-index="22"><img alt="cc animation" class="fragment" data-fragment-index="20" src="images/04-assembly/x86-cc-regs.dot.6.svg" style="position:absolute;left:0;top:0"></span>
+		  <img alt="cc animation" class="fragment" data-fragment-index="22" src="images/04-assembly/x86-cc-regs.dot.7.svg" style="position:absolute;left:0;top:0">
+		</div>
+	      </td>
+	    </tr>
+	  </table>
+
+	</td>
+      </tr>
+    </table>
+	  </section>
+
+	  <section data-markdown><script type="text/template">
+## That subroutine, again
+- We fully realize that the previous assembly method could be written as:
+```
+mov rax, rdx
+add rax, rsi
+ret
+```
+- The long-winded-ness of the previous inefficient version was to show how the calling convention works, not to showcase our assembly writing skills
+	  </script></section>
+
+
+	</section>
+
+
+      </div>
+
+    </div>
+
+  <script src="reveal.js/lib/js/head.min.js"></script> 
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="settings.js"></script> 
+
+  </body>
+</html>
