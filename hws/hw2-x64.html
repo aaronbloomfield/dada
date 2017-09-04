@@ -44,6 +44,7 @@ int  main () {
   cout &lt;&lt; &quot;volume: &quot; &lt;&lt; vol &lt;&lt; endl;
   return 0;
 }</code></pre>
+<h3 id="part-2-analysis">Part 2: analysis</h3>
 <p>The questions to answer are below. There are a number of command-line tools that can be used to generate these answers, which are listed by each question. You can type <code>man foo</code> at the Linux command prompt to see the full manual page about the 'foo' program. Some of the commands below require to to use specific flags described in the manual page for each command.</p>
 <p>See &quot;Notes on interpreting the objdump file&quot;, below, for help interpreting the output.</p>
 <ul>
@@ -65,7 +66,7 @@ int  main () {
 </ul></li>
 </ul>
 <p>Answer these questions in a PDF file called analysis.pdf. Copy the questions above (you can from the web page copy of this assignment) and type your answers below each question. Below each answer, copy and paste the specific portions of the tools output that were used to answer the question.</p>
-<h3 id="part-2-detecting-tricky-jumps">Part 2: detecting tricky jumps</h3>
+<h3 id="part-3-detecting-tricky-jumps">Part 3: detecting tricky jumps</h3>
 <p>Write a separate C or C++ program that takes in, as the input, an objdump from the above executable. It should read it in as standard input - we are not dealing with file input and output. First, you may want to save the output of objdump to a file:</p>
 <pre><code>objdump -sRrd volume &gt; input.txt</code></pre>
 <p>Your program must read in that file via standard input:</p>
@@ -78,11 +79,11 @@ int  main () {
 <p>If a tricky jump is found, then you should output &quot;tricky jump found!&quot; for <strong>each</strong> time it's found. If there are <strong>no</strong> tricky jumps, then output &quot;tricky jump not found&quot;.</p>
 <p>We are not looking for error-proof or long-winded code! The reference solution was about 20 lines.</p>
 <p>Your Makefile MUST generate an executable called <code>tricky</code>! Anything else will not be graded!</p>
-<h3 id="part-3-makefile">Part 3: Makefile</h3>
+<h3 id="part-4-makefile">Part 4: Makefile</h3>
 <p>You will need to create a Makefile that will compile the programs. There are three <strong>required</strong> aspects to the Makefile.</p>
 <ul>
 <li>The volume/density problem from part 1 must compile to an executable named <code>volume</code></li>
-<li>The tricky jump detection problem from part 2 must compile to an executable named <code>tricky</code></li>
+<li>The tricky jump detection problem from part 3 must compile to an executable named <code>tricky</code></li>
 </ul>
 <p>You may want to start with the Makefile for the vecsum program provided in CS 2150 (see <a href="http://aaronbloomfield.github.io/pdr/labs/lab08-64bit/index.html">here</a>). That example uses clang++ as the compiler, but you can use either clang++ or g++.</p>
 <p>It's fine if your source code files are named something slightly different, as long as your Makefile can compile both of them. We just have to be able to reasonably tell which source code file name is which. But the executables need to be named exactly the same as specified herein.</p>
@@ -132,11 +133,11 @@ int  main () {
 <h3 id="items-to-submit">Items to Submit</h3>
 <p>These files need to be submitted to the HW 2 assignment via the course tools submission.</p>
 <ul>
-<li>A PDF document called analysis.pdf with the analysis questions given above (in part 1) and their answers.</li>
 <li>File density.s with your assembly language solution for volume/density (from part 1)</li>
 <li>File main.cpp with your C++ code for the <code>main()</code> function for the volume/density code (from part 1)</li>
-<li>File tricky.cpp with your C++ code for the <code>main()</code> function for the tricky jump detection code from part 2</li>
-<li>A Makefile that compiles the programs, as explained above -- make sure the executables are named <code>volume</code> and <code>tricky</code>!</li>
+<li>A PDF document called analysis.pdf with the analysis questions given above (in part 2) and their answers.</li>
+<li>File tricky.cpp with your C++ code for the <code>main()</code> function for the tricky jump detection code from part 3</li>
+<li>A Makefile that compiles the programs, as explained above in part 4 -- make sure the executables are named <code>volume</code> and <code>tricky</code>!</li>
 </ul>
 </body>
 </html>
