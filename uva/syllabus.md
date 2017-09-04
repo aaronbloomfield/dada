@@ -23,7 +23,7 @@ CS 4630: Defense Against the Dark Arts (DADA)
   the reading (and to ensure that people are showing up to class!).
 
 **Grading:** There will be one midterm (15% of the grade, on
-  Wednesday, October 9th) and a final exam (25% of the grade, on
+  Wednesday, October 11th) and a final exam (25% of the grade, on
   Friday, December 15th at 9 a.m.). The homework assignments will
   constitute 50% of your grade. Attendance in class is
   noted. Participation will be the remaining 10%; participation will
