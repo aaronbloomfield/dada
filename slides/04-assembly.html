@@ -41,6 +41,9 @@
 [Calling Conventions](#/callingconv)  
 [Callee Rules](#/callee)  
 [Caller Rules](#/caller)  
+[Memory](#/memory)  
+[Windows PE files](#/winpe)  
+[Linux ELF files](#/linuxelf)  
 	</script></section>
 
 	<section>
@@ -612,7 +615,401 @@ ret
 
 	</section>
 
+	<section>
 
+	  <section data-markdown id="memory"><script type="text/template">
+# Memory
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Think back to 16 bit...
+- The 8086 and 80286 were 16-bit computers
+  - This was from 1979-1985
+- 2^16 = 64 Kb, which is not a lot of memory that a program could address
+- So they invented "segments"
+  - Each memory access include the segment and the offset
+    - The "offset" here was a 16 bit pointer
+- DOS allowed for 10 segemnts, which yielded 10 * 64 Kb = 640 Kb of memory
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Pointer types
+- Due to the segmented memory, x86 machines had "near" pointers and "far" pointers
+  - A "near" pointer was within the same segment, and thus just a 16 bit pointer
+  - A "far" pointer had a segment number *and* a 16 bit pointer
+- Microsoft tried to get this put into the C standard
+  - It was rejected as being platform specific
+- Thankfully we don't have to deal with that anymore...
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Memory segments today
+- Mostly unused in 32-bit
+- Largely elimininated in the AMD64 processor
+- Except for threads:
+  - Threads need TLS (thread local store)
+    - Example: for "global" variables are specific to that thread
+  - These use the fs/gs registers
+    - Those registers were used, in earlier chips, to help specify the segment
+- More more details, see [here](https://stackoverflow.com/questions/10810203/what-is-the-fs-gs-register-intended-for)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Virtual memory
+- Recall that memory is split into pages (1 Kb to 4 Kb in size)
+- This allows the MMU (memory management unit) and the OS to place memory pages anywhere
+  - They can be elsewhere in memory, or even on disk
+  - An MMU is also called a PMMU (paged MMU)
+- All modern computers have this
+  - One of the few restrictions on running the Linux kernel is that it must have a PMMU (and be 32-bit, and have gcc)
+  - (the image on the next slide is from [wikipedia](https://en.wikipedia.org/wiki/Virtual_memory))
+	  </script></section>
+
+	  <section>
+<img class="stretch" alt="virtual memory" style="background-color:white" src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Virtual_memory.svg">
+	  </section>
+
+	  <section data-markdown><script type="text/template">
+## Why virtual memory?
+- Many programs can "access" a given memory address
+  - Since the MMU is mapping it to somewhere in actual memory
+  - This is what allows multiple programs to be in memory at once!
+- If memory fills up, the MMU can "swap" memory to disk
+  - This frees up more RAM
+	  </script></section>
+
+	</section>
+
+	<section>
+
+	  <section data-markdown id="winpe"><script type="text/template">
+# Windows PE files
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Windows executable files
+- PE stands for "Portable Executable"
+- There are PE16, PE32, and PE64 files (most are the latter)
+  - A compiler produces this in the linking phase
+- While our assignments in this class will not focus on PE files, they are the most commonly infected by viruses
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE files: design principle
+- PE files are meant to be *portable* to any Windows installation
+  - There will be different DLL (shared library) versions, etc.
+- They are often portable across different Windows versions, also
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE file format
+<!-- .slide: class="right-float-img-800" -->
+![PE format](http://2we26u4fam7n16rz3a44uhbe1bq2.wpengine.netdna-cdn.com/wp-content/uploads/112015_2323_2MalwareRes1.jpg)
+- Parts:
+  - DOS header
+  - DOS stub
+  - PE header
+    - Where Windows looks...
+  - PE sections
+    - .data section
+    - .rdata section
+    - .text section
+
+Image from [here](http://resources.infosecinstitute.com/2-malware-researchers-handbook-demystifying-pe-file/#gref)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## DOS Header
+- If a program is invoked within a DOS command prompt window, it starts executing here
+- For most PE32 executables, the DOS header contains a tiny executable that prints: "This application must be run from Windows", then exits
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE Header
+- DOS Header points to PE header
+- PE header points to IATs and the section table, which points to all code and data sections
+- Viruses use the PE Header to navigate around the PE file, find where to insert virus code, etc.
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE Sections
+- .text: Code 
+- .data: Initialized data
+- .bss: Uninitialized data
+- .rdata: Const/read-only (and initialized) data
+- .edata: Export descriptors
+- .idata: Import descriptors
+- .reloc: Relocation table (for code instructions with absolute addressing when the module could not be loaded at its preferred base address)
+- .rsrc: Resources (icon, bitmap, dialog, ...)
+
+(shamelessly copied from [here](https://stackoverflow.com/questions/19012300/whats-the-difference-between-rdata-and-idata-segments))
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+<!-- .slide: class="right-float-img-800" -->
+## Linking a PE file
+![PE file linking](images/04-assembly/pe-linking.png)
+- Compiler produces .o files
+- Each .o has it's own sections
+- Linker combines into the PE
+- Linker: the last compiler stage
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Linking a PE file
+- Why the dead spaces?
+ - Alignment restrictions
+  - Perhaps 128 byte boundaries
+- Some linkers make PE file align to page boundaries
+  - Memory pages are much bigger (1 Kb to 4 Kb)
+  - This simplifies the loader's job
+  - But makes PE file bigger on disk
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE file expansion
+![PE file expansion](images/04-assembly/pe-expansion.png)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE file expansion
+- Why the expansion?
+  - Memory will have different alignment restrictions than the file on disk
+  - Loader increases dead spaces to use page boundaries, while alignment is to a lesser size (e.g. 128 bytes) in the PE file on disk
+  - Page sizes are 1 Kb to 4 Kb
+- Like unpacking a suitcase...
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE file expansion
+- But why align to page boundaries?
+- MMU (memory management unit) and OS can place "restrictions" on entire pages
+  - But not parts of a page
+- Possible restrictions:
+  - Not executable code (good for the stack)
+  - Not writable (good for code and read-only data)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Motivation for Learning File Formats
+- Question: Why do we care about the details of the PE file format?
+- Answer: Because a virus writer will try to infect the PE file in such a way as to make the virus code execute, while making the PE file look as it would normally look. 
+  - The job of anti-virus software is to find well-disguised viruses.
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## File infection techniques
+- Overwriting (changing host size)
+- Overwriting (not changing host size)
+- Overwriting (random)
+- Appending
+- Prepending
+- Classic parasitic
+- Cavity
+- Fractionated cavity
+- Compressor
+- Amoeba
+- "Swiss cheese"
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Virtual Addresses
+- Addresses within *.o and PE files are RVA (Relative Virtual Addresses)
+- They are offsets relative to the eventual base address that the loader chooses at load time
+- VA (virtual address) = base address (load point for section) + RVA
+- Physical address is wherever the VA is mapped by the OS to actual RAM
+- Linker cannot know final VA, as loading has not happened yet; must deal with RVA
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Loading the PE File
+- OS provides kernel32.dll, which is linked with almost every PE file
+- Application might also make use of other DLLs, such as compiler libraries, etc.
+- Loader must ensure that all dependent DLLs are loaded and ready to use
+- Linker cannot know where in memory the library functions, etc., will be loaded
+- Therefore, PE file code calls external API functions through function pointers
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE Function Pointers
+- For each DLL from which the PE file imports (uses) API functions, the linker creates an IAT (Import Address Table) in the PE
+- The Import Address Table is a table of function pointers into another DLL
+- Function calls from your application to the DLL your application depends on are made through these function pointers
+- Linker initializes the IAT to RVAs
+- Loader fills in the virtual addresses at load time
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE Function Pointers Example
+- Your C code calls `printf(...)`
+- Compiler records in the OBJ header the need to import `printf()` from the DLL that contains `stdio`
+- Compiler produces initial IAT for stdio in the OBJ header
+- Linker merges IATs from all *.o files
+  - Offset (RVA) of printf() within stdio DLL is fixed and can be determined by the linker simply by looking at the stdio library object code
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## PE Function Pointers Example cont'd.
+- Linker patches new IAT RVA for `printf()` into your object code:
+  - `call dword ptr 0x41003768`
+  - This is an indirect call through a pointer
+- Address 0x41003768 is an IAT entry that will be filled in by the loader
+- Loader replaces IAT entry with VA at load time; it knows where `stdio` DLL is loaded
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Analyzing PE Files
+- DUMPBIN tool produces readable printout of a PE file
+- `DUMPBIN /ALL /RAWDATA:NONE` is most common usage
+  - `/DISASM` switch also useful: disassembles the code sections
+	  </script></section>
+
+
+	</section>
+
+	<section>
+
+	  <section data-markdown id="linuxelf"><script type="text/template">
+# Linux ELF files
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Linux ELF Files
+<!-- .slide: class="right-float-img-800" -->
+![ELF file](https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Elf-layout--en.svg/693px-Elf-layout--en.svg.png)
+- Similar in concept to PE files
+  - No DOS header, though!
+- Same common sections
+  - .data, .text, .rodata, etc.
+- Image from [wikipedia](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## ELF portability
+- ELF stands for Executable and Linkable Format
+- The format is valid for any CPU or ISA
+- Thus, it is used on many OSes and platforms
+  - UNIX systems: Linux, Solaris, FreeBSD, etc.
+  - Non-UNIX systems: OpenVMS, Windows 10 (anniversary update), etc.
+  - Game consoles: Playstation, Dreakcast, some Nitendos, etc.
+  - Mobile phones: Android (somewhat), etc.
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## ELF file parts
+- File header
+- Program header
+- Section header (one per section)
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## ELF file header
+- 64 bytes long
+- Relevant parts:
+  - Whether it's a 32-bit or 64-bit file
+  - Endianness type
+  - ABI used
+  - Type of ELF (executable, shared library, etc.)
+  - Addresses to various parts of the file
+    - Other tables and sections in the file
+    - Executable entry point
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## `readelf -h volumne`
+```
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x4007a0
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          18448 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         9
+  Size of section headers:           64 (bytes)
+  Number of section headers:         38
+  Section header string table index: 35
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## ELF program header
+- Tells the OS how to create the memory image
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## `readelf -l volume`
+```
+Elf file type is EXEC (Executable file)
+Entry point 0x4007a0
+There are 9 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  PHDR           0x0000000000000040 0x0000000000400040 0x0000000000400040
+                 0x00000000000001f8 0x00000000000001f8  R E    8
+  INTERP         0x0000000000000238 0x0000000000400238 0x0000000000400238
+                 0x000000000000001c 0x000000000000001c  R      1
+      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]
+  LOAD           0x0000000000000000 0x0000000000400000 0x0000000000400000
+                 0x0000000000000b8c 0x0000000000000b8c  R E    200000
+  LOAD           0x0000000000000df8 0x0000000000600df8 0x0000000000600df8
+                 0x0000000000000270 0x00000000000003a0  RW     200000
+  DYNAMIC        0x0000000000000e18 0x0000000000600e18 0x0000000000600e18
+                 0x00000000000001e0 0x00000000000001e0  RW     8
+  NOTE           0x0000000000000254 0x0000000000400254 0x0000000000400254
+                 0x0000000000000044 0x0000000000000044  R      4
+  GNU_EH_FRAME   0x0000000000000a10 0x0000000000400a10 0x0000000000400a10
+                 0x0000000000000044 0x0000000000000044  R      4
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000000000000  RWE    10
+  GNU_RELRO      0x0000000000000df8 0x0000000000600df8 0x0000000000600df8
+                 0x0000000000000208 0x0000000000000208  R      1
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     
+   01     .interp 
+   02     .interp .note.ABI-tag .note.gnu.build-id .gnu.hash .dynsym .dynstr .gnu.version .gnu.version_r .rela.dyn .rela.plt .init .plt .plt.got .text .fini .rodata .eh_frame_hdr .eh_frame 
+   03     .init_array .fini_array .jcr .dynamic .got .got.plt .data .bss 
+   04     .dynamic 
+   05     .note.ABI-tag .note.gnu.build-id 
+   06     .eh_frame_hdr 
+   07     
+   08     .init_array .fini_array .jcr .dynamic .got 
+```
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## ELF utilities
+- `readelf`: displays info on ELF files
+- `objdump`: similar; used in [hw2](../hws/hw2-x64.html)
+
+&nbsp;  
+
+Type `man readelf` or just `readelf` to see the options
+	  </script></section>
+
+	  <section data-markdown><script type="text/template">
+## Why study ELF?
+- The concepts are the same as PE files
+- It's easier to use, since we all have the same Linux version via VirtualBox
+- Note, however, that not nearly as many viruses target ELF files
+	  </script></section>
+
+	</section>
+
+	
       </div>
 
     </div>
