@@ -24,8 +24,8 @@ Lectures (fall 2017)
 | 3   | Aug&nbsp;28 | Monday      | [terminology][102] | [terminology][102], slides 6.1 to 8.11 |
 | 4   | Aug&nbsp;30 | Wednesday   | [terminology][102], [vms][103] | [terminology][102], slides 9.1 to 9.7 (end); [vms][103], slides 1 to 4.10 |
 | 5   | Sep&nbsp;1  | Friday      | [vms][103]    | [vms][103], slides 4.11 to 6.6 |
-| 6   | Sep&nbsp;4  | Monday      |               |               |
-| 7   | Sep&nbsp;6  | Wednesday   |               |               |
+| 6   | Sep&nbsp;4  | Monday      | [vms][103], [assembly][104] | [vms][103], slides 7.1 to 9.6 (end); [assembly][104], slides 1 to 3.11 |
+| 7   | Sep&nbsp;6  | Wednesday   | [assembly][104] | [assembly][104], slides 4.1 to ... |
 | 8   | Sep&nbsp;8  | Friday      |               |               |
 | 9   | Sep&nbsp;11 | Monday      |               |               |
 | 10  | Sep&nbsp;13 | Wednesday   |               |               |
@@ -79,3 +79,4 @@ Lectures (fall 2017)
 [101]: ../slides/01-intro.html#/
 [102]: ../slides/02-terminology.html#/
 [103]: ../slides/03-vms.html#/
+[104]: ../slides/04-assembly.html#/
