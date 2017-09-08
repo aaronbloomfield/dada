@@ -9,6 +9,7 @@ Reveal.initialize({
     transition: 'slide', // none/fade/slide/convex/concave/zoom
     // Optional reveal.js plugins
     dependencies: [
+        { src: '../slides/reveal.js/plugin/math/math.js', async: true },
 	{ src: '../slides/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
 	{ src: '../slides/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 	{ src: '../slides/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },

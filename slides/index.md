@@ -12,8 +12,10 @@ Please note that the slides are generally not finalized until the day
 of lecture, and some of the links may not work until the lecture is
 ready to be presented.
 
-- [Daily announcements](../uva/daily-announcements.html#/) (UVa specific)
-- 1: [Course introduction](01-intro.html#/) (UVa specific)
-- 2: [Terminology](02-terminology.html#/)
-- 3: [Virtual Machines](03-vms.html#/)
-- 4: [Assembly](04-assembly.html#/)
+[Daily announcements](../uva/daily-announcements.html#/) (UVa specific)
+
+1. [Course introduction](01-intro.html#/) (UVa specific)
+2. [Terminology](02-terminology.html#/)
+3. [Virtual Machines](03-vms.html#/)
+4. [Assembly](04-assembly.html#/)
+5. [Regular expressions and lex](05-re-and-lex.html)
