@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>DADA: HW 3: Tricky Jump</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../markdown.css" type="text/css" />
+</head>
+<body>
+<h1 id="dada-hw-3-tricky-jump">DADA: HW 3: Tricky Jump</h1>
+<p><a href="index.html">Go up to the main DADA homeworks page</a> (<a href="index.md">md</a>)</p>
+<h3 id="introduction">Introduction</h3>
+<p>This assignment will explore what it takes to create a stealthy virus that employs a &quot;tricky jump.&quot; A tricky jump is a form of hijacking in which a jump is inserted to call some virus code. The jump is inserted in such a way that after the virus code runs, the program continues normal execution, thereby maintaining stealth.</p>
+<p>This program <strong><em>MUST</em></strong> run on the <a href="../docs/virtualbox-image-details.html">VirtualBox image</a> (<a href="../docs/virtualbox-image-details.md">md</a>) provided for this course.</p>
+<p>This homework was taken, with permission, from <a href="https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/tricky.html">a homework created by Charles Reiss</a></p>
+<h3 id="task">Task</h3>
+<p>A &quot;tricky jump&quot; can be efficiently implemented (only six bytes) as:</p>
+<pre><code>pushq $AddressOfVirusFunction
+ret</code></pre>
+<p>This can be encoded on x86-64 using only six bytes, and the encoding does not change based on where the push instruction is placed. This makes it easy to compute the machine code seperately from inserting it somewhere, and so has been commonly seen in viruses.</p>
+<p>One could also implement a &quot;tricky jump&quot; by inserting a conventional jump instruction:</p>
+<pre><code>jmp AddressOfVirusFunction</code></pre>
+<p>However, a <code>jmp</code> instruction uses <em>relative</em> addresses (whereas <code>pushq</code> uses <em>absolute</em> addresses), so the resulting machine code will change based on where the jump is inserted.</p>
+<p>When either sequence is executed, control is diverted to the virus code. When the virus code returns, control returns to the function that called the function the at contained the tricky jump. If the virus writer inserts the tricky jump at the end of an application function (i.e, to replace the <code>ret</code>), then the program, after the virus code executes, will continue to run as if nothing happened. For example, one might see code like like:</p>
+<pre><code>400661:       c3                      retq       
+400662:       66 66 66 66 66 2e 0f    data32 data32 data32 data32 nopw %cs:0x0(%rax,%rax,1)
+400669:       1f 84 00 00 00 00 00</code></pre>
+<p><code>data32 data32 data32 data32 nopw %cs:0x0(%rax,%rax,1)</code> is objdump's representation of a 14-byte long nop instruction. This is padding added at the end of the function. This is a &quot;cavity&quot; that gives a virus writer some room to work. If we insert a &quot;tricky jump&quot; starting where the retq instruction is located (address 0x400661), then the virus code will be invoked. When the virus code returns, control will be returned to the function that invoked this function.</p>
+<p>For this assignment, you will write a C program that infects a particular Linux executable and causes some virus code to be executed.</p>
+<p>The Linux executable you want to infect is called <a href="hw3-tricky/target.exe">target.exe</a>. Alternatively, you can download the <a href="hw3-tricky/target.c">target.c</a> source code and compile it with: <code>gcc -falign-functions=16 -o target.exe target-novirus.c</code>.</p>
+<p><code>target.exe</code> produces the following output:</p>
+<pre><code>Initialize application.
+Begin application execution.
+Terminate application.</code></pre>
+<p>(After downloading <code>target.exe</code>, you may need to mark it as executable with a command like <code>chmod +x target.exe</code>. Then you should be able to run it using <code>./target.exe</code>.)</p>
+<p>Your program should modify <code>target.exe</code> into a <code>target-infected.exe</code> which will produce the following output:</p>
+<pre><code>Initialize application.
+You have been infected with a virus!
+Begin application execution.
+Terminate application.</code></pre>
+<p>Note: add the second line <em>exactly</em> as is, as the auto-grading scripts will be looking for that line. If you add extra spaces, speling mistakes, different punctionation, etc., you will lose points!</p>
+<p>You will use the &quot;tricky jump&quot; method of infection. The push version is probably the easiest to use, but you may use any technique. To simplify this assignment:</p>
+<ul>
+<li>The executable has a large &quot;hole&quot; (unused space filled with nops) in which to place the non-malicious &quot;virus code&quot;, and we will supply working &quot;virus code&quot; for you.</li>
+<li>You only need to handle infecting this particular executable, but we expect your infection program to be fairly easy to port to new executables. (For example, you should not just have a copy of the output file inside your C file.)</li>
+</ul>
+<p>The &quot;virus&quot; code we want you to insert is the following (also available as a .s file or a .o file):</p>
+<pre><code>    leal string(%rip), %edi
+    pushq $0x4004e0 /* address of puts in target executable */
+    retq
+string: 
+    .asciz &quot;You have been infected with a virus!&quot;</code></pre>
+<p>You can copy the resulting machine code into the large cavity in the executable. This assembly code is carefully written to not require changes to the machine code depending on where in the executable it is. (This is why it does not call <code>puts</code> with a <code>jmp</code> or <code>call</code> instruction or use <code>mov $string, %edi</code>.) It will, however, not work in other executables because it hard-codes the address of <code>puts</code> in this executable. (The simplest way to avoid this problem would be to replace the call to <code>puts</code> with a direct use of the system call used to implement <code>puts</code>.)</p>
+<p>Submit a C program that when compiled an executed reads a C executable called <code>target.exe</code> and produces an executable called <code>target-infected.exe</code>. <code>target-infected.exe</code> must be the same length as <code>target.exe</code>.</p>
+<p>Also, answer the following questions:</p>
+<ol style="list-style-type: decimal">
+<li><p>How did you identify the file offsets in <code>target.exe</code> to overwrite?</p></li>
+<li><p>How did you produce the machine code to insert for the tricky jump to the virus code?</p></li>
+<li><p>If your infect.c has a hard-coded offset or something similar, how would you automate finding the location in <code>target.exe</code> to overwrite with a tricky jump so that it would work on other target programs? (For this question, ignore the problem of fixing the inserted &quot;virus&quot; code to work in other executables.)</p></li>
+</ol>
+<h3 id="submission">Submission</h3>
+<p>Submit the following files:</p>
+<ul>
+<li>your <code>infect.c</code></li>
+<li>a file <code>answers.txt</code> containing the answers to the above questions</li>
+</ul>
+<p>The names matter, as the autograder will mark points off if they are not what is expected.</p>
+<h3 id="methodology-and-hints">Methodology and Hints</h3>
+<ol style="list-style-type: decimal">
+<li><p>You should use the utility objdump to examine the executable <code>target.exe</code>. The option <code>--disassemble</code> is useful. In particular, you need to determine the starting address of the virus code. The dissasembly will also help you determine the opcodes of the instructions that you need to insert (i.e., a <code>push</code> instruction and a <code>ret</code> instruction). You may wish to consult the objdump manual (<code>man objdump</code>).</p></li>
+<li><p>Identify where the constant stings &quot;Initialize appliation&quot; and &quot;Begin application execution&quot; are referenced to locate relevant parts of the application code.</p></li>
+<li><p>Look for a large area of <code>nop</code> opcodes in the disassembly to determine where to insert the virus code. Record the address of this location in memory to generate the &quot;tricky jump&quot; code you will insert elsewhere in the executable.</p></li>
+<li>To insert both the virus code and the tricky jump itself, the trick is that you must map the address of the location in the executable to the offset of the proper byte in the file. You need to do this mapping because the file offset where you want to write is not the same as the address of the instruction when the program is loaded in memory (which is what objdump usually shows you).
+<ul>
+<li>One option is to figure out what options you can pass to objdump to get it to display the offset of code <em>within</em> the executable file.</li>
+<li>Another option is to get a hexadecimal dump of the raw file and look for bytes shown in objdump output in the actual executable file to find their location.</li>
+<li>Yet another option would be for your infect.c to search for particular bytes in the executable file itself.</li>
+</ul></li>
+<li><p>A <code>push</code> of a 32-bit constant (on 32- or 64-bit x86) can be encoded as an <code>0x68</code> byte followed by the (little-endian) constant. A <code>ret</code> is encoded as <code>c3</code>. A jump can be encoded as an <code>0xe8</code> byte followed by a 32-bit offset from the address of the following instruction.</p></li>
+<li><p>A very useful program to examine the file is a hex editor such as ghex. You can install <code>ghex</code> using <code>sudo apt-get install ghex</code>.</p></li>
+<li><p>To simplify the assignment, you can hardcode the input and output file names in your infect program. That is, infect.c opens and reads <code>target.exe</code> and opens and writes <code>target-infected.exe</code>. After you produce <code>target-infected.exe</code> you will probably need to set the execute permissions on the file (your program does not have to set those itself; that can be done manually).</p></li>
+<li><p>To read from and write to a binary file in C, you can use <code>fopen</code>, <code>fread</code>, and <code>fwrite</code>. You can run <code>man fopen</code>, <code>man fread</code>, etc., to get documentation for how these functions are called, or search online. An example usage of a program that copies &quot;input.dat&quot; to &quot;output.dat&quot; is the following:</p></li>
+</ol>
+<pre><code> #include &lt;stdio.h&gt; 
+ #include &lt;stdlib.h&gt;
+
+ int main(void) { 
+     FILE *in;
+     FILE *out;
+     char *buffer;
+     int size;
+     in = fopen(&quot;input.dat&quot;, &quot;rb&quot;);
+     /* get size of input.dat, by 
+        moving to the end of the file */
+     fseek(in, 0, SEEK_END);
+     size = ftell(in);
+     /* then, return to the
+        beginning of the file */
+     fseek(in, 0, SEEK_SET);
+     buffer = malloc(size);
+     fread(buffer, 1, size, in);
+     fclose(in);
+     out = fopen(&quot;output.dat&quot;, &quot;wb&quot;);
+     fwrite(buffer, 1, size, out);
+     fclose(in);
+ }</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li><p>The hard part is figuring out what locations in the file need to be changed and what they should be changed to. The code to do the infection is small.</p></li>
+<li><p>We are reading and writing binary files, not text files. You may need to open files in binary mode, next text mode.</p></li>
+<li><p>The virus code we've given finishes by returning with a <code>ret</code> instruction. (This is actually by returning from <code>puts()</code>.) So whereever you insert the virus function needs to be a place where it is safe to return from. If you are experiencing a segfault after the virus code prints out its message, this is the most likely reason why.</p></li>
+</ol>
+</body>
+</html>
