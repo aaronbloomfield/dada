@@ -27,7 +27,7 @@ Lectures (fall 2017)
 | 6   | Sep&nbsp;4  | Monday      | [vms][103], [assembly][104] | [vms][103], slides 7.1 to 9.6 (end); [assembly][104], slides 1 to 3.11 |
 | 7   | Sep&nbsp;6  | Wednesday   | [assembly][104] | [assembly][104], slides 4.1 to 6.6 |
 | 8   | Sep&nbsp;8  | Friday      | [assembly][104] | [assembly][104], slides 6.6 to 7.13 |
-| 9   | Sep&nbsp;11 | Monday      |               |               |
+| 9   | Sep&nbsp;11 | Monday      | [assembly][104] | [assembly][104], slides 7.13 to 8.10 (end) |
 | 10  | Sep&nbsp;13 | Wednesday   |               |               |
 | 11  | Sep&nbsp;15 | Friday      |               |               |
 | 12  | Sep&nbsp;18 | Monday      |               |               |
