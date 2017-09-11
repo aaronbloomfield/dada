@@ -23,7 +23,7 @@
   <div class="reveal">
     <div class="slides">
 
-      <section data-markdown><script type="text/template">
+	<section data-markdown id="cover"><script type="text/template">
 # CS 4630
 &nbsp;
 ### Defense Against the Dark Arts
@@ -35,74 +35,69 @@
 ## Regular Expressions and Lex
 	</script></section>
 
-	<section data-markdown><script type="text/template">
+	<section data-markdown><textarea data-template>
 # Contents
 &nbsp;  
-[Section 1](#/sec1)  
-[Section 2](#/sec2)  
-	</script></section>
+[Formal grammars](#/formal)  
+[Regular expressions](#/re)  
+[NFAs](#/nfas)  
+[REs to NFAs](#/res2nfas)  
+[NFAs to DFAs](#/nfas2dfas)  
+[Lex](#/lex)  
+	</textarea></section>
 
       <section>
-                <section>
-<h2>Insert expected running time</h2>
-<ul>
-<li>How far to move up?<ul>
-  <li>Half of the nodes are leaves, so half of the inserts will only move up one level</li>
-  <li>A quarter of the nodes are one level above the leaves, so one quarter of the inserts will move up two levels</li>
-  <li>One eighth will require moving up 3 levels</li>
-  <li>One sixteenth will require moving up 4 levels</li>
-  <li>Etc.</li></ul></li>
-<li>Expected running time:<br>&nbsp;</li>
-<ul>
-\( \frac{1}{2}*1 + \frac{1}{4}*2 + \frac{1}{8}*3 + \ldots = \sum_{i=1}^{n} \frac{1}{2^i}*i = 2 \)
-          </section>
 
-	<section data-markdown><script type="text/template">
+	<section data-markdown id="formal" data-separator="^=+$"><textarea data-template>
+# Formal Grammars
+
+========================================
+
 ## Language Specification
 - Definitions of a [formal grammar](http://en.wikipedia.org/wiki/Formal_grammar)
 - A grammar is a four-tuple $G = (N, \Sigma, P, S)$ where:
   - $N$ is a finite set of non-terminal symbols
   - &Sigma; is a finite set of terminal symbols
   - $P$ is a set of transitions: a finite subset of
-    $(N \cup \Sigma) \* N(N \cup \Sigma) \* \rightarrow (N \cup \Sigma )\*$
+    $(N \cup \Sigma) ^\* N(N \cup \Sigma) ^\* \rightarrow (N \cup \Sigma )^\*$
   - $S$ is a special symbol $(S \in N)$ called the start symbol
 - An element $(a, b)$ is generally written as $a \rightarrow b$ and is called a production
-	</script></section>
 
-	<section data-markdown><script type="text/template">
+========================================
+
 ## Language Specification
 - Chomsky Hierarchy: 4 types of grammars
 - Type 3: A grammar is said to be *regular* if each production in $P$ is of the form $A \rightarrow B$ or $A \rightarrow x$, where $A, B, \in N$ and $x \in \Sigma*$
   - Single non-terminal on the left, and one terminal and one non-terminal on the right
   - Example: regular expressions
   - Can be recognized by a finite state automata
-	</script></section>
 
-	<section data-markdown><script type="text/template">
+========================================
+
 ## Language Specification
 - Chomsky Hierarchy: 4 types of grammars
 - Type 2: A grammar is said to be *context free* if each production in $P$ is of the form $A \rightarrow \alpha$ where $\alpha \in (N \cup \Sigma)*$
   - Right side can be a set of terminals and non-terminals
   - The syntax for most programming languages
   - Can be recognized by a push-down automata
-	</script></section>
 
-	<section data-markdown><script type="text/template">
+========================================
+
 ## Language Specification
 - Chomsky Hierarchy: 4 types of grammars
 - Type 1: A grammar is said to be *context sensitive* if each production in $P$ is of the form $\alpha \rightarrow \beta$, where $|\alpha| \le |\beta|$,  and $\alpha, \beta \in N(N \cup \Sigma)*$
   - The left side has non-terminals, so it can only be used depending on the context
   - Can be recognized by a linear bounded automata
-	</script></section>
 
-	<section data-markdown><script type="text/template">
+========================================
+
 ## Language Specification
 - Chomsky Hierarchy: 4 types of grammars
 - Type 0: A grammar with no restrictions is called unrestricted
   - Can be recognized by a Turing machine
-	</script></section>
 
-	<section data-markdown><script type="text/template">
+========================================
+
 ## Context free vs Context sensitive
 - Consider the follow CSV file:
 ```
@@ -113,9 +108,9 @@
 - How should we interpret the comma in the name in the first row?
   - Because it's in double-quotes, it's intended to be a comma inside a field, rather than a field separator
   - In other words, the context of where it occurs (in quotes or not) will dictate how it is interpreted
-	</script></section>
 
-	<section data-markdown><script type="text/template">
+========================================
+
 ## Context free vs Context sensitive
 - Consider the follow CSV file:
 ```
@@ -130,130 +125,262 @@
 ```
  01	jqd1a		Doe,John
 ```
-	</script></section>
 
-	<section data-markdown><script type="text/template">
+========================================
+
 ## Operations on Languages
 - Given two languages L and M
-
-&nbsp;  
-
 - $L \cup M = \\{s | s \in L \text{ or } s \in M \\}$
 - $LM = \\{st | s \in L \text{ and } t \in M \\}$
-
-&nbsp;  
-
 - Kleene Closure: $L* = \bigcup_{i=0}^nL^i$  &nbsp;  
-
-&nbsp;  
-
 - Positive Closure: $L* = \bigcup_{i=1}^nL^i$
   - Note the $i=1$ instead of $i=0$
-	</script></section>
+	</textarea></section>
 
-	<section data-markdown><script type="text/template">
-## - Specification of Tokens
-- Regular Expressions
-- e is a regular expression denoting {e}, the language containing the empty string.
-- 
-- 
-- Specification of Tokens
-- Regular Expressions
-- R and S are regular expressions denoting the languages LR and LS then
-- 	 		(R) | (S)		LR E LS	
-- 			(R) ? (S)		LR LS
-- 		 	(R)*			LR*
+	</section>
+
+	<section>
+
+	<section data-markdown id="re" data-separator="^=+$"><textarea data-template>
+# Regular Expressions
+
+========================================
+
+## Regular Expressions
+- $e$ is a regular expression denoting $\\{e\\}$, the language containing the empty string.
+
+========================================
+
+## Regular Expressions
+- $R$ and $S$ are regular expressions denoting the languages $L\_R$ and $L\_S$ then
+  - $(R) | (S)$ means $L_R \cup L_S$
+  - $(R) \cdot (S)$ means $L_R L_S$
+  - $(R)^\*$ means $L_R^\*$
 - Notes
-- * has the highest precedence and is left associative
-- ? (concatenation) has the 2nd highest precedence and is left associative
-- | has the lowest precedence and is left associative.				
-- Regular Expressions
-- Examples
-- Let ? = {a, b}
-- a | b  TH {a, b}
-- (a | b) (a | b) TH {aa, ab, ba, bb}
-- a*  TH {e, a, aa, aaa, aaaa, ...}
-- (a | b)*  TH all strings containing zero or more instances of a's and b's
-- a | a*b  TH {a, b, ab, aab, aaab, ...}	
-- 
-- The previous example as a regex
+  - $^\*$ has the highest precedence and is left associative
+  - $\cdot$ (concatenation) has the 2nd highest precedence and is left associative
+  - $|$ has the lowest precedence and is left associative.				
+
+========================================
+
+## Regular Expressions: example
+- Let $\Sigma = \\{a, b\\}$
+  - $a | b \Rightarrow \\{ a, b \\}$
+  - $(a | b) (a | b) \Rightarrow \\{ aa, ab, ba, bb \\}$
+  - $a^\* \Rightarrow \\{e, a, aa, aaa, aaaa, \ldots\\}$
+  - $(a | b)^\* \Rightarrow $ all strings containing zero or more instances of a's and b's
+  - $a | a^\*b \Rightarrow \\{ a, b, ab, aab, aaab, \ldots \\}$
+
+========================================
+
+## The previous example as a regex
 - While the two context-free slides properly describe context, it turns out that such a CSV file can actually be recognized by a regular expression:
-- 
-- (,("((\\")|([^"]))*")|[]|[^",]|([^"][^,"]*[^"]))*
-- 
-- 
-- Non-deterministic Finite State Automata
-- A non-deterministic finite automaton is a 
-- 5-tuple:
-- 			M = {Q, aa, d, q0, F) 
-- where
-- Q is a finite set of states
-- aa is a finite set of permissible input symbols
-- d  is a mapping from Q x aa ? P(Q)
-- q0 ? Q the initial state 
-- F I Q is the set of final states
-- Non-deterministic Finite State Automata
+
+```
+(,("((\\")|([^"]))*")|[]|[^",]|([^"][^,"]*[^"]))*
+```
+	</textarea></section>
+
+	</section>
+
+	<section>
+
+	<section data-markdown id="nfas" data-separator="^=+$"><textarea data-template>
+# Non-deterministic Finite Automata
+
+========================================
+
+## Non-deterministic Finite State Automata
+- A non-deterministic finite automaton is a 5-tuple: $M = (Q, \Sigma, \delta, q_0, F)$
+- where:
+  - $Q$ is a finite set of states
+  - $\Sigma$ is a finite set of permissible input symbols
+  - $\delta$ is a mapping from $Q \times \Sigma \rightarrow P(Q)$
+  - $q_0 \in Q$ the initial state 
+  - $F \subseteq Q$ is the set of final states
+
+========================================
+
+## Non-deterministic Finite State Automata
 - The automaton operates by making a sequence of moves
 - A move is determined by a current state and the symbol under the read head
 - A move is a change of state and moving the read head.
-- Representations of Automata
-- Transition Diagram
-- 
-- Representations of Automata
-- Transition Table
-- Non-determinism
-- Transition Diagram
-- 
-- Converting a RE to a NFA
-- Converting a RE to a NFA
-- Decomposition of (ab|ba)a*
-- Decomposition of (ab|ba)a*
-- Decomposition of (ab|ba)a*
-- Decomposition of (ab|ba)a*
-- Definition
-- A finite state automaton (FSA) is deterministic if
-- It has no transitions on input e
-- For each state s and input symbol a, there is at most one edge labeled a leaving s.
-- Converting an NFA to a DFA
+
+========================================
+
+## Representations of Automata
+Transition Diagram:
+![transition diagram](images/05-re-and-lex/transition-diagram-1.png)
+
+========================================
+
+## Representations of Automata
+Transition Table:
+
+| State | | Input | |
+|-----|-----|-----|-----|
+| | a | b | c |
+| 1 | 2 | - | - |
+| 2 | - | 3 | - |
+| 3 | - | - | 4 |
+| 4 | 2 | - | 4 |
+
+========================================
+
+## Non-determinism
+Transition Diagram:
+![transition diagram](images/05-re-and-lex/transition-diagram-2.png)
+
+========================================
+
+## What is an NFA?
+- A finite automata (FA) is a NFA (non-deterministic finite automata) if either:
+  - There exists at least one empty transition $e$
+  - For any one state, there are multiple outgoing transitions for the same input symbol
+- If *neither* of these occur, then it's a DFA (deterministic finite automata)
+	</textarea></section>
+
+	</section>
+
+	<section>
+
+	<section data-markdown id="res2nfas" data-separator="^=+$"><textarea data-template>
+# Converting REs to NFAs
+
+========================================
+
+## Converting a RE to a NFA
+- Each RE rule has a NFA equivalent
+- $e$ is ![nfa equivalent](images/05-re-and-lex/nfa-part-1.png)
+- $R_1|R_2$ is ![nfa equivalent](images/05-re-and-lex/nfa-part-3.png)
+
+========================================
+
+## Converting a RE to a NFA
+- $a$ is ![nfa equivalent](images/05-re-and-lex/nfa-part-2.png)
+- $R_1^\*$ is ![nfa equivalent](images/05-re-and-lex/nfa-part-5.png)
+
+========================================
+
+## Converting a RE to a NFA
+- $R_1R_2$ is ![nfa equivalent](images/05-re-and-lex/nfa-part-4.png)
+
+========================================
+
+## Decomposition of (ab|ba)a*
+![regex tree](images/05-re-and-lex/regex-tree.png)
+
+========================================
+
+## Decomposition of (ab|ba)a*
+![regex parts](images/05-re-and-lex/regex-part-1.png)
+![regex parts](images/05-re-and-lex/regex-part-3.png)
+
+========================================
+
+## Decomposition of (ab|ba)a*
+![regex parts](images/05-re-and-lex/regex-part-2.png)
+![regex parts](images/05-re-and-lex/regex-part-4.png)
+
+========================================
+
+## Decomposition of (ab|ba)a*
+![regex completed](images/05-re-and-lex/regex-completed.png)
+	</textarea></section>
+
+	</section>
+
+	<section>
+
+	<section data-markdown id="nfas2dfas" data-separator="^=+$"><textarea data-template>
+# Converting a NFA to a DFA
+
+========================================
+
+## Converting an NFA to a DFA
 - Each D-state is a set of N-states
-- Initial D-state = {e-closure(Initial(N-state))}, where
--  e-closure(s) = {s} E {t | s (R) t on e-transition}
-- 
+- Initial D-state = {$e$-closure(Initial(N-state))}
+  - where:
+  - $e$-closure(s) = $\\{ s \\} \cup \\{ t | s \rightarrow t$ on $e$-transition $\\}$
 - Final D-states are those that hold final N-states.
-- Let D-states = {e-closure(Initial(N-state)}, unmarked.
-- Converting an NFA to a DFA
-- While there is an unmarked D-state X = {s1,...,sn} do
-- 	Mark X 
-- 	For each a I aa do 
-- 		Let T = the states reached from some sIX by a
-- 		Let Y = e-closure(T)
-- 		If Y I D-states then
-- 			Add Y to D-states, unmarked
-- 		Add a transition from X to Y labeled a if one doesn't 								exist
+- Let D-states = {$e$-closure(Initial(N-state)}, unmarked
+
+========================================
+
+## Converting an NFA to a DFA
+- While there is an unmarked D-state $X = \\{ s_1,\ldots,s_n \\}$ do
+  - Mark $X$ 
+  - For each $a \in \Sigma$ do 
+    - Let $T$ = the states reached from some $s \in X$ by $a$
+    - Let $Y$ = $e$-closure($T$)
+    - If $Y \notin$ D-states then
+      - Add $Y$ to D-states, unmarked
+    - Add a transition from $X$ to $Y$ labeled $a$ if one doesn't exist
 - Mark final states of D
-- 		
-- Converting NFA to DFA
-- A = e-closure({1}) = {1, 2, 5}
-- B = e-closure({3}) = {3}
-- a: {1, 2, 5} ? {3}
-- C = e-closure({6}) = {6}
-- b: {1, 2, 5} ? {6}
-- 
-- Converting an NFA to a DFA
-- D = e-closure({4}) = {4, 8, 9, 11}
-- b: {3} ? {4, 8, 9, 11}
-- E = e-closure({7}) = {7, 8, 9, 11}
-- a: {6} ? {7, 8, 9, 11}
-- F = e-closure({10}) = {9, 10, 11}
-- a: {4, 8, 9, 11} ? {9, 10, 11}
-- a: {7, 8, 9, 11} ? {9, 10, 11}
-- a: {9, 10, 11} ? {9, 10, 11}
-- 
-- Converting an NFA to a DFA
-- Yields the following automaton represented as a transition table
-- Converting an NFA to a DFA
-- Yields the following  deterministic automaton represented as an transition diagram
-- Lex - A Lexical Analyzer Generator
+
+========================================
+
+## Converting NFA to DFA
+- A = $e$-closure({1}) = {1, 2, 5}
+- B = $e$-closure({3}) = {3}
+  - $a: \\{ 1, 2, 5 \\} \rightarrow \\{ 3 \\}$
+- C = $e$-closure({6}) = {6}
+  - $b: \\{ 1, 2, 5 \\} \rightarrow \\{ 6 \\}$
+
+![nfa with circle](images/05-re-and-lex/regex-completed-with-circle.png)
+
+========================================
+
+## Converting an NFA to a DFA
+- D = $e$-closure({4}) = {4, 8, 9, 11}
+  - $b: \\{ 3 \\} \rightarrow \\{ 4, 8, 9, 11 \\}$
+- E = $e$-closure({7}) = {7, 8, 9, 11}
+  - $a: \\{ 6 \\} \rightarrow \\{ 7, 8, 9, 11 \\}$
+
+![nfa](images/05-re-and-lex/regex-completed.png)
+
+========================================
+
+## Converting an NFA to a DFA
+- F = $e$-closure({10}) = {9, 10, 11}
+  - $a: \\{ 4, 8, 9, 11 \\} \rightarrow \\{ 9, 10, 11 \\}$
+  - $a: \\{ 7, 8, 9, 11 \\} \rightarrow \\{ 9, 10, 11 \\}$
+  - $a: \\{ 9, 10, 11 \\} \rightarrow \\{ 9, 10, 11 \\}$
+
+![nfa](images/05-re-and-lex/regex-completed.png)
+
+========================================
+
+## Converting an NFA to a DFA
+Yields the following automaton represented as a transition table:
+
+| | a | b |
+|--|--|--|
+|A|B|C|
+|B| |D|
+|C|E| |
+|D|F| |
+|E|F| |
+|F|F| | |
+
+
+========================================
+
+## Converting an NFA to a DFA
+Yields the following  deterministic automaton represented as an transition diagram:
+![dfa of nfa](images/05-re-and-lex/regex-as-dfa.png)
+	</textarea></section>
+
+	</section>
+
+	<section>
+
+	<section data-markdown id="lex" data-separator="^=+$"><textarea data-template>
+# Lex
+
+========================================
+
+## Lex - A Lexical Analyzer Generator
 - A way to specify regular expression rules for a grammar
 - C: http://www.lysator.liu.se/c/ANSI-C-grammar-l.html 
 - 
@@ -263,7 +390,10 @@
 - 
 - This matches (and deletes) all blanks or tabs at the ends of lines
 - 
-- Lex - A Lexical Analyzer Generator
+
+========================================
+
+## Lex - A Lexical Analyzer Generator
 - Lex Source	
 - {definitions}
 - %%
@@ -273,7 +403,10 @@
 - 
 - Lex regular expressions
 - " \ [ ] ^ - ? . * + | ( ) $ / { } % <  >
-- Lex - A Lexical Analyzer Generator
+
+========================================
+
+## Lex - A Lexical Analyzer Generator
 - Repeated expressions
 - a*
 - a+
@@ -285,7 +418,10 @@
 - [^a-zA-Z]
 - Note: 	To include a - in a character class, it should be the first or last 	character in the class.
 - 
-- Lex - A Lexical Analyzer Generator
+
+========================================
+
+## Lex - A Lexical Analyzer Generator
 - Arbitrary character (but not newline)
 - .
 - a.b
@@ -313,7 +449,10 @@
 - being |
 - 
 - 
-- Lex - Implementation Details
+
+========================================
+
+## Lex - Implementation Details
 - Construct NFA to recognize sum of Lex patterns.
 - Convert to DFA.
 - Minimize DFA, but separate distinct tokens in initial partition.
@@ -321,16 +460,20 @@
 - Find last DFA state that holds an accepting NFS state. 
 - This picks the longest match.
 - If no such DFA state exists, just output the character and go again.
-- 
-- Disambiguating Rules
+
+========================================
+
+## Disambiguating Rules
 - What happens if two rules match the same input?
 - Answer: Prefer the rule that appears first in the specification
 - Example
 - then   { printf ("recognized \"then\""); }
 - [a-z]+ { printf ("recognized a word"); }
 - If the input contained "123 then", the output would be "then"
-- 
-- Disambiguating Rules
+
+========================================
+
+## Disambiguating Rules
 - What happens if two rules could match different pieces of the input
 - 
 - Example
@@ -338,12 +481,8 @@
 - island { printf ("recognized \"island\""); }
 - 
 - Answer: Lex executes the action for the longest possible match for the current input.
-- 
-	</script></section>
 
-	<section>
-        Slide 2
-	</section>
+	</textarea></section>
 
       </section>
       

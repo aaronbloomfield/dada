@@ -192,3 +192,7 @@ span.yellow { color:yellow; }
     max-width:800px;
     max-height:400px;
 }
+
+.reveal section img {
+    background:white
+}
