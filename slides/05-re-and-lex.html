@@ -50,9 +50,9 @@
 
 	<section data-markdown id="formal" data-separator="^=+$"><textarea data-template>
 # Formal Grammars
+	</textarea></section>
 
-========================================
-
+	<section data-markdown data-separator="^=+$"><textarea data-template>
 ## Language Specification
 - Definitions of a [formal grammar](http://en.wikipedia.org/wiki/Formal_grammar)
 - A grammar is a four-tuple $G = (N, \Sigma, P, S)$ where:
@@ -141,11 +141,11 @@
 
 	<section>
 
-	<section data-markdown id="re" data-separator="^=+$"><textarea data-template>
+	  <section data-markdown id="re" data-separator="^=+$"><textarea data-template>
 # Regular Expressions
+	  </textarea></section>
 
-========================================
-
+	  <section data-markdown data-separator="^=+$"><textarea data-template>
 ## Regular Expressions
 - $e$ is a regular expression denoting $\\{e\\}$, the language containing the empty string.
 
@@ -179,17 +179,17 @@
 ```
 (,("((\\")|([^"]))*")|[]|[^",]|([^"][^,"]*[^"]))*
 ```
-	</textarea></section>
+	  </textarea></section>
 
 	</section>
 
 	<section>
 
-	<section data-markdown id="nfas" data-separator="^=+$"><textarea data-template>
+	  <section data-markdown id="nfas" data-separator="^=+$"><textarea data-template>
 # Non-deterministic Finite Automata
+	  </textarea></section>
 
-========================================
-
+	  <section data-markdown data-separator="^=+$"><textarea data-template>
 ## Non-deterministic Finite State Automata
 - A non-deterministic finite automaton is a 5-tuple: $M = (Q, \Sigma, \delta, q_0, F)$
 - where:
@@ -238,17 +238,17 @@ Transition Diagram:
   - There exists at least one empty transition $e$
   - For any one state, there are multiple outgoing transitions for the same input symbol
 - If *neither* of these occur, then it's a DFA (deterministic finite automata)
-	</textarea></section>
+	  </textarea></section>
 
 	</section>
 
 	<section>
 
-	<section data-markdown id="res2nfas" data-separator="^=+$"><textarea data-template>
+	  <section data-markdown id="res2nfas" data-separator="^=+$"><textarea data-template>
 # Converting REs to NFAs
+	  </textarea></section>
 
-========================================
-
+	  <section data-markdown data-separator="^=+$"><textarea data-template>
 ## Converting a RE to a NFA
 - Each RE rule has a NFA equivalent
 - $e$ is ![nfa equivalent](images/05-re-and-lex/nfa-part-1.png)
@@ -294,9 +294,9 @@ Transition Diagram:
 
 	<section data-markdown id="nfas2dfas" data-separator="^=+$"><textarea data-template>
 # Converting a NFA to a DFA
+	</textarea></section>
 
-========================================
-
+	<section data-markdown data-separator="^=+$"><textarea data-template>
 ## Converting an NFA to a DFA
 - Each D-state is a set of N-states
 - Initial D-state = {$e$-closure(Initial(N-state))}
@@ -375,80 +375,97 @@ Yields the following  deterministic automaton represented as an transition diagr
 
 	<section>
 
-	<section data-markdown id="lex" data-separator="^=+$"><textarea data-template>
+	  <section data-markdown id="lex" data-separator="^=+$"><textarea data-template>
 # Lex
+	  </textarea></section>
 
-========================================
-
+	  <section data-markdown data-separator="^=+$"><textarea data-template>
 ## Lex - A Lexical Analyzer Generator
 - A way to specify regular expression rules for a grammar
-- C: http://www.lysator.liu.se/c/ANSI-C-grammar-l.html 
-- 
-- Rules example
-- 	regular expression		action
-- 	[ \t ]+$				;
-- 
-- This matches (and deletes) all blanks or tabs at the ends of lines
-- 
+  - C: http://www.lysator.liu.se/c/ANSI-C-grammar-l.html 
+- Rules example:
+```
+ 	/* regular expression */               /* action */
+ 	[ \t ]+$                               ;
+```
+- This matches (and deletes) all blanks or tabs at the ends of lines (and then does nothing)
 
 ========================================
 
-## Lex - A Lexical Analyzer Generator
-- Lex Source	
-- {definitions}
-- %%
-- {rules}
-- %%
-- {user subroutines}
-- 
-- Lex regular expressions
-- " \ [ ] ^ - ? . * + | ( ) $ / { } % <  >
+## Lex
+Lex source:
+```
+{definitions}
+%%
+{rules}
+%%
+{user subroutines}
+```
+Lex special characters:
+```
+" \ [ ] ^ - ? . * + | ( ) $ / { } % <  >
+```
 
 ========================================
 
-## Lex - A Lexical Analyzer Generator
+## Lex
 - Repeated expressions
-- a*
-- a+
-- Character Classes
-- [abc]	
-- [a-z]
-- [a-zA-Z]
-- [^abc]
-- [^a-zA-Z]
-- Note: 	To include a - in a character class, it should be the first or last 	character in the class.
-- 
+```
+a*
+a+
+```
+- Character classes (matches any character in the range(s)):
+```
+[abc]	
+[a-z]
+[a-zA-Z]
+[^abc]
+[^a-zA-Z]
+```
+- To include a - in a character class, it should be the first or last 	character in the class.
 
 ========================================
 
-## Lex - A Lexical Analyzer Generator
-- Arbitrary character (but not newline)
-- .
-- a.b
-- Alternation
-- ab|cd
-- Context Sensitivity
-- ^
-- $
-- ab/cd
-- Lex - A Lexical Analyzer Generator
-- %{
-- /*
--  * This sample demonstrates (very) simple recognition: a verb/not a verb.
--  */
-- %}
-- %%
-- [\t ]+  /* ignore whitespace */
-- 
-- is |
-- am |
-- are |
-- were |
-- was |
-- be | 
-- being |
-- 
-- 
+## Lex
+- Arbitrary character (but not newline):
+```
+.
+a.b
+```
+- Alternation:
+```
+ab|cd
+```
+- Context sensitivity:
+```
+^
+$
+ab/cd
+```
+
+========================================
+
+## Lex
+```
+%{
+/*
+ * This sample demonstrates (very) simple 
+ * recognition: a verb/not a verb.
+ */
+%}
+%%
+[\t ]+  /* ignore whitespace */
+
+is | am | are | were |
+was | be | being | been |
+do | does | did | will |
+would | should | can | could |
+has | have | had |
+go   { printf("%s: is a verb\n", yytext); }
+
+[a-zA-Z]+  { printf("%s: is not a verb\n", yytext); }
+%%
+```
 
 ========================================
 
@@ -458,28 +475,30 @@ Yields the following  deterministic automaton represented as an transition diagr
 - Minimize DFA, but separate distinct tokens in initial partition.
 - Simulate DFA to termination (i.e. no further transitions are possible).
 - Find last DFA state that holds an accepting NFS state. 
-- This picks the longest match.
-- If no such DFA state exists, just output the character and go again.
+  - This picks the longest match.
+  - If no such DFA state exists, just output the character and go again.
 
 ========================================
 
 ## Disambiguating Rules
 - What happens if two rules match the same input?
-- Answer: Prefer the rule that appears first in the specification
-- Example
-- then   { printf ("recognized \"then\""); }
-- [a-z]+ { printf ("recognized a word"); }
-- If the input contained "123 then", the output would be "then"
+  - Answer: Prefer the rule that appears first in the specification
+- Example:
+```
+foo    { printf ("recognized 'bar'"); }
+[a-z]+ { printf ("recognized a word"); }
+```
+- If the input contained "foo", the output would be "bar"
 
 ========================================
 
 ## Disambiguating Rules
 - What happens if two rules could match different pieces of the input
-- 
-- Example
-- is   { printf ("recognized \"is\""); }
-- island { printf ("recognized \"island\""); }
-- 
+- Example:
+```
+is     { printf ("recognized \"is\""); }
+island { printf ("recognized \"island\""); }
+```
 - Answer: Lex executes the action for the longest possible match for the current input.
 
 	</textarea></section>
