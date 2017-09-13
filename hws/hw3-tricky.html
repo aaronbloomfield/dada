@@ -23,7 +23,7 @@ ret</code></pre>
 <p>One could also implement a &quot;tricky jump&quot; by inserting a conventional jump instruction:</p>
 <pre><code>jmp AddressOfVirusFunction</code></pre>
 <p>However, a <code>jmp</code> instruction uses <em>relative</em> addresses (whereas <code>pushq</code> uses <em>absolute</em> addresses), so the resulting machine code will change based on where the jump is inserted.</p>
-<p>When either sequence is executed, control is diverted to the virus code. When the virus code returns, control returns to the function that called the function the at contained the tricky jump. If the virus writer inserts the tricky jump at the end of an application function (i.e, to replace the <code>ret</code>), then the program, after the virus code executes, will continue to run as if nothing happened. For example, one might see code like like:</p>
+<p>When either sequence is executed, control is diverted to the virus code. The tricky jump pushes the virus address onto the stack, and then the standard <code>ret</code> at the end of the (infected) subroutine jumps to the virus code. When the virus is done, it calls <code>ret</code> which returns to the actual caller of the infected function. If the virus writer inserts the tricky jump at the end of an application function (i.e, to replace the <code>ret</code>), then the program, after the virus code executes, will continue to run as if nothing happened. For example, one might see code like like:</p>
 <pre><code>400661:       c3                      retq       
 400662:       66 66 66 66 66 2e 0f    data32 data32 data32 data32 nopw %cs:0x0(%rax,%rax,1)
 400669:       1f 84 00 00 00 00 00</code></pre>

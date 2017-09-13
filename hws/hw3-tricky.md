@@ -26,7 +26,7 @@ jmp AddressOfVirusFunction
 
 However, a `jmp` instruction uses *relative* addresses (whereas `pushq` uses *absolute* addresses), so the resulting machine code will change based on where the jump is inserted.
 
-When either sequence is executed, control is diverted to the virus code. When the virus code returns, control returns to the function that called the function the at contained the tricky jump. If the virus writer inserts the tricky jump at the end of an application function (i.e, to replace the `ret`), then the program, after the virus code executes, will continue to run as if nothing happened. For example, one might see code like like:
+When either sequence is executed, control is diverted to the virus code.  The tricky jump pushes the virus address onto the stack, and then the standard `ret` at the end of the (infected) subroutine jumps to the virus code.  When the virus is done, it calls `ret` which returns to the actual caller of the infected function.  If the virus writer inserts the tricky jump at the end of an application function (i.e, to replace the `ret`), then the program, after the virus code executes, will continue to run as if nothing happened. For example, one might see code like like:
 ```
 400661:       c3                      retq       
 400662:       66 66 66 66 66 2e 0f    data32 data32 data32 data32 nopw %cs:0x0(%rax,%rax,1)
