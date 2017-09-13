@@ -13,7 +13,7 @@
 <p><a href="index.html">Go up to the main DADA homeworks page</a> (<a href="index.md">md</a>)</p>
 <h3 id="introduction">Introduction</h3>
 <p>This assignment will explore what it takes to create a stealthy virus that employs a &quot;tricky jump.&quot; A tricky jump is a form of hijacking in which a jump is inserted to call some virus code. The jump is inserted in such a way that after the virus code runs, the program continues normal execution, thereby maintaining stealth.</p>
-<p>This program <strong><em>MUST</em></strong> run on the <a href="../docs/virtualbox-image-details.html">VirtualBox image</a> (<a href="../docs/virtualbox-image-details.md">md</a>) provided for this course.</p>
+<p>This program <strong><em>MUST</em></strong> run on the <a href="../docs/virtualbox-image-details.html">VirtualBox image</a> (<a href="../docs/virtualbox-image-details.md">md</a>) provided for this course. You have to write it in either C or C++.</p>
 <p>This homework was taken, with permission, from <a href="https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/tricky.html">a homework created by Charles Reiss</a></p>
 <h3 id="task">Task</h3>
 <p>A &quot;tricky jump&quot; can be efficiently implemented (only six bytes) as:</p>
@@ -63,10 +63,12 @@ string:
 <h3 id="submission">Submission</h3>
 <p>Submit the following files:</p>
 <ul>
-<li>your <code>infect.c</code></li>
-<li>a file <code>answers.txt</code> containing the answers to the above questions</li>
+<li>Your <code>infect.c</code> or <code>infect.cpp</code> (we don't care if you do it in C or C++, but it must be in one of those)</li>
+<li>A <code>Makefile</code> that will compile your file into an executable named <code>a.out</code></li>
+<li>A file <code>answers.txt</code> containing the answers to the above questions</li>
 </ul>
 <p>The names matter, as the autograder will mark points off if they are not what is expected.</p>
+<p>When we run your program, we will put the specified <code>target.exe</code> in the same directory as the <code>a.out</code> executable, and we will expect the result to be a file named <code>target-infected.exe</code>.</p>
 <h3 id="methodology-and-hints">Methodology and Hints</h3>
 <ol style="list-style-type: decimal">
 <li><p>You should use the utility objdump to examine the executable <code>target.exe</code>. The option <code>--disassemble</code> is useful. In particular, you need to determine the starting address of the virus code. The dissasembly will also help you determine the opcodes of the instructions that you need to insert (i.e., a <code>push</code> instruction and a <code>ret</code> instruction). You may wish to consult the objdump manual (<code>man objdump</code>).</p></li>

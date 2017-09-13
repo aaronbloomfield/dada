@@ -7,7 +7,7 @@ DADA: HW 3: Tricky Jump
 
 This assignment will explore what it takes to create a stealthy virus that employs a "tricky jump." A tricky jump is a form of hijacking in which a jump is inserted to call some virus code. The jump is inserted in such a way that after the virus code runs, the program continues normal execution, thereby maintaining stealth.
 
-This program ***MUST*** run on the [VirtualBox image](../docs/virtualbox-image-details.html) ([md](../docs/virtualbox-image-details.md)) provided for this course.
+This program ***MUST*** run on the [VirtualBox image](../docs/virtualbox-image-details.html) ([md](../docs/virtualbox-image-details.md)) provided for this course.  You have to write it in either C or C++.
 
 This homework was taken, with permission, from [a homework created by Charles Reiss](https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/tricky.html)
 
@@ -85,10 +85,13 @@ Also, answer the following questions:
 ### Submission
 Submit the following files:
 
-- your `infect.c`
-- a file `answers.txt` containing the answers to the above questions
+- Your `infect.c` or `infect.cpp` (we don't care if you do it in C or C++, but it must be in one of those)
+- A `Makefile` that will compile your file into an executable named `a.out`
+- A file `answers.txt` containing the answers to the above questions
 
 The names matter, as the autograder will mark points off if they are not what is expected.
+
+When we run your program, we will put the specified `target.exe` in the same directory as the `a.out` executable, and we will expect the result to be a file named `target-infected.exe`.
 
 ### Methodology and Hints
 
