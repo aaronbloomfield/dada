@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DADA: File Viruses</title>
+  <link rel="stylesheet" href="../slides/reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="../slides/reveal.js/css/theme/black.css">
+  <link rel="stylesheet" href="../slides/dada.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="../slides/reveal.js/lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section data-markdown id="cover"><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;
+## File Viruses
+  </script></section>
+
+	<section data-markdown><textarea data-template>
+# Contents
+&nbsp;  
+[Overview](#/2)  
+[Destructive Overwrite Viruses](#/overwrite)  
+[Appending Viruses](#/appending)  
+[Cavity & Compressing Viruses](#/cavity)  
+[Entry-Point Obscuring Viruses](#/epo)  
+	</textarea></section>
+
+	<section>
+	  
+	  <section data-markdown id="overview"><textarea data-template>
+# Overview
+	  </textarea></section>
+
+	  <section data-markdown data-separator="^=+$"><textarea data-template>
+## Viruses: Online Resources
+- Symantec Virus Encyclopedia:
+  - http://securityresponse.symantec.com/avcenter/vinfodb.html 
+- McAfee Virus Information Library:
+  - http://vil.nai.com/vil/default.aspx
+
+========================================
+
+## File Infection Techniques
+- Executable files (*.EXE, *.COM, *.BAT, etc.) are often the target of viruses
+- Executing an infected file usually triggers replication of the virus into other files
+- Executable file infection techniques can be categorized broadly by asking where the virus code is placed in the file
+
+========================================
+
+## Location: Beginning of the File
+- Henceforth, *beginning* always refers to the start of the executable code, which might follow a header area in some file formats
+- A virus can either preserve the original beginning of the file, or destroy it by overwriting
+- Destructiveness always reduces the stealth of the virus
+
+========================================
+
+## File infection modalities
+- Beginning of File with Destructive Overwrite
+- Random Location in File with Destructive Overwrite
+- Appending Viruses
+- Multiple Techniques
+- Cavity Viruses
+- Compressing Viruses
+- Entry-Point Obscuring (EPO) Viruses
+  - Including IAT replacement
+	  </textarea></section>
+	  
+	</section>
+
+	<section>
+	  
+	  <section data-markdown id="overwrite"><textarea data-template>
+# Overwriting
+	  </textarea></section>
+	  
+	<section data-markdown data-separator="^\n$"><textarea data-template>
+## Beginning of File w/Destructive Overwrite
+- Two primary methods:
+  - Replace \*.exe file with virus \*.exe
+![virus overwite replacement](images/06-file-viruses/virus-overwrite-replacement.png)
+
+
+## Beginning of File w/Destructive Overwrite
+- Two primary methods:
+  - Overwrite only the beginning of a \*.exe that is larger than the virus \*.exe
+![virus overwite replacement](images/06-file-viruses/virus-overwrite-beginning.png)
+
+
+## Beginning of File w/Destructive Overwrite
+- Neither method is stealthy:
+  - The \*.exe has lost its functionality entirely, so the user notices that something is wrong
+  - Anti-virus software finds a virus easily right at the beginning of the file
+
+
+## Beginning of File w/Destructive Overwrite
+- The first method changes the file size, making it even less stealthy than the second method
+- The file size change was only significant for stealthy viruses when first-generation anti-virus software depended on keeping track of file sizes
+- Both kinds of overwriting viruses can only be repaired by restoring files from a backup
+
+
+## Beginning of File w/Destructive Overwrite
+- E.g. the LoveLetter mass mailer worm, after replicating by email, overwrote every file on the system that had one of 32 file extensions: \*.c, \*.cpp, \*.mp3, \*.vbs, etc.
+  - It had already replicated to other systems, so it no longer tried to remain stealthy; a common design for worms
+
+
+## Random Location in File w/Destructive Overwrite
+![Destructive Methods: Random](images/06-file-viruses/virus-overwrite-random.png)
+
+
+## Random Location in File w/Destructive Overwrite
+- The Russian Omud virus, also called 8888, overwrote at a random location in the \*.exe file.
+  - Anti-virus software must now search the entire file to find it; this defeated early anti-virus software
+  - Control might transfer to the virus during execution of the \*.exe, or it might not, or program might crash; stealth came at a price!
+
+	</textarea></section>
+
+	</section>
+
+	<section>
+	  
+	  <section data-markdown id="appending"><textarea data-template>
+# Appending Viruses
+	  </textarea></section>
+	  
+	<section data-markdown data-separator="^\n$"><textarea data-template>
+## Appending Viruses
+- A jump, or tricky jump, to the virus address is overwritten on the first few bytes of the executable
+- Virus code is appended to the file
+- Overwritten instructions are saved in the virus
+  - When the virus is about to terminate, it executes the saved instructions and jumps back to the spot that followed them
+  - Application program functionality is preserved (stealth)
+
+
+## Appending Viruses
+- So common among DOS .COM files that it was called the normal COM virus technique; Vienna and Suicide are famous examples of this kind of virus
+- The jump, or tricky jump, is easily spotted by anti-virus software
+- The file size has changed
+
+
+## Appending Viruses
+![Appending Virus Illustration](images/06-file-viruses/virus-appending.png)
+
+
+## Appending Viruses
+- The stealth depends on executing the original application successfully when the virus code has finished, AND not spending too long in the virus code
+- In order to execute the application successfully, the virus often copies the application code into a temporary file, then calls system() or a similar function to execute the contents of that file
+  - Must pass original command-line arguments!
+
+
+## Multiple Techniques
+- Many viruses implement, in one virus, several of the techniques we have studied
+- 1991 DOS normal COM example: Phantom
+  - Appending COM file infector (normal COM)
+  - Memory resident: installs itself into high DOS memory, reduces available memory by about 2KB, monitors system activity and infects COM files as they are executed
+  - Hooks interrupts 20h and 21h in order to intercept COM file executions
+  - Existed in multiple variants w/ different messages
+	</textarea></section>
+
+	</section>
+
+	<section>
+	  <section data-markdown id="cavity"><textarea data-template>
+# Cavity & Compressing Viruses
+	  </textarea></section>
+	  
+	<section data-markdown data-separator="^\n$"><textarea data-template>
+## Cavity Viruses
+- Virus creators often search for space within a file that is filled with zeroes or ASCII blanks
+- These spaces, or cavities, can be filled with virus code without changing the file size
+- Still need to reach the start of the virus with a jump, or modify the PE entry point
+
+
+## Cavity Viruses
+- A single cavity might be big enough for the whole virus, or the virus might be distributed into multiple small cavities, loaded into memory by the virus loader code at the head of the virus, connected by jump instructions (a fractionated cavity virus)
+  - Called a *fractionated* cavity virus
+
+
+## Cavity Viruses
+- Jump, or modified PE entry point, detectable by anti-virus software
+- Disinfection can be difficult (was the original cavity full of zeroes, or ASCII blanks?)
+![Cavity Virus Illustration](images/06-file-viruses/virus-cavity.png)
+
+
+## Cavity Viruses
+- This is the purpose of [HW 3: binary tricky jump](../hws/hw3-tricky.html)
+- The compilation command for this file was specifically designed to create a large cavity to place your code
+  - And so that there was extra space after the `ret`
+    - Otherwise, you would have had to save instructions to the "virus"
+
+
+## Compressing Viruses
+- Application code is compressed
+- Virus code plus decompressor code fits into the space that was saved
+- Can keep the file size from changing
+- Might not even change the entry point!
+
+
+## Compressing Viruses
+![Compressing Virus Illustration](images/06-file-viruses/virus-compressing.png)
+
+
+## Compressing Viruses cont'd.
+- How can a compressing virus be detected and disinfected?
+- The virus code might even be compressed, so that only the decompressor code is recognizable as normal code
+- However, a self-extracting archive would have a similar appearance and be quite legitimate
+- File size and entry point could be unchanged
+- Application behavior could be preserved
+
+
+## Detecting a Compressing Virus
+- When a virus outbreak occurs, reports come in to major anti-virus software vendors from their customers
+- More expensive system scans than are normal for a background anti-virus program might reveal that known applications now have unintelligible executables
+- Disassembly tools are used to examine the code, and human intelligence is needed to find the decompressor code
+
+
+## Detecting a Compressing Virus cont'd.
+- A copy of the virus code can be decompressed using the decompressor
+- The virus design is then figured out by walkthroughs
+- Which other files on the system are targeted for infection can now be determined by examining the virus code
+- A code pattern is devised that describes unique instruction sequences in the decompressor code
+
+
+## Detecting a Compressing Virus cont'd.
+- The system is scanned to verify that this code pattern is not found in uninfected files
+- The virus code pattern database is updated, and customers download the update
+- More on pattern recognition in a future homework (and from the previous lecture set on regular expressions and lex)
+
+
+## Disinfecting a Compressing Virus
+- With the virus and decompressor understood, the decompressor algorithm can be applied to the compressed application code
+- The virus code and decompressor are removed 
+- The anti-virus software might maintain a database of cryptographic checksums for application executables
+- If the disinfected application now matches its stored checksums, success is declared
+- Otherwise, restore the file from backup
+	</textarea></section>
+
+	</section>
+
+	<section>
+	  <section data-markdown id="epo"><textarea data-template>
+# Entry-Point Obscuring Viruses
+	  </textarea></section>
+	  
+	<section data-markdown data-separator="^\n$"><textarea data-template>
+## Entry-Point Obscuring (EPO) Viruses
+- Anti-virus software closely examines PE file headers, entry points, and the initial code executed at the entry point
+- A stealthy virus must be designed to avoid changes to any of these locations
+- The EPO virus obscures its own entry point by finding a call instruction in the targeted PE file and "hijacking" the call so that the virus code is called instead
+
+
+## EPO Viruses cont'd
+- A function call within the application becomes a call to the virus code.
+![epo virus](images/06-file-viruses/virus-epo.png)
+
+
+## EPO Viruses cont'd
+- The virus code saves the registers in order to preserve the parameters that were being passed. Also saves the original call target address.
+- When the virus finishes executing, it restores the registers and does a tricky jump back to the original call target
+
+
+## EPO Viruses cont'd
+- How can a virus find a function call?
+  - The binary opcodes can be scanned.
+- However, constant data in the code section can happen to have the same value as a call opcode
+- The most well-designed viruses examine the field that gives the target of the call.
+  - What does the virus do with this field?
+  - How does this help the virus?
+
+
+## EPO Viruses cont'd
+- The .reloc section gives information to be used if the program has to be relocated during execution
+  - i.e. reloaded at a different load point because the system had to defragment memory or some other reason
+- Relocation during execution is unusual, so the .reloc section usually sits unused, e.g. in statically linked executables
+- Unfortunately, this provides a large cavity for viruses to use and still leave the file size unchanged
+
+
+## Detecting Call-Hijacking Viruses
+- The .reloc section is examined by modern anti-virus software to see if it looks like a legitimate .reloc section
+- Code patterns such as saving state, tricky jumps, etc., can be detected in the .reloc section
+- Some EPO viruses are accidentally destructive; hard to re-enter the application successfully in some cases
+
+
+## EPO Viruses: IAT Replacement
+- The IAT (import address table) is the function pointer table that exports the API (application program interface) that the user application is presenting to outside callers
+- Several function pointers can be saved in the virus body, then replaced with pointers to the virus code
+- After the virus code is memory-resident, it can restore the IAT in memory so that the API is preserved and stealth is maintained
+
+
+## EPO Viruses: IAT Replacement
+- The Tentacle and Tentacle-II viruses were 16-bit Windows examples, infecting the NE (New Executable) files that were the ancestors of PE
+
+
+## EPO Viruses: IAT Replacement
+![IAT Replacement Illustration](images/06-file-viruses/virus-epo.png)
+
+
+## An IAT by a different name...
+- The IAT is the target for Windows PE files
+- ELF files have the .dynsym section
+  - dynsym stands for dynamic symbol table
+- Macho (Mac OS X) has `LC_DYLD_INFO`
+- The concepts are essentially the same
+	</textarea></section>
+	
+	</section>
+	
+    </div>
+  </div>
+  <script src="reveal.js/lib/js/head.min.js"></script> 
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="settings.js"></script> 
+</body>
+</html>
