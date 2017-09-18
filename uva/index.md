@@ -29,7 +29,7 @@ Lectures (fall 2017)
 | 8   | Sep&nbsp;8  | Friday      | [assembly][104] | [assembly][104], slides 6.6 to 7.13 |
 | 9   | Sep&nbsp;11 | Monday      | [assembly][104] | [assembly][104], slides 7.13 to 8.10 (end) |
 | 10  | Sep&nbsp;13 | Wednesday   | [re and lex][105] | [re and lex][105], slides 1 to 4.5 |
-| 11  | Sep&nbsp;15 | Friday      |               |               |
+| 11  | Sep&nbsp;15 | Friday      | [re and lex][105] | [re and lex][105], slides 5.1 to 6.8 |
 | 12  | Sep&nbsp;18 | Monday      |               |               |
 | 13  | Sep&nbsp;20 | Wednesday   |               |               |
 | 14  | Sep&nbsp;22 | Friday      |               |               |
@@ -80,3 +80,5 @@ Lectures (fall 2017)
 [102]: ../slides/02-terminology.html#/
 [103]: ../slides/03-vms.html#/
 [104]: ../slides/04-assembly.html#/
+[105]: ../slides/05-re-and-lex.html#/
+[106]: ../slides/06-file-viruses.html#/
