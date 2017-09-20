@@ -508,12 +508,12 @@ island { printf ("recognized \"island\""); }
 
 
 ## Lex code
+- Source code: [uva-userid.l](code/05-re-and-lex/uva-userid.l)
 ```
-%%
 USERID	^[a-z][a-z][a-z]?([0-9][a-z][a-z]?)?$
 %%
 {USERID}   { printf("Found a UVa userid: %s\n",yytext); }
-.          { /* ignore other input */ }
+.|\n       { /* ignore other input */ }
 %%
 ```
 - In the regex, the `^` means the start of the line
@@ -533,15 +533,16 @@ gcc lex.yy.c -lfl
 
 
 ## What lex does
-- When you run `flex uva-userid.l`, it creates a 1,779 line file that will read in tokens
-  - The [C grammar](http://www.lysator.liu.se/c/ANSI-C-grammar-l.html) is 2,448 lines
-- The `yy_accept` array is the state change table:
+- When you run `flex uva-userid.l`, it creates a 1,776 line file that will read in tokens
+  - Result: [lex.yy.c](code/05-re-and-lex/lex.yy.c.html) ([source](code/05-re-and-lex/lex.yy.c))
+- The `yy_accept` array is the state change table (there are others as well in the file):
 ```
-static yyconst flex_int16_t yy_accept[14] =
-    {   0,    0,    0,    4,    2,    3,    2,
-        0,    1,    0,    0,    0,    0,    0
+static yyconst flex_int16_t yy_accept[13] =
+    {   0,    0,    0,    4,    2,    2,    0, 
+        1,    0,    0,    0,    0,    0
     } ;
 ```
+- The [C grammar](http://www.lysator.liu.se/c/ANSI-C-grammar-l.html), for comparison, generates a 2,448 line lex.yy.c
 	</textarea></section>
 
       </section>
