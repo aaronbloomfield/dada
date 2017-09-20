@@ -29,7 +29,7 @@ ret</code></pre>
 400669:       1f 84 00 00 00 00 00</code></pre>
 <p><code>data32 data32 data32 data32 nopw %cs:0x0(%rax,%rax,1)</code> is objdump's representation of a 14-byte long nop instruction. This is padding added at the end of the function. This is a &quot;cavity&quot; that gives a virus writer some room to work. If we insert a &quot;tricky jump&quot; starting where the retq instruction is located (address 0x400661), then the virus code will be invoked. When the virus code returns, control will be returned to the function that invoked this function.</p>
 <p>For this assignment, you will write a C program that infects a particular Linux executable and causes some virus code to be executed.</p>
-<p>The Linux executable you want to infect is called <a href="hw3-tricky/target.exe">target.exe</a>. Alternatively, you can download the <a href="hw3-tricky/target.c">target.c</a> source code and compile it with: <code>gcc -falign-functions=16 -o target.exe target-novirus.c</code>.</p>
+<p>The Linux executable you want to infect is called target.exe, but that file is not included in this repository. You can download the <a href="hw3-tricky/target.c">target.c</a> source code and compile it with: <code>gcc -falign-functions=16 -o target.exe target.c</code>.</p>
 <p><code>target.exe</code> produces the following output:</p>
 <pre><code>Initialize application.
 Begin application execution.

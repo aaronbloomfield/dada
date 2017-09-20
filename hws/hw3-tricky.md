@@ -36,7 +36,7 @@ When either sequence is executed, control is diverted to the virus code.  The tr
 
 For this assignment, you will write a C program that infects a particular Linux executable and causes some virus code to be executed.
 
-The Linux executable you want to infect is called [target.exe](hw3-tricky/target.exe). Alternatively, you can download the [target.c](hw3-tricky/target.c) source code and compile it with: `gcc -falign-functions=16 -o target.exe target-novirus.c`.
+The Linux executable you want to infect is called target.exe, but that file is not included in this repository. You can download the [target.c](hw3-tricky/target.c) source code and compile it with: `gcc -falign-functions=16 -o target.exe target.c`.
 
 `target.exe` produces the following output:
 
