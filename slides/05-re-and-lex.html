@@ -379,7 +379,7 @@ Yields the following  deterministic automaton represented as an transition diagr
 # Lex
 	  </textarea></section>
 
-	  <section data-markdown data-separator="^=+$"><textarea data-template>
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
 ## Lex - A Lexical Analyzer Generator
 - A way to specify regular expression rules for a grammar
   - C: http://www.lysator.liu.se/c/ANSI-C-grammar-l.html 
@@ -390,7 +390,6 @@ Yields the following  deterministic automaton represented as an transition diagr
 ```
 - This matches (and deletes) all blanks or tabs at the ends of lines (and then does nothing)
 
-========================================
 
 ## Lex
 Lex source:
@@ -406,7 +405,6 @@ Lex special characters:
 " \ [ ] ^ - ? . * + | ( ) $ / { } % <  >
 ```
 
-========================================
 
 ## Lex
 - Repeated expressions
@@ -424,7 +422,6 @@ a+
 ```
 - To include a - in a character class, it should be the first or last 	character in the class.
 
-========================================
 
 ## Lex
 - Arbitrary character (but not newline):
@@ -443,7 +440,6 @@ $
 ab/cd
 ```
 
-========================================
 
 ## Lex
 ```
@@ -467,7 +463,6 @@ go   { printf("%s: is a verb\n", yytext); }
 %%
 ```
 
-========================================
 
 ## Lex - Implementation Details
 - Construct NFA to recognize sum of Lex patterns.
@@ -478,7 +473,6 @@ go   { printf("%s: is a verb\n", yytext); }
   - This picks the longest match.
   - If no such DFA state exists, just output the character and go again.
 
-========================================
 
 ## Disambiguating Rules
 - What happens if two rules match the same input?
@@ -490,7 +484,6 @@ foo    { printf ("recognized 'bar'"); }
 ```
 - If the input contained "foo", the output would be "bar"
 
-========================================
 
 ## Disambiguating Rules
 - What happens if two rules could match different pieces of the input
@@ -501,6 +494,54 @@ island { printf ("recognized \"island\""); }
 ```
 - Answer: Lex executes the action for the longest possible match for the current input.
 
+
+## UVa userids
+- There are a few forms:
+  - The original form: two or three letters ('ab', 'abc')
+  - Two initials, a digit, and then one or two letters ('ab1c', 'ab1cd')
+  - Three initials, a digit, and then one or two letters ('abc1d', 'abc1de')
+- A regex:
+
+```
+[a-z][a-z][a-z]?([0-9][a-z][a-z]?)?
+```
+
+
+## Lex code
+```
+%%
+USERID	^[a-z][a-z][a-z]?([0-9][a-z][a-z]?)?$
+%%
+{USERID}   { printf("Found a UVa userid: %s\n",yytext); }
+.          { /* ignore other input */ }
+%%
+```
+- In the regex, the `^` means the start of the line
+- And `$` means the end of the line
+- This prevents it from finding a userid in the string `abcdefg`
+
+
+## Compiling and running
+- One can either use lex or flex (the "fast" version of lex)
+```
+flex uva-userid.l
+gcc lex.yy.c -lfl
+```
+- Since a `main()` wasn't included, lex puts one in for you
+  - As you type input, it prints out either "found a uva userid" or nothing
+- The `fl` library (linked via `-lfl`) provides necessary functionality for this program to work
+
+
+## What lex does
+- When you run `flex uva-userid.l`, it creates a 1,779 line file that will read in tokens
+  - The [C grammar](http://www.lysator.liu.se/c/ANSI-C-grammar-l.html) is 2,448 lines
+- The `yy_accept` array is the state change table:
+```
+static yyconst flex_int16_t yy_accept[14] =
+    {   0,    0,    0,    4,    2,    3,    2,
+        0,    1,    0,    0,    0,    0,    0
+    } ;
+```
 	</textarea></section>
 
       </section>
