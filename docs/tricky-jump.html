@@ -19,7 +19,9 @@
 ret</code></pre>
 <p>The function returns an integer (perhaps representing a boolean) and in the example code, the return value (held in register <code>eax</code>) is set to zero. This is a common code pattern. If the virus can find such a function that is near the location that will hold the virus code, the distance to the virus code will be small enough to permit the following instruction to be the same size as the <code>xor</code> instruction above:</p>
 <pre><code>push offset _virus_code_func_name</code></pre>
-<p>This permits the virus to simply overwrite the <code>xor</code> instruction, producing the following epilogue code for the infected function:</p>
+<p>Note that the <code>offset</code> keyword and the underscore before a jump target are used in some assemblers, but not in nasm; thus, that code in nasm would be:</p>
+<pre><code>push virus_code_func_name</code></pre>
+<p>In either case, this permits the virus to simply overwrite the <code>xor</code> instruction, producing the following epilogue code for the infected function:</p>
 <pre><code>push offset _virus_code_func_name
 ret</code></pre>
 <p>Let us analyze what will happen here. The stack frame has the address to which the infected function is supposed to return. The address of the virus code is pushed onto the top of the stack. The <code>ret</code> instruction immediately pops this virus address off the stack and transfers control to it. Thus, the <code>ret</code> instruction has been used <em>not</em> to <em>return</em> to the caller, but to <em>jump</em> to the virus code. This is why it is called a <em>tricky jump</em>. Notice that after this pair of instructions (<code>push</code> followed by <code>ret</code>, which pops the stack), the stack has been returned to its original state, with the proper return address residing at the top of the stack.</p>

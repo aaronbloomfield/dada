@@ -39,8 +39,17 @@ above:
 push offset _virus_code_func_name
 ```
 
-This permits the virus to simply overwrite the `xor` instruction,
-producing the following epilogue code for the infected function:
+Note that the `offset` keyword and the underscore before a jump target
+are used in some assemblers, but not in nasm; thus, that code in nasm
+would be:
+
+```
+push virus_code_func_name
+```
+
+In either case, this permits the virus to simply overwrite the `xor`
+instruction, producing the following epilogue code for the infected
+function:
 
 ```
 push offset _virus_code_func_name
