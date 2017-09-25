@@ -18,4 +18,6 @@ ready to be presented.
 2. [Terminology](02-terminology.html#/)
 3. [Virtual Machines](03-vms.html#/)
 4. [Assembly](04-assembly.html#/)
-5. [Regular expressions and lex](05-re-and-lex.html)
+5. [Regular expressions and lex](05-re-and-lex.html#/)
+6. [File viruses](06-file-viruses.html#/)
+7. [Assembly obfuscations](07-obfuscations.html#/)

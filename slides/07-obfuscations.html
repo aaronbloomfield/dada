@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DADA: Assembly Obfuscations</title>
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css">
+  <link rel="stylesheet" href="dada.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section data-markdown id="cover"><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;
+## Assembly Obfuscations
+  </script></section>
+
+	<section data-markdown><textarea data-template>
+# Contents
+&nbsp;  
+[Code Obfuscation](#/obfuscation)  
+[Language Theory](#/ltheory)  
+[Possible Obfuscations](#/possibilities)  
+	</textarea></section>
+
+	<section>
+      
+	  <section data-markdown id="obfuscation"><textarea data-template>
+# Code Obfuscation
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Virus Code Patterns
+- Viruses will often have very common assembly commands to do a tricky jump:
+```
+push virusfunc
+ret
+```
+- Or to hook an interrupt:
+```
+mov eax, 4Ch 
+mov dword ptr [eax], edx
+```
+- In [HW 4](../hws/hw4-lex.html) you will write a flex scanner to detect these sequences
+
+
+## Virus Obfuscation
+- Assume that you have a virus scanner ([HW 5](../hws/hw5-obfuscation.html)) that looks for the two previous patterns
+- Consider the following:
+```
+push virusfunc 
+add eax, 0
+ret 
+```
+- Or:
+```
+push virusfunc 
+mul eax,1
+ret 
+```
+- How would the scanning routine find these?
+
+
+## Defeating Obfuscation
+- Can regular expression matchers defeat all attempts at obfuscating virus code?
+- To answer this question, we need to examine all possible obfuscating instructions
+- We have seen simple kinds of obfuscating instructions inserted into virus code: no-ops and do-nothings
+  - e.g. add zero to a register, multiply a register by 1
+- A finite list of such simple obfuscations can be filtered out by a tool such as lex
+
+
+## Removing Obfuscations
+- For the simple examples of obfuscations, we could just use lex or flex or a similar pattern matcher to filter out the obfuscating instructions
+- The lex rules to perform the filtering would be simple, matching single instructions such as `nop` or `add eax,0` or `mul ebx,1`
+- The virus scanner could then just match real virus code patterns
+
+
+## Advanced Code Obfuscations
+- Are all obfuscations simple enough to filter?
+- A more advanced obfuscation is register renaming, e.g.:
+```
+add eax,03FFh
+mov edx,eax
+```
+- Or:
+```
+add ebx,03FFh
+mov esi,ebx
+```
+- The second uses ebx instead of eax, and esi instead of edx
+  - This can't be done via flex alone!
+
+
+## Defeating Register Renaming
+- An advanced pattern matcher could use wildcard characters for all register fields within an instruction
+- However, this removes most of the details of the code
+- Some key details such as key constants used in the virus are still available
+- The chances of a false positive (claiming that legitimate code is actually virus code) become unacceptably high with too many wildcards
+
+
+## Inter-Instruction Dependencies
+- A sequence of obfuscations instructions, interleaved with the virus code, that have no net effect:
+```
+; virus code can use edi here
+add edi,1  ; obfuscating instruction
+; real virus code here that does not use edi
+add edi,3
+; real virus code here that does not use edi
+sub edi,4
+; real virus code can use edi starting here
+```
+- The number of possibilities is almost infinite
+- A regex would have to "remember" arithmetic values; not possible with flex!
+
+
+## Dependencies cont'd.
+- Even worse: Obfuscating instructions could have a net effect that is NOT zero, but the register affected was unused by the virus code
+  - e.g. remove the `sub edi, 4` instruction from previous example
+- A compiler can analyze register usage and determine that a register is being overwritten with values that are not used later in the program. 
+  - Can these analyses be done with just regular expressions and a pattern matcher?
+- We need formal language theory to answer this
+	  </textarea></section>
+
+	</section>
+
+	<section>
+	  
+	  <section data-markdown id="ltheory"><textarea data-template>
+# Language Theory
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+
+## The problem specified
+- Let's analyize a simple obfuscation: an arbitrary number of increments followed by an equal number of decrements
+  - The net effect is zero!
+- Start with a series of increments
+  - `inc rax`, `add rax, 1`, `sub rax, -1`, etc.
+- Followed by an equal number of decrements:
+  - `dec rax`, `add rax, -1`, `sub rax, 1`, etc.
+- We want to see if the *net effect* is zero
+
+
+## Regular languages
+- flex creates a *regular language*
+  - level 3 on the Chomsky hierarchy
+- A regular language does not have any memory or storage other than the state it is in
+  - More powerful languages do have such a "memory"
+- And, being a finite state machine, the states are finite!
+
+
+## FSA and the Pumping Lemma
+- Informal proof by contradiction: Suppose that an FSA with only $n$ states could recognize any number of increments followed by the same number of decrements
+- Then, after more than *n* increments have been seen, the FSA will have to have visited at least one of its states more than once
+- That state no longer remembers a single number of increments seen; e.g. it could represent having seen $k$ or $k+20$ increments
+
+
+## Pumping Lemma cont'd
+- This means that seeing the additional 20 increments caused the FSA to make a cycle back to that state
+- Then, 20 more increments will cause it to come back to that state again
+- The loss of memory means that the FSA will correctly match *n* increments with *n* decrements, but it will also incorrectly match *n+20* or *n+40* or *n+60*, etc., increments with *n* decrements
+
+
+## Pumping Lemma cont'd
+- We say that the first part of the input can be "pumped" up by an extra 20 increments without the FSA being able to track the pumping
+- In your automata theory course, you have seen (or will see) a formal proof using the pumping lemma for regular languages
+
+
+## Pumping Lemma cont'd
+- The fundamental proof using this lemma is that an FSA cannot recognize the language $a^nb^n$, which has the same number of $a$ and $b$ terminals
+- If "a" represents increments and "b" represents decrements, this is what we were (unsuccessfully) trying to recognize to defeat one kind of obfuscation
+
+
+## Obfuscations and the Chomsky Hierarchy
+- The language $a^nb^n$ is not a regular language
+- In order to recognize it, we must move up the Chomsky hierarchy to context free languages
+- $S \rightarrow aSb|e$  is a context free language that recognizes $a^nb^n$
+- That which is impossible at one level of the Chomsky hierarchy is sometimes trivial at the next higher level
+
+
+## Other Obfuscations
+- Other obfuscations are even more complex to recognize
+- Rather than simple increments and decrements, all sorts of complex arithmetic could be used to change and then restore the value of a register
+- Even with simple increments and decrements, if any changed value of the register is used, then the increments and decrements were not junk instructions
+- A tool such as flex cannot analyze such possibilities with regular expressions
+
+
+## Defeating Complex Obfuscations
+- A compiler combines recognition of regular expressions with recognition of context free languages and higher level semantic analyses
+- By analyzing the flow of control and flow of data within the program, a compiler can answer questions that a regex pattern matcher can not
+  - Is this value ever used, or is it junk?
+  - If register assignments were changed in the code, what would the code look like?
+  - Can complex arithmetic be simplified?
+	</textarea></section>
+
+	</section>
+	
+	<section>
+      
+	  <section data-markdown id="possibilities"><textarea data-template>
+# Possible Obfuscations
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Trivial Obfuscations
+- Adding NOPs
+  - `nop`, `add rax, 0`, `imul rax, 1`, `xchg rax, rax`, etc.
+- Moidfying a register that is never used
+
+
+## Simple algorithmic obfuscations
+- Register replacement
+- Multiple instructions that have no net effect
+  - Instructions on an unused register that do have a net effect are on the previous slide
+
+
+## Complicated algorithmic instructions
+- Computing a constant through multiple instructions so that the constant value is not in the program code
+
+
+## More reading
+- [Wikibooks: x86 Disassembly/Code Obfuscation](https://en.wikibooks.org/wiki/X86_Disassembly/Code_Obfuscation)
+- Google is your friend
+	</textarea></section>
+
+	</section>
+      
+    </div>
+  </div>
+  <script src="reveal.js/lib/js/head.min.js"></script> 
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="settings.js"></script> 
+</body>
+</html>
