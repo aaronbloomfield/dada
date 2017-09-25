@@ -1,5 +1,5 @@
-DADA: HW 4: Lex
-===============
+DADA: HW 4: Lex and recognizing viruses
+=======================================
 
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 

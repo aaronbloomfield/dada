@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Program submission guidelines</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../markdown.css" type="text/css" />
+</head>
+<body>
+<h1 id="program-submission-guidelines">Program submission guidelines</h1>
+<p><a href="index.html">Go up to the main DADA homeworks page</a> (<a href="index.md">md</a>)</p>
+<p>A few rules MUST be followed for the submission system to recognize your output properly:</p>
+<ul>
+<li>Your program must return an exit code of zero (not returning an exit code in Java or C is the same thing as returning zero). Exit codes are checked to determine run-time errors, so if you properly exit your program and return specific codes, the system will think you have a run-time error.
+<ul>
+<li>That being said, C does not require a return value, and the system can handle this</li>
+</ul></li>
+<li>Unless otherwise directed, your program must read from standard input (<code>scanf()</code>, <code>cin</code>, <code>System.in</code>, etc.), and write to standard output (<code>printf()</code>, <code>cout</code>, <code>System.out</code>, etc.).</li>
+<li>The languages supported are listed below, along with the naming requirements.</li>
+</ul>
+<p>Beyond that, a few notes and suggestions:</p>
+<ul>
+<li>If you want to mix <code>printf()</code> and <code>cout</code> in a C++ program, you have to be careful (they buffer their output in different places), you need to consider <a href="http://www.cplusplus.com/reference/iostream/ios_base/sync_with_stdio/">ios_base::sync_with_stdio</a>.</li>
+<li>Some compilers automatically include certain header files, such as <code>&lt;stdio.h&gt;</code> and <code>&lt;stdlib.h&gt;</code>. The version of g++ on the server does not. If your code compiles fine for you, and does not on the server, then try making sure all your include files are correct.</li>
+</ul>
+<p>Language specific information: note that the compilation command is dependent on the file extension of the first submitted file it recognizes. The execution command is more specific.</p>
+<ul>
+<li>C: typically compiled with <code>gcc *.c</code>; thus files can be named anything with a .c extension. The server has gcc version 5.4.0.</li>
+<li>C++: typically compiled with &quot;g++ *.cpp&quot;; thus files can be named anything with a .cpp extension. The server has g++ version 5.4.0.</li>
+<li>Java: typically compiled with <code>javac Main.java</code>; thus, the primary file must be Main.java. Java is OpenJDK version 1.8.0.</li>
+<li>Python: no compilation, due to being an interpreted language; tyipcally executed with <code>python main.py</code>, so make sure you name your file correctly. The system has Python version 2.7.12 (run via <code>python main.py</code>) and Python version 3.5.2 (run via <code>python3 main.py</code>).</li>
+<li>PHP: no compilation, due to being an interpreted language; typically executed with <code>php main.php</code>, so make sure you name your file correctly. The first line in your program should be <code>&lt;?php</code> and not <code>#!/usr/bin/php</code>. PHP version 7.0.22.</li>
+<li>Ruby: no compilation, due to being an interpreted language; typically executed with <code>ruby main.rb</code>, so make sure you name your file correctly. The Ruby version installed is ruby 2.3.1.</li>
+</ul>
+</body>
+</html>
