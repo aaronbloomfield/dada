@@ -59,7 +59,7 @@ ret
 - Or to hook an interrupt:
 ```
 mov eax, 4Ch 
-mov dword ptr [eax], edx
+mov [eax], edx
 ```
 - In [HW 4](../hws/hw4-lex.html) you will write a flex scanner to detect these sequences
 
@@ -75,7 +75,7 @@ ret
 - Or:
 ```
 push virusfunc 
-mul eax,1
+imul eax, 1
 ret 
 ```
 - How would the scanning routine find these?
@@ -91,7 +91,7 @@ ret
 
 ## Removing Obfuscations
 - For the simple examples of obfuscations, we could just use lex or flex or a similar pattern matcher to filter out the obfuscating instructions
-- The lex rules to perform the filtering would be simple, matching single instructions such as `nop` or `add eax,0` or `mul ebx,1`
+- The lex rules to perform the filtering would be simple, matching single instructions such as `nop` or `add eax, 0` or `imul ebx, 1`
 - The virus scanner could then just match real virus code patterns
 
 
@@ -99,13 +99,13 @@ ret
 - Are all obfuscations simple enough to filter?
 - A more advanced obfuscation is register renaming, e.g.:
 ```
-add eax,03FFh
-mov edx,eax
+add eax, 03FFh
+mov edx, eax
 ```
 - Or:
 ```
-add ebx,03FFh
-mov esi,ebx
+add ebx, 03FFh
+mov esi, ebx
 ```
 - The second uses ebx instead of eax, and esi instead of edx
   - This can't be done via flex alone!
@@ -122,11 +122,11 @@ mov esi,ebx
 - A sequence of obfuscations instructions, interleaved with the virus code, that have no net effect:
 ```
 ; virus code can use edi here
-add edi,1  ; obfuscating instruction
+add edi, 1  ; obfuscating instruction
 ; real virus code here that does not use edi
-add edi,3
+add edi, 3
 ; real virus code here that does not use edi
-sub edi,4
+sub edi, 4
 ; real virus code can use edi starting here
 ```
 - The number of possibilities is almost infinite
