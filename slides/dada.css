@@ -179,18 +179,21 @@ span.yellow { color:yellow; }
     float:right;
     max-width:400px;
     max-height:200px;
+    margin-left:20px !important;
 }
 
 .right-float-img-600 img {
     float:right;
     max-width:600px;
     max-height:300px;
+    margin-left:20px !important;
 }
 
 .right-float-img-800 img {
     float:right;
     max-width:800px;
     max-height:400px;
+    margin-left:20px !important;
 }
 
 .reveal section img {
