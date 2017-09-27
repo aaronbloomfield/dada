@@ -34,7 +34,7 @@ Lectures (fall 2017)
 | 13  | Sep&nbsp;20 | Wednesday   | [re and lex][105], [file viruses][106] | [re and lex][105], slides 8.1 to 8.13 (end); [file viruses][106], slides 1 to 3.5 |
 | 14  | Sep&nbsp;22 | Friday      | [file viruses][106] | [file viruses][106], slides 4.1 to 6.10 |
 | 15  | Sep&nbsp;25 | Monday      | [file viruses][106], [obfuscation][107] | [file viruses][106], slides 6.10 to 7.11 (end); [obfuscation][107], slides 1 to 3.8 |
-| 16  | Sep&nbsp;27 | Wednesday   |               |               |
+| 16  | Sep&nbsp;27 | Wednesday   | [obfuscation][107], [advanced viruses][108] | [obfuscation][107], slides 3.8 to 5.5 (end); [advanced viruses][108], slides 1 to 4.10 |
 | 17  | Sep&nbsp;29 | Friday      |               |               |
 |     | Oct&nbsp;2  | Monday      |               |               |
 | 18  | Oct&nbsp;4  | Wednesday   |               |               |
@@ -83,3 +83,4 @@ Lectures (fall 2017)
 [105]: ../slides/05-re-and-lex.html#/
 [106]: ../slides/06-file-viruses.html#/
 [107]: ../slides/07-obfuscations.html#/
+[108]: ../slides/08-advanced-viruses.html#/

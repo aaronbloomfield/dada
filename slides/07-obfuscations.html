@@ -155,9 +155,9 @@ sub edi, 4
 - Let's analyize a simple obfuscation: an arbitrary number of increments followed by an equal number of decrements
   - The net effect is zero!
 - Start with a series of increments
-  - `inc rax`, `add rax, 1`, `sub rax, -1`, etc.
+  - `inc rax`; `add rax, 1`; `sub rax, -1`; etc.
 - Followed by an equal number of decrements:
-  - `dec rax`, `add rax, -1`, `sub rax, 1`, etc.
+  - `dec rax`; `add rax, -1`; `sub rax, 1`; etc.
 - We want to see if the *net effect* is zero
 
 
