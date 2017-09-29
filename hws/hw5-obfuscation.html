@@ -93,11 +93,15 @@ done:
 <p>There are three different platforms that people are using: Windows, Mac OS X, and Linux. As a result, there are differences in how to compile and run x64 assembly.</p>
 <p><strong>YOUR SUBMITTED PROGRAM MUST RUN ON A 64 BIT LINUX MACHINE!</strong> And must be compiled using the -m64 flag (which compiles it into 64 bit assembly).</p>
 <p>You can look at <a href="http://aaronbloomfield.github.io/pdr/labs/lab08-64bit/index.html">CS 2150 lab 8 (x64, part 1)</a>, which discusses the various ways to compile x64 for the various platforms.</p>
+<h3 id="register-usage">Register usage</h3>
+<p>Your obfuscations may need to use temporary registers for their computations. One way to do this is to trace the registers throughout the execution of the program and see which ones are not being used, but this is beyond the scope of this homework.</p>
+<p>For this homework, you can safely assume that you may use the rcx, r8, and r9 registers, as those will not be used by the surrounding assembly code. Thus, you can use those three registers in your obfuscations (you don't have to, but you have that option). You may recall that these are registers that are used to pass in parameters 4-6 (from the <a href="http://aaronbloomfield.github.io/pdr/slides/08-assembly-64bit.html#/5/8">register usage guidelines</a>). Thus, we will not be providing you with subroutines that have more than three parameters.</p>
+<p>Note that you will have to assure that your provided assembly code (in x64.s and whatever you test with) also does not use these registers.</p>
 <h3 id="submission-requirements">Submission requirements</h3>
 <p>You should submit the following files. <strong>BE SURE TO NAME THEM PROPERLY</strong>, including capitalization - otherwise, can can't call our testing scripts on your code, and we'll just give you a zero. For example, we will assume that your assembly file is called <code>x64.s</code>, your C++ file <code>main.cpp</code>. Your sample C++/assembly file needs to compile to an <code>x64</code> executable (not <code>a.out</code>!). The submission system will call <code>make</code> to compile everything.</p>
 <ul>
 <li>Your program, written in the language of your choice. The name will depend on the language that you are using. Did you read the <a href="program-submission-guidelines.html">Program submission guidelines</a> (<a href="program-submission-guidelines.md">md</a>) page?</li>
-<li><code>x64.s</code>: assembly code for us to obfuscate. In particular, you should generate some assembly routines that demonstrate the various obfuscations that your code can produce. However, this file should be the <em>non</em>-obfuscated version. You can have multiple assembly routines in a single file - just have multiple 'global' lines, one for each. To start with, use the vecsum.s file (but rename it to x64.s). This file should compute something - what, we don't care, but it should need many opcodes to compute some numerical result. <strong>IT MUST CONFORM TO 64-BIT X64 ASSEMBLY</strong>. See above for details.</li>
+<li><code>x64.s</code>: assembly code that you write for us to obfuscate. In particular, you should generate some assembly routines that demonstrate the various obfuscations that your code can produce. However, this file should be the <em>non</em>-obfuscated version. You can have multiple assembly routines in a single file - just have multiple <code>global</code> lines, one for each. To start with, use the vecsum.s file (but rename it to x64.s). This file should compute something - what, we don't care, but it should need many opcodes to compute some numerical result. <strong>IT MUST CONFORM TO 64-BIT X64 ASSEMBLY</strong>. See above for details.</li>
 <li><code>main.cpp</code>: the driver file that will call your sample assembly code. This is not the program that you can select the language for! You are welcome to use the CS 2150 lab 8 main.cpp file verbatim, if you would like. It should not take in any input.</li>
 <li><code>Makefile</code>: this should compile BOTH the main.cpp/x64.s program (into an executable named 'x64') and, if necessary, your obfuscation program (only C, C++, and Java need to do this compilation step; Python, Ruby, and PHP do not). When you submit it, it <strong>MUST CALL g++ WITH THE -m64 FLAG</strong>. See above for details, and see below for a sample Makefile.</li>
 <li><code>readme.pdf</code>: this file should describe the obfuscation techniques that you use, and where we would find them in the file. We realize that you can't specify exactly where (due to the fact that your program will have randomization), but give us as good an idea as you can. And see [How to create a PDF file]. Note that we will not know about an obfuscation technique unless it is listed here!</li>
@@ -117,6 +121,10 @@ done:
 <li>no limit on complicated algorithmic obfuscations</li>
 </ul>
 <p>This has the net effect of requiring at least two complicated algorithmic implementation for more than 6/10 on this homework.</p>
+<p><strong><em>NOTE:</em></strong> if your obfuscated code doesn't compile, then you will get a very low score. Anybody can scramble a program so that it doesn't compile. It will be far better to provide a small number of obfuscations that work properly rather than a lot that do not work.</p>
+<h3 id="execution">Execution</h3>
+<p>We are going to run your obfuscator on your provided source code (x64.s), and compile the result along with your main.cpp, and make sure that it works the same way that your original (un-obfuscated) x64.s and main.cpp worked.</p>
+<p>We are also going to obfuscate our own assembly code. In particular, we are going to obfuscate our code <em>multiple times</em> -- meaning we will take the output of our obfuscated assembly code and run it through the obfuscator again and again. It should produce the same result each time.</p>
 <h3 id="makefile">Makefile</h3>
 <p>Below is a sample Makefile for an obfuscator written in C++. You are certainly welcome to use a more complicated Makefile; this is the minimum required for this assignment.</p>
 <pre><code>main:
@@ -140,16 +148,17 @@ run:
 <ul>
 <li>C: <code>gcc -Wall obfuscator.c</code></li>
 <li>Java: <code>javac Main.java</code></li>
-<li>PHP, Python, Ruby: no compilation line required, but the program naming requirement is quite strict; see <a href="program-submission-guidelines.html">Program submission guidelines</a> (<a href="program-submission-guidelines.md">md</a>) for details.</li>
+<li>PHP, Python, Ruby: no compilation line required, but see the <a href="program-submission-guidelines.html">Program submission guidelines</a> (<a href="program-submission-guidelines.md">md</a>) for details. See below for what to name the files.</li>
 </ul>
+<p>For this homework, please name the obfuscator source code file <code>obfuscator.*</code> for whatever language you are using.</p>
 <p>The second target is what will run your obfuscator. Here are some sample lines for various languages:</p>
 <ul>
-<li>C/C++: <code>./a.out1</code></li>
-<li>Java: <code>java Obfuscator</code></li>
+<li>C/C++: <code>./a.out1</code> (compiled from obfuscator.c or obfuscator.cpp)</li>
+<li>Java: <code>java obfuscator</code> (compiled from obfuscator.java)</li>
 <li>Python 2: <code>python obfuscator.py</code></li>
 <li>Python 3: <code>python3 obfuscator.py</code></li>
-<li>PHP: <code>php main.php</code></li>
-<li>Ruby: <code>ruby main.rb</code></li>
+<li>PHP: <code>php obfuscator.php</code></li>
+<li>Ruby: <code>ruby obfuscator.rb</code></li>
 </ul>
 </body>
 </html>

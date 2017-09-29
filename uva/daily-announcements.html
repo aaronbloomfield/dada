@@ -55,6 +55,50 @@ line-height:120%;
 
 	<section>
 
+	  <section>
+<h2>Worrying Scientist Interviews</h2>
+<img class="stretch" src="http://imgs.xkcd.com/comics/worrying_scientist_interviews.png" title="They always try to explain that they&#39;re called &#39;solar physicists&#39;, but the reporters interrupt with &quot;NEVER MIND THAT, TELL US WHAT&#39;S WRONG WITH THE SUN!&quot;" alt="Worrying Scientist Interviews" srcset="http://imgs.xkcd.com/comics/worrying_scientist_interviews_2x.png 2x">
+<p class="center"><a href="http://xkcd.com/1895/">xkcd # 1895</a></p>
+	  </section>
+
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Friday, September 29th
+- My office hours are M/W 1:00-2:30
+    - Lawrence Hook has them Thu 1-3, Fri 2-3 (both in Rice 514)
+    - Martin Simpkins has them Tu/Thu 11-12:15 (Tuesdays in Rice 204; Thursdays in Rice 514)
+    - These are listed in the Collab workspace (on the landing page)
+    - But we won't have them this Monday or Tuesday
+- [HW 4: lex](../hws/hw4-lex.html): how did it go?
+- [HW 5: obfuscations](../hws/hw5-obfuscation.html) is out
+    - All homeworks are due by midnight on the date specified
+    - The submission system will open next week
+    - It's due next Friday (Oct 6) by midnight
+    - Compilation will be with `make`
+	- A few updates were just made: file naming, register usage, grading, and execution
+- The midterm is in class on Wednesday, October 11th; the [syllabus](syllabus.html) has been updated
+- Today we will continue with [advanced viruses](../slides/08-advanced-viruses.html#/), starting [here](../slides/08-advanced-viruses.html#/3/9)
+
+
+## Badness of the day: [Stoned virus](https://en.wikipedia.org/wiki/Stoned_(computer_virus))
+- This was a 1987 DOS virus, and one of the first viruses
+- It was multi-partite:
+  - Infected the *master boot record*
+  - Stayed resident in memory (used the upper 2Kb)
+  - Hooked the disk interrupt
+- Thus, the AV software had to remove all three, else the system would be re-infected
+- It printed out "You've been stoned" every 8th boot
+- When it infected the MBR, it wrote the orignal to the end of the disk
+  - But it was designed for 360 Kb floppies, so it wrote it to sector 361 (sic)
+  - Which was right in the middle of the data when floppies went to 1.2 Mb
+  - Thus, it was *accidentally destructive*
+</textarea></section>
+
+	</section>
+
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+	<section>
+
 	  <section data-markdown data-separator="^\n$"><textarea data-template>
 <h2>Real Estate</h2>
 <img class="stretch" src="http://imgs.xkcd.com/comics/real_estate.png" title="I tried converting the prices into pizzas, to put it in more familiar terms, and it just became a hard-to-think-about number of pizzas." alt="Real Estate" srcset="http://imgs.xkcd.com/comics/real_estate_2x.png 2x">
@@ -71,7 +115,7 @@ line-height:120%;
     - The submission system is open
     - Compilation will be with `make`, and it must produce an executable named `a.out`
     - I updated the text file format of the input file; please `git pull` and re-check!
-- [HW 5: obfuscations](../hws/hw5-obfuscations.html) is out
+- [HW 5: obfuscations](../hws/hw5-obfuscation.html) is out
     - It's due next Friday (Oct 6) by midnight
     - Compilation will also be with `make`
 - The midterm is in class on Wednesday, October 11th; the [syllabus](syllabus.html) has been updated
