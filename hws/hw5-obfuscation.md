@@ -177,8 +177,10 @@ main:
      g++ -m64 -Wall -o x64 x64.o main.o
 
 run:
-     ./a.out
+     @./a.out
 ```
+
+You have to put the `@` before the execution line!  Your execution line will vary depending on your language: `@./a.out` for C/C++, `@java Main.java` for Java, `@python obfuscator.py` for Python, etc.
 
 Note that if you cut-and-paste this into a Makefile for you to use, you will have to replace the leading 5 spaces on those lines with a single tab.  And the -Wall flag is there for your sanity (it turns on all warnings), but it is certainly not required.
 

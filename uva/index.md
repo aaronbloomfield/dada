@@ -37,7 +37,7 @@ Lectures (fall 2017)
 | 16  | Sep&nbsp;27 | Wednesday   | [obfuscation][107], [advanced viruses][108] | [obfuscation][107], slides 3.8 to 5.5 (end); [advanced viruses][108], slides 1 to 4.10 |
 | 17  | Sep&nbsp;29 | Friday      | [advanced viruses][108] | [advanced viruses][108], slides 4.10 to 6.3 |
 |     | Oct&nbsp;2  | Monday      |               |               |
-| 18  | Oct&nbsp;4  | Wednesday   |               |               |
+| 18  | Oct&nbsp;4  | Wednesday   | [advanced viruses][108] | [advanced viruses][108], slides 6.1 to 8.3 |
 | 19  | Oct&nbsp;6  | Friday      |               |               |
 | 20  | Oct&nbsp;9  | Monday      |               |               |
 | 21  | Oct&nbsp;11 | Wednesday   |               |               |

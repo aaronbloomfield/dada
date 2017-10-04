@@ -134,7 +134,8 @@ done:
      g++ -m64 -Wall -o x64 x64.o main.o
 
 run:
-     ./a.out</code></pre>
+     @./a.out</code></pre>
+<p>You have to put the <code>@</code> before the execution line! Your execution line will vary depending on your language: <code>@./a.out</code> for C/C++, <code>@java Main.java</code> for Java, <code>@python obfuscator.py</code> for Python, etc.</p>
 <p>Note that if you cut-and-paste this into a Makefile for you to use, you will have to replace the leading 5 spaces on those lines with a single tab. And the -Wall flag is there for your sanity (it turns on all warnings), but it is certainly not required.</p>
 <p>This Makefile does a number of things:</p>
 <ul>
