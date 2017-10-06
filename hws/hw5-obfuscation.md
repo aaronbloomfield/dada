@@ -94,7 +94,7 @@ Note that in the above program the obfuscations are clearly labeled.  Not only a
 - You can use a regular expression replacement subroutine to replace all occurrences of white space with a single space - depending on your language, this may make calling `split()` (or equivalent) easier.
 - Quality is more important than quantity.  Putting in thousands of NOPs will just make us cranky when trying to grade your program.
 - To tell if it's a jump target, you just have to check if a single colon is in the line.
-- Note that you should not put any obfuscation opcodes between a cmp and it's respective jump command, as that may interfere with the conditional jump.
+- Note that you should not put any obfuscation opcodes between a cmp and it's respective jump command, as that may interfere with the conditional jump.  You can assume that there not be any other assembly commands (much less any that modify the condition codes) between a `cmp` and it's respective conditional jump.
 - Using randomization is going to be necessary, otherwise it will just create another x64 program pattern to match exactly.
 
 
