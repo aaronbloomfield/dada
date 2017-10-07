@@ -38,9 +38,9 @@ Lectures (fall 2017)
 | 17  | Sep&nbsp;29 | Friday      | [advanced viruses][108] | [advanced viruses][108], slides 4.10 to 6.3 |
 |     | Oct&nbsp;2  | Monday      |               |               |
 | 18  | Oct&nbsp;4  | Wednesday   | [advanced viruses][108] | [advanced viruses][108], slides 6.1 to 8.3 |
-| 19  | Oct&nbsp;6  | Friday      |               |               |
-| 20  | Oct&nbsp;9  | Monday      |               |               |
-| 21  | Oct&nbsp;11 | Wednesday   |               |               |
+| 19  | Oct&nbsp;6  | Friday      | [advanced viruses][108] | [advanced viruses][108], slides 8.3 to 10.9 |
+| 20  | Oct&nbsp;9  | Monday      | [advanced viruses][108] | [advanced viruses][108], slides 10.9 to 10.12; review session |
+| 21  | Oct&nbsp;11 | Wednesday   | MIDTERM!!!! | |
 | 22  | Oct&nbsp;13 | Friday      |               |               |
 | 23  | Oct&nbsp;16 | Monday      |               |               |
 | 24  | Oct&nbsp;18 | Wednesday   |               |               |
