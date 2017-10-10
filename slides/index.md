@@ -21,3 +21,4 @@ ready to be presented.
 5. [Regular expressions and lex](05-re-and-lex.html#/)
 6. [File viruses](06-file-viruses.html#/)
 7. [Assembly obfuscations](07-obfuscations.html#/)
+8. [Advanced viruses](08-advanced-viruses.html#/)
