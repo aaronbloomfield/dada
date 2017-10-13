@@ -11,3 +11,4 @@ The due dates for the various homeworks are listed in the
 - [Homework 3: binary tricky jump](hw3-tricky.html) ([md](hw3-tricky.md))
 - [Homework 4: lex and recognizing viruses](hw4-lex.html) ([md](hw4-lex.md))
 - [Homework 5: obfuscating x64 assembly code](hw5-obfuscation.html) ([md](hw5-obfuscation.md))
+- [Homework 6: binary lex](hw6-lex2.html) ([md](hw6-lex2.md))
