@@ -111,8 +111,8 @@ xor  [si],si   ; xor code with its address
 xor  [si],sp   ; xor code with its inverse index
 ```
 - The XOR operation is reversible:
-	- 0f237h &oplus; 0682h = 0f4b5h
-	- 0f4b5h &oplus; 0682h = 0f237h
+	- f237h &oplus; 0682h = f4b5h
+	- f4b5h &oplus; 0682h = f237h
 - Very fast to encrypt and decrypt, yet sufficient to prevent detection by patterns
     - IMPORTANT: Even the hex patterns are file-dependent, because they depend on addresses
 
@@ -183,7 +183,7 @@ mov  sp,0682h  ; length of encrypted code (1666 bytes)
 	- Still need to black-box or sandbox the application to prevent damage
 - SDT (software dynamic translation, or run-time compilation) decodes a program into a buffer as it runs
 	- Can examine decrypted code in the translation cache/buffer
-- clang and lldb have similar functionality
+- clang and llvm have similar functionality
 
 
 ## Virus Code Evolution

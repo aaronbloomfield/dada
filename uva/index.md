@@ -41,7 +41,7 @@ Lectures (fall 2017)
 | 19  | Oct&nbsp;6  | Friday      | [advanced viruses][108] | [advanced viruses][108], slides 8.3 to 10.9 |
 | 20  | Oct&nbsp;9  | Monday      | [advanced viruses][108] | [advanced viruses][108], slides 10.9 to 10.12; review session |
 | 21  | Oct&nbsp;11 | Wednesday   | MIDTERM!!!! | |
-| 22  | Oct&nbsp;13 | Friday      |               |               |
+| 22  | Oct&nbsp;13 | Friday      | [advanced coding techniques][109] | [advanced coding techniques][109], slides 1 to 3.19 |
 | 23  | Oct&nbsp;16 | Monday      |               |               |
 | 24  | Oct&nbsp;18 | Wednesday   |               |               |
 | 25  | Oct&nbsp;20 | Friday      |               |               |
@@ -84,3 +84,4 @@ Lectures (fall 2017)
 [106]: ../slides/06-file-viruses.html#/
 [107]: ../slides/07-obfuscations.html#/
 [108]: ../slides/08-advanced-viruses.html#/
+[109]: ../slides/09-adv-code-tech.html#/
