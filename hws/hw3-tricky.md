@@ -9,7 +9,7 @@ This assignment will explore what it takes to create a stealthy virus that emplo
 
 This program ***MUST*** run on the [VirtualBox image](../docs/virtualbox-image-details.html) ([md](../docs/virtualbox-image-details.md)) provided for this course.  You have to write it in either C or C++.
 
-This homework was taken, with permission, from [a homework created by Charles Reiss](https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/tricky.html)
+This homework was taken, with permission, from [a homework created by Charles Reiss](https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/tricky.html), which was taken -- again, with permission -- from one created by Jack Davidson.
 
 ### Task
 A "tricky jump" can be efficiently implemented (only six bytes) as:
