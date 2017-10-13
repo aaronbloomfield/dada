@@ -22,3 +22,4 @@ ready to be presented.
 6. [File viruses](06-file-viruses.html#/)
 7. [Assembly obfuscations](07-obfuscations.html#/)
 8. [Advanced viruses](08-advanced-viruses.html#/)
+9. [Advanced virus coding techniques](09-adv-code-tech.html#/)

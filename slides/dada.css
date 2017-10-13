@@ -169,6 +169,7 @@ ul.small {
 span.red { color:red; }
 span.skyblue { color:skyblue; }
 span.pink { color:pink; }
+span.hotpink { color:hotpink; }
 span.blue { color:blue; }
 span.green { color:green; }
 span.lightgreen { color:lightgreen; }
@@ -199,3 +200,19 @@ span.yellow { color:yellow; }
 .reveal section img {
     background:white
 }
+
+/* to color <pre> blocks of code */
+
+.reveal pre.code { 
+    max-height: 700px;
+    background-color:dimgray;
+    border-radius:7px;
+    box-shadow: 5px 5px 5px black;
+    font-family: monospace;
+    padding: 5px;
+    overflow: auto;
+    word-wrap: normal;
+}
+
+span.junkcode { color:palevioletred; }
+span.spotcode { color:springgreen; }

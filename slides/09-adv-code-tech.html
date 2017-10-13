@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DADA: Advanced Virus Coding Techniques</title>
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css">
+  <link rel="stylesheet" href="dada.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section data-markdown id="cover"><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;
+## Advanced Virus Coding Techniques
+  </script></section>
+
+	<section data-markdown><textarea data-template>
+# Contents
+&nbsp;  
+[Encrypted Viruses](#/encrypted)  
+[Oliogomorphic Viruses](#/oligomorphic)  
+[Polymorphic Viruses](#/polymorphic)  
+[Metamorphic Viruses](#/metamorphic)  
+[Virus Creation Kits](#/kits)  
+	</textarea></section>
+
+	<section>
+      
+	  <section data-markdown id="encrypted"><textarea data-template>
+# Encrypted Viruses
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Encrypted Viruses
+- Virus encryption is both an anti-disassembly technique and an obstacle to virus detection using code patterns
+- Encryption takes many forms
+- The most advanced, difficult to defeat viruses use encryption techniques
+- We will devote several lectures to understanding, detecting, and disinfecting various encrypted viruses
+
+
+## Simple Encryption
+- The earliest viruses to use encryption used a very simple decryption algorithm, such as XORing code with its own address
+- The point was not to use advanced algorithms that were hard to analyze; just to slow down analysis and defeat pattern-based virus detection
+- Because the decryptor code is always present in unencrypted form, there is not much point in choosing complex encryption/decryption methods
+- The DOS virus Cascade was the first encrypted virus
+
+
+## Example: Cascade Virus
+- The simple decryptor of Cascade, circa 1990:
+```
+   lea  si,Start  ; start of encrypted code 
+                  ; (computed by virus)
+   mov  sp,0682h  ; length of encrypted code (1666 bytes)
+Decrypt:
+   xor  [si],si   ; xor code with its address
+   xor  [si],sp   ; xor code with its inverse index
+   inc  si        ; increment address pointer
+   dec  sp        ; decrement byte counter
+   jnz  Decrypt   ; loop if more bytes to decrypt
+Start:         ; virus code body
+```
+
+
+## Cascade Virus Walkthrough
+- Setting up the indices:
+```
+ lea  si,Start  ; start of encrypted code 
+                ; (computed by virus)
+```
+- The virus does not have a "Start" label whose address is determined by a compiler
+- Instead, it computes the address at infection time, depending on the location in the file being infected
+- Virus uses hex offsets; we show "Start" to make it more readable
+
+
+## Cascade Virus Walkthrough
+- Stack pointer used as counter
+```
+mov  sp,0682h  ; length of encrypted code (1666 bytes)
+```
+- Virus knows its own length before it infects a new file
+- Using the stack pointer is an anti-debugger technique
+    - Cascade is therefore an armored virus
+- However, this line of code is a distinctive pattern (signature) for this virus
+
+
+## Cascade Virus Walkthrough
+- The XOR encryption lines:
+```
+xor  [si],si   ; xor code with its address
+xor  [si],sp   ; xor code with its inverse index
+```
+- The XOR operation is reversible:
+	- 0f237h &oplus; 0682h = 0f4b5h
+	- 0f4b5h &oplus; 0682h = 0f237h
+- Very fast to encrypt and decrypt, yet sufficient to prevent detection by patterns
+    - IMPORTANT: Even the hex patterns are file-dependent, because they depend on addresses
+
+
+## Cascade Virus Walkthrough
+- Increment counters/indices and loop:
+```
+inc  si        ; increment address pointer
+dec  sp        ; decrement byte counter
+jnz  Decrypt   ; loop if more bytes to decrypt
+```
+- With pattern-based detection impeded by encryption, an anti-virus researcher would like to step through the decryptor in a debugger and see the decrypted code
+- However, use of stack pointer inhibits most debugger use
+
+
+## Analyzing Cascade
+- Prevention in the OS: don't allow writing to the executable code segment
+	- Virus writer can work around this by decrypting into a buffer, rather than decrypting code in its place
+- The best attack upon a simple encrypted virus is to detect the code patterns of the decryptor, e.g.
+```
+mov  sp,0682h  ; length of encrypted code (1666 bytes)
+```
+
+
+## Difficult Decryptors
+- We can have multiple decryptors:
+	- One decryptor loop might traverse the virus body, applying a decryptor function (e.g. XOR or something more complex)
+	- Then another decryptor loop can traverse the virus code in reverse order applying a different decryption function
+	- etc.
+
+
+## Difficult Decryptors
+- The unencrypted decryptor code could decrypt a piece of code that is a more complex decryptor...
+    - ... which then decrypts another decryptor...
+	- ... which decrypts the virus
+- Static analysis of the patterns of the first decryptor would be irrelevant
+	- That decryptor could be common to many viruses and also to commercial software
+
+
+## Detecting Decryptors
+- The main loop of the decryptor (a tight loop with XORs) looks like it would be a good subject for pattern-based detection
+- But, many different viruses can use the same decryptor algorithm and have totally different payloads and behaviors
+- A virus could pad itself out so that it has the same length as other, unrelated viruses
+
+
+## Detecting Decryptors
+- Even worse is the fact that some commercial software is obfuscated by an *anti-debug wrapper*, which looks just like the decryptor code for Cascade, in order to prevent reverse engineering of their product
+	- Can produce false positives
+
+
+## Detecting Decryptors cont.
+- Memory allocation within the decryptor can produce a good code pattern to match
+- Decryptor has three locations in which it can decrypt the virus code:
+	1. In place; OS can disallow this
+	2. In heap; allocation code is unencrypted and makes pattern-based detection easier
+	3. On the stack; stealthiest choice
+
+
+## Detecting Decryptors cont.
+- How can an encrypted virus be detected if it uses stack allocation, makes itself look like a commercial anti-debug wrapper, makes itself the same length as unrelated viruses, etc.?
+- Emulation and dynamic analysis are common approaches
+	- Expensive
+	- Proprietary
+
+
+## Advanted compiler tools
+- Phoenix, from Microsoft, could be used to dump the code after the decryption has occurred
+	- Still need to black-box or sandbox the application to prevent damage
+- SDT (software dynamic translation, or run-time compilation) decodes a program into a buffer as it runs
+	- Can examine decrypted code in the translation cache/buffer
+- clang and lldb have similar functionality
+
+
+## Virus Code Evolution
+- Simile is one example of a virus that evolves in order to frustrate pattern-based detection
+- Each time it replicates, it generates a different memory allocation code sequence in the decryptor
+	- Can be done with simple obfuscations, code re-orderings, etc.
+- No single pattern matches the allocator
+- More common is mutating the decryptor code itself and using stack allocation
+
+
+## Decryptor Mutation
+- Viruses that can evolve by mutating as they replicate can be classified in three categories, based on the degree of variety they produce:
+	1. Oligomorphic viruses can produce a few dozen decryptors; they select one at random when replicating
+	2. Polymorphic viruses dynamically generate code rearrangements and randomly insert junk instructions to produce millions of variants
+
+
+## Decryptor Mutation cont'd
+- Viruses that can evolve by mutating as they replicate can be classified in three categories, based on the degree of variety they produce:
+	3. Metamorphic viruses apply polymorphic techniques to the entire virus body rather than just to a decryptor, so that one generation differs greatly from the previous generation; no encryption is even necessary to be classified as metamorphic
+	  </textarea></section>
+
+	</section>
+	<section>
+
+	  <section data-markdown id="oligomorphic"><textarea data-template>
+# Oligomorphic Viruses
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Oligomorphic Viruses
+- Detecting encrypted viruses that have distinctive decryptors was too easy (in the opinion of virus writers!)
+- Whale was the first oligomorphic virus
+- It carried several dozen decryptors in its body as data; when replicating, it selected one at random, encrypted the virus body with it, and deposited the body and the decryptor in the target file
+
+
+## Oligomorphic Viruses cont.
+- Carrying the decryptors as data is a burden to the virus, making it larger
+- Memorial was a Windows 95 oligomorphic virus that generated 96 different decryptors, choosing one at replication time
+	- Detecting 96 different patterns is an impractical solution for virus scanners that must deal with thousands of viruses; pattern database size explosion would result
+- It inserted junk instructions at various points in the decryptor code
+
+
+## Junk Instructions
+- A junk instruction can be a no-op or do-nothing instruction, but it can also be an instruction that uses registers or memory locations that are unused in the decryptor
+- Given the following decryptor loop for the Memorial oligomorphic virus:
+```
+Decrypt:
+	xor [esi],al     ; decrypt a byte with key in AL
+	inc esi          ; go to next byte
+	inc al           ; slide the key up
+	dec ecx          ; decrement the byte counter
+	jnz Decrypt      ; loop back if more to decrypt
+```
+
+
+## Junk Instructions cont.
+- Code patterns can be obfuscated with junk instructions:
+<pre class="code">
+Decrypt:
+	<span class="junkcode">add ebx,edx        ; junk</span>
+	xor [esi],al       ; decrypt a byte with key in AL
+	<span class="junkcode">dec edx            ; junk</span>
+	inc esi            ; go to next byte
+	<span class="junkcode">mov [whocares],edx ; junk</span>
+	inc al             ; slide the key up
+	dec ecx            ; decrement the byte counter
+	jnz Decrypt        ; loop back if more to decrypt
+</pre>
+
+
+## Junk Instructions cont.
+- A different variant puts different junk instructions at different offsets:
+<pre class="code">
+Decrypt:
+	<span class="junkcode">add bh,4           ; junk</span>
+	<span class="junkcode">xor edx,edx        ; junk</span>
+	xor [esi],al       ; decrypt a byte with key in AL
+	inc esi            ; go to next byte
+	<span class="junkcode">xchg ebx,edx       ; junk</span>
+	inc al             ; slide the key up
+	<span class="junkcode">cmp ebx,edx        ; junk</span>
+	dec ecx            ; decrement the byte counter
+	jnz Decrypt        ; loop back if more to decrypt
+</pre>
+
+
+## Junk Instructions cont.
+- The index increment instructions are order-independent, creating more variants:
+
+<pre class="code">
+Decrypt:
+	add bh,4           ; junk
+	xor edx,edx        ; junk
+	xor [esi],al       ; decrypt a byte with key in AL
+	<span class="spotcode">inc al             ; slide the key up</span>
+	xchg ebx,edx       ; junk
+	<span class="spotcode">inc esi            ; go to next byte</span>
+	cmp ebx,edx        ; junk
+	dec ecx            ; decrement the byte counter
+	jnz Decrypt        ; loop back if more to decrypt
+</pre>
+
+
+## Junk Instructions cont.
+- There is more than one way to increment or decrement counters:
+<pre class="code">
+Decrypt:
+	add bh,4           ; junk
+	xor edx,edx        ; junk
+	xor [esi],al       ; decrypt a byte with key in AL
+	<span class="spotcode">add al,1           ; slide the key up</span>
+	xchg ebx,edx       ; junk
+	<span class="spotcode">add esi,1          ; go to next byte</span>
+	cmp ebx,edx        ; junk
+	<span class="spotcode">sub ecx,1          ; decrement the byte counter</span>
+	jnz Decrypt        ; loop back if more to decrypt
+</pre>
+
+
+## Junk Instructions cont.
+- There is more than one way to decrement a counter and loop back if it is not zero:
+<pre class="code">
+Decrypt:
+	add bh,4           ; junk
+	xor edx,edx        ; junk
+	xor [esi],al       ; decrypt a byte with key in AL
+	add al,1           ; slide the key up
+	xchg ebx,edx       ; junk
+	add esi,1          ; go to next byte
+	cmp ebx,edx        ; junk
+	<span class="spotcode">loop Decrypt       ; decrement the byte counter and
+                       ;  loop back if more to decrypt</span>
+</pre>
+
+
+## Detecting Oligomorphic Viruses
+- Clearly, it is easy to produce numerous variants of a decryptor
+- Filtering out no-ops and do-nothings does not remove the obfuscation
+- Emulation, debugging, or proprietary dynamic analyses are needed to produce the decrypted virus for analysis
+- An advanced compiler tool could be a good alternatives
+	  </textarea></section>
+
+	</section>
+	<section>
+
+	  <section data-markdown id="polymorphic"><textarea data-template>
+# Polymorphic Viruses
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Polymorphic Viruses
+- Whereas an oligomorphic virus might create dozens of decryptor variants during replication, a polymorphic virus creates millions of decryptors
+- Pattern-based detection of oligomorphic viruses is difficult, but feasible
+- Pattern-based detection of polymorphic viruses is infeasible
+- Amazingly, the first polymorphic virus was created for DOS in 1990, and called [V2PX](https://en.wikipedia.org/wiki/1260_(computer_virus%29) or 1260 (because it was only 1260 bytes!)
+
+
+## The 1260 Virus
+- A researcher, Mark Washburn, wanted to demonstrate to the anti-virus community that string-based scanners were not sufficient to identify viruses
+- Washburn wanted to keep the virus compact, so he:
+	- Modified the existing Vienna virus
+	- Limited junk instructions to 39 bytes
+	- Made the decryptor code easy to reorder
+
+
+## The 1260 Virus Decryptor
+- One instance of a decryptor:
+```
+; Group 1: Prolog instructions
+	mov ax,0E9Bh    ; set key 1
+	mov di,012Ah    ; offset of virus Start
+	mov cx,0571h    ; byte count, used as key 2
+; Group 2: Decryption instructions
+Decrypt:
+	xor [di],cx     ; decrypt first 16-bit word with key 2
+	xor [di],ax     ; decrypt first 16-bit word with key 1
+; Group 3: Decryption instructions
+	inc di          ; move on to next byte
+	inc ax          ; slide key 1
+; loop instruction (not part of Group 3)
+	loop Decrypt    ; slide key 2 and loop back if not zero
+; Random padding up to 39 bytes
+Start:          ; encrypted virus body starts here
+```
+
+
+## The 1260 Virus: Polymorphism
+- Sources of decryptor diversity:
+  1. Reordering instructions within groups
+  2. Choosing junk instruction locations
+  3. Changing which junk instructions are used
+- We will see that these variations are simple for the replication code to produce
+- Can we really produce millions of variants in a short decryptor, just using these simple forms of diversity?
+
+
+## Polymorphism: Reordering
+- The 1260 decryptor has three instruction groups, with 3, 2, and 2 instructions, respectively
+- The groups were the opcodes that could be permuted without changing the decryption result
+	- i.e. there is no inter-instruction dependence among the instructions inside a group
+- So, the reorderings within the groups produce 3! * 2! * 2! = 24 variants
+- This gives a multiplicative factor of 24 to apply to all variants that can be produced using junk instructions
+
+
+## Polymorphism: Junk Locations
+- In a 2-instruction group, there are three locations for junk: before, after, and between
+- However, there are far more possibilities than these three locations, as each location can hold from zero to 39 instructions
+	- 39-byte junk inst. limit (imposed by Washburn)
+	- Shortest x86 instructions take 1 byte; most are 2-3
+	- Let's guess that the replicator will choose ~15 junk instructions totalling 39 bytes
+	- 11 locations are possible throughout the decryptor
+
+
+## Polymorphism: Junk Locations cont'd
+- The choosing of 11 numbers from 0-15, that add up to exactly 15, can be done in how many ways?
+	- 1+10+(10+C(10,2))+(10+P(10,2)+C(10,3))+(10+P(10,2)+C(10,2)+10+C(9,2)+C(10,4))+......  = 1+10+55+220+401+......
+- This gives a multiplicative factor of several thousand to apply to all variants that can be produced using junk instruction selection and decryptor instruction reordering
+	- So far, 24 * (several thousand) variants
+
+
+## Polymorphism: Junk Instruction Selection
+- How many instructions qualify as junk instruction candidates for this decryptor?
+- x86 has more than 400 instructions
+- Each has dozens of variants based on operand choice, register renaming, etc.:
+	- add ax,bx; add bx,ax; add dx,cx; add ah,al; add si,1; add di,7  etc.
+	- Immediate operands produce a combinatorial explosion of possibilities
+
+
+## Polymorphism: Junk Instruction Selection
+- Using only the registers that are unused by the decryptor will still produce hundreds of thousands of possibilities
+  - So, 24 \* (several thousand) \* (hundreds of thousands) of variants = ~1 billion variants
+
+
+## Polymorphism in V2PX/1260
+- The 1260 virus made its replication code simpler by only allowing up to 5 junk instructions in any one location, and by generating only a few hundred of the possible x86 junk instructions
+- That means it can produce (only) a million or so variants rather than a billion
+- A short (1260 byte) virus is still able to use polymorphism to achieve a million variants of the short decryptor code
+	- Pattern-based detection is hopeless
+
+
+## Register Replacement
+- The 1260 virus did not make use of another polymorphic technique: register replacement
+- If the decryptor only uses three registers, the virus can choose different registers for different replications 
+- Another multiplicative factor of several dozen variants can be added by this technique
+	- A decryptor of only 8 instructions can produce over 100 billion variants by the fairly simple application of four polymorphic techniques!
+
+
+## Mutation Engines
+- Creating a polymorphic virus that makes no errors in replication and always produces functional offspring is difficult for the average virus writer
+- Early in the history of virus polymorphism, a few virus writers started creating mutation engines, which can transform an encrypted virus into a polymorphic virus 
+- The Dark Avenger mutation engine, also called MtE, was the first such engine (DOS viruses, summer 1991, from Bulgaria)
+
+
+## MtE Mutation Engine
+- MtE was a modular design that accepted various size and target file location parameters, a virus, a decryptor, a pointer to the virus code to encrypt, a pointer to a buffer to write its output into, and a bit mask telling it what registers to avoid using
+- The engine then generated the polymorphic wrapper code to surround the virus code and replicate it polymorphically 
+
+
+## MtE Mutation Engine
+- MtE relied on generating variants of code obfuscation sequences in the decryptor, rather than inserting junk instructions
+	- There are many convoluted ways to compute any given number
+
+
+## MtE Decryptor Obfuscation
+- Can you follow the computation of a value into register BP below?
+```
+mov bp,A16Ch
+mov cl,03h
+ror bp,cl
+mov cx,bp         ; Save 1st mystery value in cx
+mov bp,856Eh
+or bp,740Fh
+mov si,bp         ; Save 2nd mystery value in si
+mov bp,3B92h      ; Put 3rd value into bp
+add bp,si         ; bp := bp+ 2nd mystery value
+xor bp,cx         ; xor result with 1st mystery value
+sub bp,B10Ch      ; BP now has the desired value
+```
+- Many different obfuscated sequences can compute the same value into BP
+
+
+## Detecting Polymorphic Viruses
+- Anti-virus scanners in 1990-1991 were unable to cope, at first, with polymorphic viruses
+- Soon, x86 virtual machines (emulators) were added to the scanners to emulate short stretches of code to determine if the result of the computations matched known decryptors
+- This spurred the development of the anti-emulation techniques used in armored viruses
+
+
+## Detecting Polymorphic Viruses
+- The key to detection is that the virus code must be decrypted to plain text at some point
+- However, this implies that dynamic analysis must be used, rather than static analysis, and anti-emulation techniques might inhibit the most widely used dynamic analysis technique
+	- Some polymorphic viruses combine EPO techniques with anti-emulation techniques
+- Again, an advanced compiler tool might be executed up to the point of decryption
+    - Then the virus body can be examined in memory
+	  </textarea></section>
+
+	</section>
+	<section>
+
+	  <section data-markdown id="metamorphic"><textarea data-template>
+# Metamorphic Viruses
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Metamorphic Viruses
+- Metamorphic Viruses
+- A metamorphic virus has been defined as a *body-polymorphic* virus; that is, polymorphic techniques are used to mutate the virus body, not just a decryptor
+- Metamorphism makes the virus body a moving target for analysis as it propagates around the world
+- The techniques used to transform virus bodies range from simple to complex
+
+
+## Source Code Metamorphism
+- Unix/Linux systems almost always have a C compiler installed and accessible to all users
+- A source code metamorphic virus such as Apparition injects source code junk instructions into a C-language virus and invokes the C compiler
+- Amateur virus writers often created buggy viruses when they attempted to use polymorphism.  
+- Source code metamorphism is easier to do correctly.
+
+
+## Source Code Metamorphism cont'd
+- By using junk variables at the source code level, the bugs that afflict many polymorphic and metamorphic viruses at the ASM level are avoided
+	- e.g. accidentally using a register that is implicitly used by another instruction and was not really available for junk code)
+- Because of differences in compiler versions, compiler libraries, etc., the resulting executable could vary across systems even if there were no source code metamorphism
+
+
+## .NET/MSIL Metamorphism
+- Windows systems do not always have a C compiler available
+- Windows systems with some release of Microsoft .NET installed will compile MSIL (Microsoft Intermediate Language) into the native code for that machine
+- A source code metamorphic virus can operate on MSIL code and invoke the .NET Framework to compile it
+	- Probably a fertile field for viruses in the future
+- The MSIL/Gastropod virus is one example
+
+
+## Metamorphism with Phoenix
+- Worst case: Phoenix is installed on the machine
+- The virus could, conceivably, raise itself to a higher IR level
+	- ... and then perform source code obfuscation
+	- ... and then lower itself back to an executable format
+- So Phoenix will save the world, and destroy it too...
+- Luckily, few computers have Phoenix installed
+
+
+## Early Metamorphic Viruses
+- Very few on DOS, but the first was a DOS virus called ACG (Amazing Code Generator)
+- The code generator generated a new version of the virus body each time it replicated (thus it was metamorphic)
+- Although most metamorphic viruses use encryption, ACG did not
+	- Being "body-polymorphic" is sufficient to avoid pattern-based detection
+
+
+## Early Metamorphic Viruses cont'd
+- ACG was not too damaging, because DOS was already a dying operating system when it was released in 1997
+- This is a key difference between polymorphic and metamorphic viruses: the former mutates the decryptor, the latter might not even have a decryptor
+
+
+## Early Metamorphics: Regswap
+- Regswap was a Windows 95 metamorphic virus released in December, 1998
+- The metamorphism was restricted to register replacement, as in these two generations:
+```
+pop edx                    pop eax
+mov edi,0004h              mov ebx,0004h
+mov esi,ebp                mov edx,ebp
+mov eax,000Ch              mov edi,000Ch
+add edx,0088h              add eax,0088h
+mov ebx,[edx]              mov esi,[eax]
+mov [esi+eax*4+1118],ebx   mov [edx+edi*4+1118],esi
+etc.                       etc.
+```
+
+
+## Detecting Regswap
+- Register replacement is not much of an obstacle to a hex-pattern scanner that allows the use of wild cards (don't-cares) in its patterns:
+- The first two lines of the previous example, in hex, are:
+<pre class="code">
+5<span class="hotpink">A</span>                  5<span class="hotpink">8</span>
+B<span class="hotpink">F</span>04000000          B<span class="hotpink">B</span>04000000
+</pre>
+	- Only the hex digits that encode registers differ
+- If the scanner accepts wild cards, then both variants match 5?B?04000000
+
+
+## Module Permutation
+- Another metamorphosis of the virus body is to reorder the subroutines
+	- Works best if code is in many small modules
+	- First used in DOS viruses that did not even use encryption of the virus body, as a technique to defeat early scanners
+- BadBoy had 8 modules: produces 8! = 40,320 permutations
+	- However, short search strings (within modules) can still work if wild cards are used to mask the particular addresses and offsets in the code
+
+
+## Metamorphic Build & Execute
+- The Zmorph metamorphic virus appeared in early 2000 with a unique approach
+- Many small virus code subroutines are added at the end of a PE file
+	- They form a call chain among themselves
+	- Each is body-polymorphic (metamorphic)
+	- Each builds a little virus code on the stack
+	- Execution is then transferred to the stack area when the building is complete
+	- Payload is not visible inside the virus in normal patterns for a scanner
+
+
+## Metamorphic Build & Execute
+- Recall that the stack is the most stealthy place for a virus to use as scratch space
+- How to detect this?
+	- Emulators are used to detect Zmorph, as well as many other metamorphic viruses
+	- Which means your virus scanner now has to do emulation, which causes it to take even longer
+
+
+## Metamorphic Engines
+- A metamorphic engine is a code replicator that has evolutionary heuristics built in:
+	- Change arithmetic and load-store instructions to equivalent instructions
+	- Insert junk instructions
+	- Reorder instructions
+	- Change built-in constants to computed values
+
+
+## Metamorphic Engines
+- Built-in constants are particularly important to pattern-based scanners
+	- A metamorphic engine that can mutate constants from one generation to the next makes pattern-based static analysis difficult or impossible
+
+
+## Metamorphic Engine Example
+- The Evol virus of July, 2000
+- Compare a code snippet from two generations, after several generations of evolution:
+```
+mov  dword ptr [esi],55000000h      ; 1st generation
+mov  dword ptr [esi+0004],5151EC8Bh ; 1st generation
+```
+```
+mov edi,55000000h      ;2nd gen., constant not changed
+mov dword ptr [esi],edi
+pop edi                ; junk
+push edx               ; junk
+mov dh,40h             ; junk
+mov edx,5151EC8Bh      ; constant not changed yet
+push ebx               ; junk
+mov ebx,edx
+mov dword ptr [esi+0004],ebx
+```
+
+
+## Evol Example cont.
+- A later generation shows the constant mutation starting:
+```
+mov ebx,5500000Fh      ; 3rd gen., constant has changed
+mov dword ptr [esi],ebx
+pop ebx                ; junk
+push ecx               ; junk
+mov ecx,5FC0000CBh     ; constant has changed
+add ecx,F191EBC0h      ; ECX now has original value
+mov dword ptr [esi+0004],ecx
+```
+- As it replicates, the metamorphic engine makes just a few changes each generation, but the AV scanner code patterns change drastically 
+- Eventually, all constants will be mutated many times
+
+
+## Metamorphic Instruction Permutation
+- The Zperm virus family used a method known from a DOS virus: reorder individual instructions and insert jumps to retain the code functionality; look at three generations of Zperm pseudocode:
+
+
+## Zperm virus
+```
+jmp Start         jmp Start         jmp Start
+Instr4            Instr2            Instr3
+Instr5            jmp Instr3        Instr4
+jmp End           junk              jmp Instr5
+junk              Instr3            junk
+Start:            jmp Instr4        Instr5
+Instr1            junk              jmp End
+Instr2            Instr5            Start:
+jmp Instr3        jmp End           Instr1
+junk              Start:            jmp Instr2
+Instr3            Instr1            junk
+jmp Instr4        jmp Instr2        Instr2
+junk              Instr4            jmp Instr3
+End:              jmp Instr5        junk
+                  End:              End:
+```
+
+
+## Zmist
+- "One of the most complex binary viruses ever written"
+- EPO, metamorphic, a bit of everything
+- First virus to include a code integrator (Mistfall)
+	- Takes apart PE files, inserts it's code inside, reassembles it
+	  - The reassembly properly fixes the jumps, reloation data, etc.
+- Szor takes 4 full pages to describe all the things that this virus can do
+	- http://vil.nai.com/vil/content/v_99382.htm 
+
+
+## Simile
+- Benign payload - displays a few messages here and there
+- 14,000 lines of assembly code
+	- 90% of which is the metamorphic engine
+- [http://en.wikipedia.org/wiki/Simile_(computer_virus)](http://en.wikipedia.org/wiki/Simile_(computer_virus%29)
+
+
+## Instruction Permutation Detection
+- Standard AV software uses an emulator to detect the effect of the code, rather than trying to statically analyze it
+- An advanced compiler tool could make use of existing compiler transformations to simplify the jump chain into straight-line code
+
+
+## Instruction Permutation Detection
+- If the virus used no other metamorphic technique besides permutation, it could then be recognized by patterns
+	- However, Zperm and related viruses also use instruction replacement, junk instruction insertion, etc. to be truly metamorphic even after jump chains are straightened
+	  </textarea></section>
+
+	</section>
+	<section>
+
+	  <section data-markdown id="kits"><textarea data-template>
+# Virus Creation Kits
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Virus Creation Kits
+- Allows novices to create viruses
+- AV researchers have to study them well, to see all the viruses that they can produce
+- Most produce source code, which can be tweaked further
+	- And include the anti-disassembly, anti-debugging, anti-emulation, etc., techniques discussed previously
+	  - Some can even do source-code metamorphism
+- Hundreds of such kits available
+
+
+## Virus Construction Set (VCS)
+- The first one, back in 1990
+- All viruses were 1,077 bytes, and named virus.com
+- Viruses produced were quite simple
+- Options: specify the message to be displayed, and select which generations would display the message
+- Payload: delete startup config files, display message
+
+
+## Kits of the 1990's
+- GenVir (1990-1991)
+	- Released as shareware, produced few viruses
+- Virus Creation Laboratory (VCL) (1992)
+	- Produced source code, not binary - required compilation
+	- Had a large variety of payloads
+	- Due to the number of options, viruses created were harder to detect
+- PS-MPC (1992)
+	- 15,000 variant viruses produced
+	- The code engine produced code-morphed viruses
+
+
+## Virus Creation Laboratory
+![VCL](images/09-adv-code-tech/vcl.png)
+
+
+## NGVCK 
+<!-- .slide: class="right-float-img-800" -->
+Next Generation Virus Creation Kit (2001)
+![NGVCK](images/09-adv-code-tech/ngvck.gif)
+
+A VB script
+
+Similar to VCL, but could infect PE files
+
+Advanced assembly source morphing engine
+
+
+## Anna Kournikova virus
+- Most known virus created with a virus creation kit
+	- Used the VBSWG kit
+- People executed a AnnaKournikova.jpg.vbs e-mail attachment
+- Which then e-mailed itself out to everybody in their Outlook address box
+	- Author, 20-year old Jan de Wit created it, even though he did not know how to write a program
+
+
+## Ethics question
+- Is it ever ethical to create a virus using a virus creation tool?
+	- If so, then when?
+
+
+## Ethics question
+- Is it ever ethical to create a virus using a virus creation tool?  If so, then when?
+- The widely accepted guidelines is that it is ethical to use it only if doing for antivirus research purposes
+	- The virus must be kept on a `dirty' PC
+	- And completely destroyed once a detection means is achieved
+		- Meaning not even a copy is stored for later testing
+		- Of course, if you have the kit and take good notes, you can re-create it if needed...
+	</textarea></section>
+
+      </section>
+      
+    </div>
+  </div>
+  <script src="reveal.js/lib/js/head.min.js"></script> 
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="settings.js"></script> 
+</body>
+</html>
