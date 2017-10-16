@@ -21,7 +21,7 @@
 <pre><code>$ ./filter a.out
 7f454c46010101000000000000000000020003000100000030 .......</code></pre>
 <p>No other characters, other than the hex digits and the terminating newline, should be output. In case you want to check the accuracy of your output, you can ensure that the hex digits match the output of <code>hexdump</code> (although that program prints the address and white space).</p>
-<p>Hint: You might find the <code>stdio</code> function <code>freopen()</code> useful. The program filter is small. You should be able to implement it in fewer than 25 lines of C/C++ code. Note, however, that the file may be arbitrarily large, so do not buffer the input before outputting it.</p>
+<p>The program filter is small. You should be able to implement it in fewer than 25 lines of C/C++ code. Note, however, that the file may be arbitrarily large, so do not buffer the input before outputting it.</p>
 <p>The next programs will analyze this stream of data, which is not true binary, but a representation of the binary code -- hence why the word binary was expressed in quotes above.</p>
 <p>You will submit filter.c or filter.cpp for this part.</p>
 <h3 id="part-2-writing-some-x64-code">Part 2: Writing some x64 code</h3>

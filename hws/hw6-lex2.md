@@ -26,8 +26,7 @@ $ ./filter a.out
 
 No other characters, other than the hex digits and the terminating newline, should be output.  In case you want to check the accuracy of your output, you can ensure that the hex digits match the output of `hexdump` (although that program prints the address and white space).
 
-Hint: You might find the `stdio` function `freopen()` useful. The program filter is small. You should
-be able to implement it in fewer than 25 lines of C/C++ code.  Note, however, that the file may be arbitrarily large, so do not buffer the input before outputting it.
+The program filter is small. You should be able to implement it in fewer than 25 lines of C/C++ code.  Note, however, that the file may be arbitrarily large, so do not buffer the input before outputting it.
 
 The next programs will analyze this stream of data, which is not true binary, but a representation of the binary code -- hence why the word binary was expressed in quotes above.
 
