@@ -24,7 +24,7 @@ $ ./filter a.out
 7f454c46010101000000000000000000020003000100000030 .......
 ```
 
-No other characters, other than the hex digits and the terminating newline, should be output.  In case you want to check the accuracy of your output, you can ensure that the hex digits match the output of `hexdump` (although that program prints the address and white space).
+No other characters, other than the hex digits and the terminating newline, should be output.  In case you want to check the accuracy of your output, you can ensure that the hex digits match the output of `hexdump -C` (although that program prints the address and white space).
 
 The program filter is small. You should be able to implement it in fewer than 25 lines of C/C++ code.  Note, however, that the file may be arbitrarily large, so do not buffer the input before outputting it.
 
@@ -35,7 +35,7 @@ You will submit filter.c or filter.cpp for this part.
 
 ### Part 2: Writing some x64 code
 
-Write some x64 code that has five assembly patterns to search for.  You can take the main.cpp and x64.s from [HW 5: obfuscation](hw5-obfuscation.md) ([html](hw5-obfuscation.html)).  Your program doesn't have do do anything, really, but must not take in any input.  The goal here is for you to be able to specify the exact assembly opcodes in your x64.s file.  You can just have your main.ccp print out "hello world" or similar, as long as it is linked (via the Makefile) with x64.s.  You should include the three patterns from [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)) (interrupt hook with eax, interrupt hook with ebx, and a tricky jump), as well as the two others that you are going to create in part 3.
+Write some x64 code that has five assembly patterns to search for.  You can take the main.cpp and x64.s from [HW 5: obfuscation](hw5-obfuscation.md) ([html](hw5-obfuscation.html)).  Your program doesn't have to do anything, really, but must not take in any input.  The goal here is for you to be able to specify the exact assembly opcodes in your x64.s file.  You can just have your main.ccp print out "hello world" or similar, as long as it is linked (via the Makefile) with x64.s.  You should include the three patterns from [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)) (interrupt hook with eax, interrupt hook with ebx, and a tricky jump), as well as the two others that you are going to create in part 3.
 
 You may want to read ahead to part 3 to determine the other two patterns (or you can come back to this part to put them in).
 
@@ -50,7 +50,7 @@ You will need to determine two more patterns that you will search for.  Pick a s
 
 Thus, you are looking for a total of five patterns: three from HW 4, and two more that you are to determine.
 
-To find the binary code for a set of assembly opcodes, you can use the nasm assembler.  Write a sample x64.s, and compile it -- we'll call this one original.s.  Note the file size.  Now put in the instructions that you want to determine the hex code for, and compile it -- we'll call this one modified.s.  Note the new size.  You can do a `diff` of the hexdump of those files -- but since one is longer, it's going to be difficult to make this work.  Modify original.s to put in a series of nops at the same spot you inserted your instructions for modified.s.  The idea is that, since a nop takes up exactly one byte (0x90, as it happens to be), you can put it as many nops as you need so that the file sizes match.  Then do a `hexdump` of each, and compare the results via `diff`.  You should be able to determine the machine hex code for the instructions that you are going to search for.  You will have to do this for all five patterns.
+To find the binary code for a set of assembly opcodes, you can use the nasm assembler.  Write a sample x64.s, and compile it -- we'll call this one original.s.  Note the file size.  Now put in the instructions that you want to determine the hex code for, and compile it -- we'll call this one modified.s.  Note the new size.  You can do a `diff` of the `hexdump -C` of those files -- but since one is longer, it's going to be difficult to make this work.  Modify original.s to put in a series of nops at the same spot you inserted your instructions for modified.s.  The idea is that, since a nop takes up exactly one byte (0x90, as it happens to be), you can put it as many nops as you need so that the file sizes match.  Then do a `hexdump -C` of each, and compare the results via `diff`.  You should be able to determine the machine hex code for the instructions that you are going to search for.  You will have to do this for all five patterns.
 
 You will need to put these patterns in a patterns.txt file for us to look at.  Please also include the nasm opcodes so that we know what hex digits go with which opcode patterns.
 
