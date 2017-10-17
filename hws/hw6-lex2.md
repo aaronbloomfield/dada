@@ -44,7 +44,7 @@ You will submit main.cpp and x64.s for this part.  The Makefile, described below
 
 ### Part 3: Determining the patterns to find
 
-The next step is to figure out which *hex* patterns you will need to scan for.  In other words, you will need to determine what the hex patterns are for the three provided patterns that you want to search for, plus two more.  The three known patterns are the ones from [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)): a tricky jump on eax, a tricky jump on ebx, and an interrupt hook.
+The next step is to figure out which *hex* patterns you will need to scan for.  In other words, you will need to determine what the hex patterns are for the three provided patterns that you want to search for, plus two more.  The three known patterns are the ones from [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)): an interrupt hook with eax, an interrupt hook with ebx, and a tricky jump.
 
 You will need to determine two more patterns that you will search for.  Pick a set of (at least two) assembly opcodes that might seem suspicious -- you can look in the [advanced virus coding techniques lecture set](../slides/09-adv-code-tech.html#/) slide set for some ideas.  Whatever additional patterns your program can search for must also be in your x64.s file from part 2.
 
