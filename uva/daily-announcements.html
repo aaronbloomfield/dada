@@ -56,6 +56,64 @@ line-height:120%;
 	<section>
 
 	  <section data-markdown data-separator="^\n$"><textarea data-template>
+<h2>Bun Trend</h2>
+<img class="stretch" src="http://imgs.xkcd.com/comics/bun_trend.png" title="Our experts have characterized the ecological impact of this trend as &quot;adorable.&quot;" alt="Bun Trend" srcset="http://imgs.xkcd.com/comics/bun_trend_2x.png 2x"/>
+<p class="center"><a href="http://xkcd.com/1903/">xkcd # 1903</a></p>
+
+
+## Wednesday, October 18th
+- My office hours are M/W 1:00-2:30
+    - Lawrence Hook has them Thu 1-3, Fri 2-3 (both in Rice 514)
+    - Martin Simpkins has them Tu/Thu 11-12:15 (Tuesdays in Rice 204; Thursdays in Rice 514)
+    - These are listed in the Collab workspace (on the landing page)
+- HW 6 is out, and due this Friday
+- Grading!
+    - HWs 1-3 have been returned, grading guidelines on Collab, regrades enabled
+	- HWs 4 & 5 should be back *next* week
+	- At that point, we'll be all caught up
+    - Midterm is being graded; currently aiming to return it this Friday
+- The final is now moving to the last day of class
+- Today we will work through (and possibly finish) with [advanced virus coding techniques](../slides/09-adv-code-tech.html#/), starting [here](../slides/09-adv-code-tech.html#/metamorphic)
+
+
+## Badness of the day: KRACK (page 1 of 2)
+- WPA2 is the "secure" version of WiFi encryption
+- Called [KRACK](https://en.wikipedia.org/wiki/KRACK), it was just revealed
+  - But had been discovered in 2016
+- It's a weakness with the protocol
+  - So all valid implementations will be vulnerable -- which is pretty much everybody
+- How WPA2 should work:
+  - The AP (access point -- the router) has a "master key" for it's encryption
+  - When a device connects, the AP and device generate [nonces](https://en.wikipedia.org/wiki/Cryptographic_nonce)
+    - A secret and large number to be used just this once
+  - From the nonces, a secret key specific to the device/AP combination
+    - The nonces are discarded
+  - This is a 4-way handshake; see [here](http://www.wi-fiplanet.com/img/2007/03/wpafigure1.gif) for an image
+
+
+## Badness of the day: KRACK (page 2 of 2)
+- How KRACK works:
+  - WiFi can occassionally disconnect, and that was anticipated into this protocol
+  - A disconnect for handshake 3 (of 4) allows a reconnection with the same key (nonce)
+  - Thus, a client can repeatedly "disconnect", then reconnect using the same key
+  - This allows sending of arbitrary data, which can be used (in many small steps) to decrypt the entire keychain
+  - At that point, the "master key" is known
+- Sources: slashdot [1](https://mobile.slashdot.org/story/14/03/22/0048220/wpa2-wireless-security-crackable-with-relative-ease), [2](https://it.slashdot.org/story/17/10/16/149251/wpa2-security-flaw-puts-almost-every-wi-fi-device-at-risk-of-hijack-eavesdropping), [wikipedia](https://en.wikipedia.org/wiki/KRACK), [CCS paper](https://papers.mathyvanhoef.com/ccs2017.pdf)
+- Patches are already coming out
+  - [Microsoft has already patched it](https://mobile.slashdot.org/story/17/10/16/166220/microsoft-has-already-fixed-the-wi-fi-attack-vulnerability-android-will-be-patched-within-weeks), so update now
+  - Android patch should be out within "weeks"
+    - But much longer due to manufacturer delays in patching
+  - [See a list of known patches](https://mobile.slashdot.org/story/17/10/16/2136238/every-patch-for-krack-wi-fi-vulnerability-available-right-now) as of 10-16-17 @ 7:40 p.m.
+- How many people will be updating their router firmware, though?
+	  </textarea></section>
+
+	</section>
+
+	<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+	<section>
+
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
 <h2>Jet Lag</h2>
 <img class="stretch" src="http://imgs.xkcd.com/comics/jet_lag.png" title="I had some important research to do on proposed interstellar space missions, basketball statistics, canceled skyscrapers, and every article linked from &quot;Women in warfare and the military in the 19th century.&quot;" alt="Jet Lag" srcset="http://imgs.xkcd.com/comics/jet_lag_2x.png 2x">
 <p class="center"><a href="http://xkcd.com/1900/">xkcd # 1900</a></p>
