@@ -50,7 +50,7 @@ You will need to determine two more patterns that you will search for.  Pick a s
 
 Thus, you are looking for a total of five patterns: three from HW 4, and two more that you are to determine.
 
-To find the binary code for a set of assembly opcodes, you can use the nasm assembler.  Write a sample x64.s, and compile it -- we'll call this one original.s.  Note the file size.  Now put in the instructions that you want to determine the hex code for, and compile it -- we'll call this one modified.s.  Note the new size.  You can do a `diff` of the `hexdump -C` of those files -- but since one is longer, it's going to be difficult to make this work.  Modify original.s to put in a series of nops at the same spot you inserted your instructions for modified.s.  The idea is that, since a nop takes up exactly one byte (0x90, as it happens to be), you can put it as many nops as you need so that the file sizes match.  Then do a `hexdump -C` of each, and compare the results via `diff`.  You should be able to determine the machine hex code for the instructions that you are going to search for.  You will have to do this for all five patterns.
+To find the binary code for a set of assembly opcodes, you can just use `objdump -sRrd <filename>`.  When it disassembles the executable, it prints out the machine code for those instructions on the same line.
 
 You will need to put these patterns in a patterns.txt file for us to look at.  Please also include the nasm opcodes so that we know what hex digits go with which opcode patterns.
 
