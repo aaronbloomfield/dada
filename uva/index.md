@@ -44,7 +44,7 @@ Lectures (fall 2017)
 | 22  | Oct&nbsp;13 | Friday      | [advanced coding techniques][109] | [advanced coding techniques][109], slides 1 to 3.19 |
 | 23  | Oct&nbsp;16 | Monday      | [advanced coding techniques][109] | [advanced coding techniques][109], slides 4.1 to 5.18 |
 | 24  | Oct&nbsp;18 | Wednesday   | [advanced coding techniques][109] | [advanced coding techniques][109], slides 6.1 to 6.20 |
-| 25  | Oct&nbsp;20 | Friday      |               |               |
+| 25  | Oct&nbsp;20 | Friday      | [advanced coding techniques][109], [SQL & XSS][110] | [advanced coding techniques][109], slides 6.21 to 7.9 (end); [SQL & XSS][110], slides 1 to 3.13 |
 | 26  | Oct&nbsp;23 | Monday      |               |               |
 | 27  | Oct&nbsp;25 | Wednesday   |               |               |
 | 28  | Oct&nbsp;27 | Friday      |               |               |
