@@ -12,3 +12,4 @@ The due dates for the various homeworks are listed in the
 - [Homework 4: lex and recognizing viruses](hw4-lex.html) ([md](hw4-lex.md))
 - [Homework 5: obfuscating x64 assembly code](hw5-obfuscation.html) ([md](hw5-obfuscation.md))
 - [Homework 6: binary lex](hw6-lex2.html) ([md](hw6-lex2.md))
+- [Homework 7: SQL Injection & XSS](hw7-sql-xss.html) ([md](hw7-sql-xss.md))
