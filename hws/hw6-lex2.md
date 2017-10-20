@@ -50,7 +50,7 @@ You will need to determine two more patterns that you will search for.  Pick a s
 
 Thus, you are looking for a total of five patterns: three from HW 4, and two more that you are to determine.
 
-To find the binary code for a set of assembly opcodes, you can just use `objdump -sRrd <filename>`.  When it disassembles the executable, it prints out the machine code for those instructions on the same line.
+To find the binary code for a set of assembly opcodes, you can just use `objdump -d <filename>`.  When it disassembles the executable, it prints out the machine code for those instructions on the same line.
 
 You will need to put these patterns in a patterns.txt file for us to look at.  Please also include the nasm opcodes so that we know what hex digits go with which opcode patterns.
 

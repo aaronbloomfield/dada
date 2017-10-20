@@ -32,7 +32,7 @@
 <p>The next step is to figure out which <em>hex</em> patterns you will need to scan for. In other words, you will need to determine what the hex patterns are for the three provided patterns that you want to search for, plus two more. The three known patterns are the ones from <a href="hw4-lex.md">HW 4: Lex</a> (<a href="hw4-lex.html">html</a>): an interrupt hook with eax, an interrupt hook with ebx, and a tricky jump.</p>
 <p>You will need to determine two more patterns that you will search for. Pick a set of (at least two) assembly opcodes that might seem suspicious -- you can look in the <a href="../slides/09-adv-code-tech.html#/">advanced virus coding techniques lecture set</a> slide set for some ideas. Whatever additional patterns your program can search for must also be in your x64.s file from part 2.</p>
 <p>Thus, you are looking for a total of five patterns: three from HW 4, and two more that you are to determine.</p>
-<p>To find the binary code for a set of assembly opcodes, you can just use <code>objdump -sRrd &lt;filename&gt;</code>. When it disassembles the executable, it prints out the machine code for those instructions on the same line.</p>
+<p>To find the binary code for a set of assembly opcodes, you can just use <code>objdump -d &lt;filename&gt;</code>. When it disassembles the executable, it prints out the machine code for those instructions on the same line.</p>
 <p>You will need to put these patterns in a patterns.txt file for us to look at. Please also include the nasm opcodes so that we know what hex digits go with which opcode patterns.</p>
 <p>You will submit patterns.txt for this part.</p>
 <h3 id="part-4-binary-lex-scanner">Part 4: &quot;Binary&quot; Lex scanner</h3>
