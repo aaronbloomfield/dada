@@ -23,4 +23,5 @@ ready to be presented.
 7.  [Assembly obfuscations](07-obfuscations.html#/)
 8.  [Advanced viruses](08-advanced-viruses.html#/)
 9.  [Advanced virus coding techniques](09-adv-code-tech.html#/)
-10. [Encryption](10-encryption.html#/)
+10. [SQL & XSS](10-sql-and-xss.html#/)
+11. [Encryption](11-encryption.html#/)
