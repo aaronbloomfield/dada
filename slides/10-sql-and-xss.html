@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DADA: SQL & XSS</title>
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css">
+  <link rel="stylesheet" href="dada.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section data-markdown id="cover"><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;
+## SQL & XSS
+  </script></section>
+
+	<section data-markdown><textarea data-template>
+# Contents
+&nbsp;  
+[SQL Primer](#/sqlintro)  
+[SQL Injection Attacks](#/sqlinject)  
+[HTML and Javascript Primer](#/htmljss)  
+[Cross site scripting](#/xss)  
+	</textarea></section>
+
+	<section>
+      
+	  <section data-markdown id="sqlintro"><textarea data-template>
+# SQL Primer
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## SQL Primer
+- SQL - Standard Query Language - is a formally defined language
+  - ANSI formalized first in 1986
+  - Latest version is SQL:2008
+- There are many companies and products that create a database that uses SQL
+  - Microsoft Access, Oracle, MySQL, PostgreSQL, etc.
+- The level of SQL we will be studying will apply to all of these
+
+
+## SQL Basics
+- SQL data is stored in tables, similar to spreadsheets like excel
+- Each row is an entry, and each column has a type
+- This table on the nex slide has types: string, string, string, integer
+
+
+## SQL Table
+| Last name | First name | Userid | Year |
+|-----------|------------|--------|------|
+| Smith | Isabella | ias1s | 1 |
+| Johnson | Jacob | jbj2t | 2 |
+| Williams | Emma | ecw3u | 3 |
+| Jones | Ethan | edj4v | 4 |
+| Brown | Olivia | oeb5w | 1 |
+| Davis | Michael | mfd6x | 2 |
+| Miller | Sophia | sgm7y | 3 |
+| Wilson | William | whw8z | 4 |
+
+
+## SQL commands: select
+- You can retrieve all the table's data:
+```
+select * from course;
+```
+- You can select only specific data:
+```
+select * from course where year=2;
+select * from course where substring (userid,1,1)='e';
+```
+
+
+## SQL select command output
+- The output is in the format of a text-based table:
+
+```
+mysql> select * from course where
+       substring(userid,1,1)='e';
++----------+-------+--------+------+
+| lname    | fname | userid | year |
++----------+-------+--------+------+
+| Williams | Emma  | ecw3u  |    3 |
+| Jones    | Ethan | edj4v  |    4 |
++----------+-------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql>
+```
+
+
+## SQL commands: update
+- To change a single entry:
+```
+update course set year=5 where userid=`edj4v';
+```
+- To update all entries
+```
+update course set year=5;
+```
+
+
+## SQL commands: insert
+- To create a new entry:
+```
+insert into course set lname=`Moore', fname=`Ava',
+       userid=`aim9r', year=5;
+```
+- An alternate form:
+```
+insert into course values (`Moore', 'Ava', `aim9r', 5);
+```
+
+
+## SQL commands: delete
+- To delete a single entry:
+```
+delete from course where userid=`ias1s';
+```
+- To delete many entries:
+```
+delete from course where year=1;
+```
+- To delete all entries
+```
+delete from course;
+```
+
+
+## Other SQL commands
+- `use <db>;`
+  - Changes to a different database
+- `show databases;`
+  - Shows which databases exist that the user can access
+- `create database <db>;`
+  - Creates a database, which can hold an arbitrary number of tables
+- `grant [...];`
+  - Sets (`grants') permissions on a database to a given user
+
+
+## Other SQL commands
+- `drop database <db>;`
+  - Deletes an entire database (and all the tables in that DB)
+- `show tables`
+  - Shows which tables are in the current DB
+- `describe <table>`
+  - Gives details about the table columns
+- `create table <table> [...]`
+  - Creates a table
+
+
+## Other SQL commands
+- `truncate <table>`
+  - Erases all the data in the table
+  - Almost the same as `delete from course;'
+- `drop table <table>`
+  - Deletes an entire table (and all data!)
+
+
+## Comments
+- Anything starting with "-- " will be a comment
+  - There are *three* characters there (two dashes and a space)
+- Similar to C++'s `//`, it is a comment until the end of the line
+</textarea></section>
+
+	</section>
+
+    <section>
+      
+	  <section data-markdown id="sqlinject"><textarea data-template>
+# SQL Injection Attacks
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Vulnerable script for SQL injections
+- Let's imagine that your web script asks for your userid
+  - Then does a select command on that value
+- Pseudo-code:
+```
+var userid = getUseridFromWebForm()
+var statement = "select * from course where userid='" +
+                userid + "';"
+var result = databaseQuery (statement)
+doSomethingWithTheResult (result)
+```
+- This has a SQL injection attack vulnerability
+  - Next, we'll see an exploit
+
+
+## Normal operation
+- If we enter `asb2t' into the web form, we will get the following SQL command:
+<pre class="code">
+select * from course where userid='<span class='hotpink'>asb2t</span>';
+</pre>
+- Which works as desired
+
+
+## SQL injection attack exploit
+- What if we enter the following as our userid:
+``` 
+'; truncate course; -- 
+``` 
+- At that point, our SQL command is as follows:
+<pre class="code">
+select * from course where userid='<span class='hotpink'>'; truncate course; -- </span>';
+</pre>
+- Which does not work as desired
+
+
+## SQL injection attack exploit
+- Our SQL injection attack query:
+<pre class="code">
+select * from course where
+    userid='<span class='hotpink'>'; truncate course; -- </span>';
+</pre>
+- The DB will perform two database operations (a select then a delete), and then result in a parse error on the last two characters (single quote and semi-colon)
+  - The DB function the script calls might return a value or it might not
+- At this point, we have deleted everything from the table
+
+
+## SQL injection attack exploit
+- This is not stealthy - the DB probably won't work right if everything has been deleted
+- We can put in various commands to modify the database, or access data from it that we would not be able to access otherwise
+- Typically, the privileges that a script runs allow full read/write access to the entire database
+- We can obviously put more nefarious commands in the injection attack as well
+- drop table, drop database, etc.
+
+
+## SQL injection attack prevention
+- How to prevent against this?
+  - We need to *escape* our input string
+- If our input is the same:
+```
+'; truncate course;
+```
+- An escaped input string would result in:
+```
+select * from course where 
+		userid='\'; truncate course;';
+```
+- This will search for an odd username, but it will not allow an injection attack
+
+
+## SQL injection attack prevention
+- Some (modern) web scripting languages do this automatically
+  - In PHP, any input string is automatically escaped
+- You need to call stripslashes() to remove them
+- Not all languages do this, though
+  - Perl, C/C++, Java, etc.
+  - But many provide functions, such as addslashes(), to do this very easily (but not automatically!)
+
+
+## SQL escaped strings
+- There are *four* characters that need to be escaped for safe string handling:
+  - Single quote (as it can start/end strings)
+  - Double quote (as it can start/end strings)
+  - Backslash (as it can change the meaning of the next character)
+  - NUL byte (as it can signify the end of a string)
+- Other languages may have additional character(s) that need escaping
+
+
+## Better SQL attack prevention
+- Escaping strings will prevent the attacks, but not much else
+  - It's error-prone, because it is easy to forget to do this
+- Proper prevention means validating the input
+  - Checking that it is a proper userid
+  - If not, then trigger an error response
+  - And log and notify that error response!!!
+
+
+## xkcd on SQL injection attacks
+Exploits of a Mom:
+![Her daughter is named Help I&#39;m trapped in a driver&#39;s license factory." alt="Exploits of a Mom"](http://imgs.xkcd.com/comics/exploits_of_a_mom.png)
+[xkcd # 327](https://xkcd.com/327/)
+	</textarea></section>
+
+	</section>
+
+    <section>
+      
+	  <section data-markdown id="htmljs"><textarea data-template>
+# HTML and Javascript Primer
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+- HTML and Javascript Background
+- A very basic web page
+- <!doctype html>
+- <html>
+-   <head>
+-     <title>Basic page</title>
+-   </head>
+-   <body>
+-     <p>Hello world!</p>
+-   </body>
+- </html>
+- Javascript in web pages
+- Javascript (no relation to Java) has C-like syntax, and is used for rich client-side functionality
+- To put a Javascript program in your web page:
+- 
+- <script>
+- /* your Javascript program here */
+- </script>
+- 
+- Or:
+- 
+- <script src="path/to/script.js">
+- 
+- 
+- 
+- 
+- 
+- 
+- Long URLs
+- You can embed form data into a URL:
+- http://www.google.com/search?q=aaron+bloomfield 
+- This is quite common, and is often desired functionality
+- (this is actually GET data, not POST data, but we'll ignore the difference here)
+	</textarea></section>
+
+	</section>
+
+    <section>
+      
+	  <section data-markdown id="xss"><textarea data-template>
+# Cross-site scripting
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+- Cross-site Scripting (XSS)
+- Vulnerable script for XSS attacks
+- Let's envision a very simple web script
+- It asks you for your name in a web form text field in a web form
+- It takes that name, and displays a page that just says "hello, name!"
+- While this is an (intentionally) very simple situation to show how XSS works, much more complicated ones exist
+- Ebay, where you enter your search string
+- Financial institutions, where you also enter a search string
+- The `basic' web page, updated
+- <!doctype html>
+- <html>
+-   <head>
+-     <title>Basic web page</title>
+- 
+- <script>
+- var balance=1;
+- </script>
+- 
+-   </head>
+-   <body>
+-     <p>Hello Aaron!</p>
+-     <p>Your account balance is 
+- 
+- <script>
+- document.write(balance);
+- </script>
+- 
+-     </p>
+-   </body>
+- </html>
+- Using long URLs
+- Perhaps the previous page can be obtained via:
+- http://www.nowhere.abc/printinfo.php?name=Aaron 
+- (not a real site, of course - notice the TLD is wrong)
+- 
+- Exploiting the XSS vulnerability
+- Instead of our name of `Aaron', we will input the following as our name:
+- 
+- 	<script>\nbalance=1000000;\n</script>Aaron
+- 
+- Note the necessary returns (colored red) in the text, which can also be represented as `%0a'
+- Some browsers will work with the "\n" part removed entirely
+- The HTML page after the XSS attack
+- <!doctype html>
+- <html>
+-   <head>
+-     <title>Basic web page</title>
+- <script>
+- var balance=1;
+- </script>
+-   </head>
+-   <body>
+-     <p>Hello <script>
+- balance=1000000;
+- </script>Aaron!</p>
+-     <p>Your account balance is 
+- <script>
+- document.write(balance);
+- </script>
+-     </p>
+-   </body>
+- </html>
+- More complicated XSS attacks
+- If a decision is based upon said balance, then the decision point can be changed
+- Not likely that such a decision will be decided client-side
+- Perhaps you can inject code to view cookies or session variables
+- But these are easily discernable through the browser anyway
+- So we need a reason do perform such an exploit...
+- Long URLs
+- Assume the page we developed can be obtained via:
+- http://www.nowhere.abc/printinfo.php?name=Aaron 
+- Then why can't we do the following?
+- http://www.nowhere.abc/printinfo.php?name=<script>\nbalance=1000000;\n</script>Aaron
+- That has some non-standard characters (spaces, quotes, returns), but we can fix those
+- An XSS attack in a long URL
+- We replace the punctuation with their web encodings:
+- \n with %0a
+- space with %20
+- ! with %21
+- - with %2d
+- / with %2f
+- Some are definitely necessary, others are just in case they are necessary
+- Our new (and rather long) URL:
+- 	http://www.nowhere.abc/printinfo.php?name=%3cscript%3e%0abalance%3d1000000%3b%0a%3c%2fscript%3eAaron   
+- This contains an XSS attack in a URL!
+- 
+- 
+- How to create an XSS exploit
+- Download the HTML page, and save it locally
+- Enter the script manually, and make sure it works
+- Then, encode the script using URL-encoded text
+- There are online utilities to do this, such as the one at http://www.xav.com/encode.pl
+- Pass that to the script
+- Note that trying to edit the Javascript code through the URL-encoded text won't work!
+- XSS exploit payloads
+- An XSS exploit can be a URL link that somebody clicks on (perhaps via e-mail) that goes to bankofamerica.com, and...
+- Reads the account number and/or balance into Javascript variable(s)
+- Sends that data to a remote server
+- This can be done via XMLHttpRequst(), which is the function used for Web 2.0 functionality
+- Alternately, it can be used to steal cookies, which can allow an attacker to impersonate a victim
+- An XSS attack scenario (via Wikipedia)
+- Alice often visits a particular website, which is hosted by Bob. Bob's website allows Alice to log in with a username/password pair and store sensitive data, such as billing information.
+- Mallory observes that Bob's website contains a reflected XSS vulnerability.
+- Mallory crafts a URL to exploit the vulnerability, and sends Alice an email, enticing her to click on a link for the URL under false pretenses. This URL will point to Bob's website, but will contain Mallory's malicious code, which the website will reflect.
+- Alice visits the URL provided by Mallory while logged into Bob's website.
+- The malicious script embedded in the URL executes in Alice's browser, as if it came directly from Bob's server (this is the actual XSS vulnerability). The script can be used to send Alice's session cookie to Mallory. Mallory can then use the session cookie to steal sensitive information available to Alice (authentication credentials, billing info, etc.) without Alice's knowledge.
+
+	  </textarea></section>
+
+      </section>
+      
+    </div>
+  </div>
+  <script src="reveal.js/lib/js/head.min.js"></script> 
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="settings.js"></script> 
+</body>
+</html>
