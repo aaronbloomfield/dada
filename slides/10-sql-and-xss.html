@@ -40,7 +40,7 @@
 &nbsp;  
 [SQL Primer](#/sqlintro)  
 [SQL Injection Attacks](#/sqlinject)  
-[HTML and Javascript Primer](#/htmljss)  
+[HTML and Javascript Primer](#/htmljs)  
 [Cross site scripting](#/xss)  
 	</textarea></section>
 
@@ -54,7 +54,7 @@
 ## SQL Primer
 - SQL - Standard Query Language - is a formally defined language
   - ANSI formalized first in 1986
-  - Latest version is SQL:2008
+  - Latest version is SQL:2016
 - There are many companies and products that create a database that uses SQL
   - Microsoft Access, Oracle, MySQL, PostgreSQL, etc.
 - The level of SQL we will be studying will apply to all of these
@@ -128,7 +128,7 @@ insert into course set lname=`Moore', fname=`Ava',
 ```
 - An alternate form:
 ```
-insert into course values (`Moore', 'Ava', `aim9r', 5);
+insert into course values (`Moore', 'Ava', 'aim9r', 5);
 ```
 
 
@@ -172,7 +172,7 @@ delete from course;
 ## Other SQL commands
 - `truncate <table>`
   - Erases all the data in the table
-  - Almost the same as `delete from course;'
+  - Almost the same as 'delete from course;'
 - `drop table <table>`
   - Deletes an entire table (and all data!)
 
@@ -208,7 +208,7 @@ doSomethingWithTheResult (result)
 
 
 ## Normal operation
-- If we enter `asb2t' into the web form, we will get the following SQL command:
+- If we enter 'asb2t' into the web form, we will get the following SQL command:
 <pre class="code">
 select * from course where userid='<span class='hotpink'>asb2t</span>';
 </pre>
@@ -292,6 +292,14 @@ select * from course where
 Exploits of a Mom:
 ![Her daughter is named Help I&#39;m trapped in a driver&#39;s license factory." alt="Exploits of a Mom"](http://imgs.xkcd.com/comics/exploits_of_a_mom.png)
 [xkcd # 327](https://xkcd.com/327/)
+
+
+## Real-world examples
+- From [Wikipedia](https://en.wikipedia.org/wiki/SQL_injection#Examples)
+- Oct 15: 156k customer's personal info was stolen from a British telecom company
+- Aug 2014: Milwaukee computer security company had info on 420k websites stolen
+- March 2014: At Johns Hopkins, servers in BME had personal info on 878 faculty and students stolen
+- I think the article gave up keeping track of after 2014/2015...
 	</textarea></section>
 
 	</section>
@@ -419,12 +427,54 @@ End of the HTML text
 <html>
   <head>
     <title>Basic web page</title>
+<script> <!-- newly added code -->
+var balance=1;
+</script>
+  </head>
+  <body>
+    <p>Hello Aaron!</p> <!-- name from user input -->
+    <p>Your account balance is 
+<script> <!-- newly added code -->
+document.write(balance);
+</script>
+    </p>
+  </body>
+</html>
+```
+Output: Hello, Aaron!  Your account balance is 1
+
+
+## Using long URLs
+- Perhaps the previous page can be obtained via:
+```
+http://www.nowhere.abc/printinfo.php?name=Aaron
+```
+- (not a real site, of course - notice the TLD is wrong)
+
+
+## Exploiting the XSS vulnerability
+- Instead of our name of 'Aaron', we will input the following as our name:
+```
+<script>\nbalance=1000000;\n/script>Aaron
+```
+- Note the necessary returns in the text (`\n`), which can also be represented as '%0a'
+- Some browsers will work with the "\n" part removed entirely
+
+
+## The HTML page afterward
+```
+<!doctype html>
+<html>
+  <head>
+    <title>Basic web page</title>
 <script>
 var balance=1;
 </script>
   </head>
   <body>
-    <p>Hello Aaron!</p>
+    <p>Hello <script>
+balance=1000000;
+</script>Aaron!</p>
     <p>Your account balance is 
 <script>
 document.write(balance);
@@ -433,84 +483,72 @@ document.write(balance);
   </body>
 </html>
 ```
+Output: Hello Aaron! Your account balance is 1000000
 
 
-- Using long URLs
-- Perhaps the previous page can be obtained via:
-- http://www.nowhere.abc/printinfo.php?name=Aaron 
-- (not a real site, of course - notice the TLD is wrong)
-- 
-- Exploiting the XSS vulnerability
-- Instead of our name of `Aaron', we will input the following as our name:
-- 
-- 	<script>\nbalance=1000000;\n</script>Aaron
-- 
-- Note the necessary returns (colored red) in the text, which can also be represented as `%0a'
-- Some browsers will work with the "\n" part removed entirely
-- The HTML page after the XSS attack
-- <!doctype html>
-- <html>
--   <head>
--     <title>Basic web page</title>
-- <script>
-- var balance=1;
-- </script>
--   </head>
--   <body>
--     <p>Hello <script>
-- balance=1000000;
-- </script>Aaron!</p>
--     <p>Your account balance is 
-- <script>
-- document.write(balance);
-- </script>
--     </p>
--   </body>
-- </html>
-- More complicated XSS attacks
+## More complicated XSS attacks
 - If a decision is based upon said balance, then the decision point can be changed
-- Not likely that such a decision will be decided client-side
+  - Not likely that such a decision will be decided client-side
 - Perhaps you can inject code to view cookies or session variables
-- But these are easily discernable through the browser anyway
+  - But these are easily discernable through the browser anyway
 - So we need a reason do perform such an exploit...
-- Long URLs
+
+
+## Long URLs
 - Assume the page we developed can be obtained via:
-- http://www.nowhere.abc/printinfo.php?name=Aaron 
+  - http://www.nowhere.abc/printinfo.php?name=Aaron 
 - Then why can't we do the following?
-- http://www.nowhere.abc/printinfo.php?name=<script>\nbalance=1000000;\n</script>Aaron
+  - `http://www.nowhere.abc/printinfo.php?name=<script>\nbalance=1000000;\n&lt;</script>Aaron`
 - That has some non-standard characters (spaces, quotes, returns), but we can fix those
-- An XSS attack in a long URL
+
+
+## An XSS attack in a long URL
 - We replace the punctuation with their web encodings:
-- \n with %0a
-- space with %20
-- ! with %21
-- - with %2d
-- / with %2f
+  - \n with %0a
+  - space with %20
+  - ! with %21
+  - \- with %2d
+  - / with %2f
 - Some are definitely necessary, others are just in case they are necessary
+
+
+## An XSS attack in a long URL
 - Our new (and rather long) URL:
-- 	http://www.nowhere.abc/printinfo.php?name=%3cscript%3e%0abalance%3d1000000%3b%0a%3c%2fscript%3eAaron   
+  - http://www.nowhere.abc/printinfo.php?name=%3cscript%3e%0abalance%3d1000000%3b%0a%3c%2fscript%3eAaron   
 - This contains an XSS attack in a URL!
-- 
-- 
-- How to create an XSS exploit
+
+
+## How to create an XSS exploit
 - Download the HTML page, and save it locally
 - Enter the script manually, and make sure it works
-- Then, encode the script using URL-encoded text
-- There are online utilities to do this, such as the one at http://www.xav.com/encode.pl
+- *Then*, encode the script using URL-encoded text
+  - There are online utilities to do this, such as the one at http://www.xav.com/encode.pl
 - Pass that to the script
 - Note that trying to edit the Javascript code through the URL-encoded text won't work!
-- XSS exploit payloads
+
+
+## XSS exploit payloads
 - An XSS exploit can be a URL link that somebody clicks on (perhaps via e-mail) that goes to bankofamerica.com, and...
-- Reads the account number and/or balance into Javascript variable(s)
-- Sends that data to a remote server
-- This can be done via XMLHttpRequst(), which is the function used for Web 2.0 functionality
+  - Reads the account number and/or balance into Javascript variable(s)
+  - Sends that data to a remote server
+    - This can be done via XMLHttpRequst(), which is the function used for Web 2.0 functionality
 - Alternately, it can be used to steal cookies, which can allow an attacker to impersonate a victim
-- An XSS attack scenario (via Wikipedia)
-- Alice often visits a particular website, which is hosted by Bob. Bob's website allows Alice to log in with a username/password pair and store sensitive data, such as billing information.
+
+
+## An XSS attack scenario
+- Alice often Bob's website, where sensitive information is stored.
 - Mallory observes that Bob's website contains a reflected XSS vulnerability.
-- Mallory crafts a URL to exploit the vulnerability, and sends Alice an email, enticing her to click on a link for the URL under false pretenses. This URL will point to Bob's website, but will contain Mallory's malicious code, which the website will reflect.
-- Alice visits the URL provided by Mallory while logged into Bob's website.
-- The malicious script embedded in the URL executes in Alice's browser, as if it came directly from Bob's server (this is the actual XSS vulnerability). The script can be used to send Alice's session cookie to Mallory. Mallory can then use the session cookie to steal sensitive information available to Alice (authentication credentials, billing info, etc.) without Alice's knowledge.
+- Mallory crafts an exploit URL, sends to Alice, and entices her to click on it
+  - This URL is for Bob's website, but contains Mallory's malicious code, which the website will reflect (execute).
+  - Alice visits the URL provided by Mallory while logged into Bob's website.
+
+
+## An XSS attack scenario
+- The malicious script embedded in the URL executes in Alice's browser, as if it came directly from Bob's server
+  - This is the actual XSS vulnerability.
+  - The script can be used to send Alice's session cookie to Mallory.
+- Mallory can then use the session cookie to steal sensitive information available to Alice (authentication credentials, billing info, etc.) without Alice's knowledge.
+- [Reference](https://en.wikipedia.org/wiki/Cross-site_scripting#Non-persistent)
 
 	  </textarea></section>
 
