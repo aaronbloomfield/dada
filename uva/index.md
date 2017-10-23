@@ -85,3 +85,5 @@ Lectures (fall 2017)
 [107]: ../slides/07-obfuscations.html#/
 [108]: ../slides/08-advanced-viruses.html#/
 [109]: ../slides/09-adv-code-tech.html#/
+[110]: ../slides/10-sql-and-xss.html#/
+[111]: ../slides/11-encryption.html#/

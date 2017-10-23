@@ -198,9 +198,9 @@ delete from course;
 - Pseudo-code:
 ```
 var userid = getUseridFromWebForm()
-var statement = "select * from course where userid='" +
-                userid + "';"
-var result = databaseQuery (statement)
+var query = "select * from course where userid='" +
+              userid + "';"
+var result = databaseQuery (query)
 doSomethingWithTheResult (result)
 ```
 - This has a SQL injection attack vulnerability
@@ -233,7 +233,7 @@ select * from course where userid='<span class='hotpink'>'; truncate course; -- 
 select * from course where
     userid='<span class='hotpink'>'; truncate course; -- </span>';
 </pre>
-- The DB will perform two database operations (a select then a delete), and then result in a parse error on the last two characters (single quote and semi-colon)
+- The DB will perform two database operations (a select then a delete), and then see a comment at the end of the statement
   - The DB function the script calls might return a value or it might not
 - At this point, we have deleted everything from the table
 
@@ -264,7 +264,7 @@ select * from course where
 ## SQL injection attack prevention
 - Some (modern) web scripting languages do this automatically
   - In PHP, any input string is automatically escaped
-- You need to call stripslashes() to remove them
+  - You need to call `stripslashes()` to remove them
 - Not all languages do this, though
   - Perl, C/C++, Java, etc.
   - But many provide functions, such as addslashes(), to do this very easily (but not automatically!)
@@ -284,6 +284,7 @@ select * from course where
   - It's error-prone, because it is easy to forget to do this
 - Proper prevention means validating the input
   - Checking that it is a proper userid
+	- Check it against a regex for userids!
   - If not, then trigger an error response
   - And log and notify that error response!!!
 
