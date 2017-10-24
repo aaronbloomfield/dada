@@ -456,7 +456,7 @@ http://www.nowhere.abc/printinfo.php?name=Aaron
 ## Exploiting the XSS vulnerability
 - Instead of our name of 'Aaron', we will input the following as our name:
 ```
-<script>\nbalance=1000000;\n/script>Aaron
+<script>\nbalance=1000000;\n</script>Aaron
 ```
 - Note the necessary returns in the text (`\n`), which can also be represented as '%0a'
 - Some browsers will work with the "\n" part removed entirely
@@ -499,7 +499,7 @@ Output: Hello Aaron! Your account balance is 1000000
 - Assume the page we developed can be obtained via:
   - http://www.nowhere.abc/printinfo.php?name=Aaron 
 - Then why can't we do the following?
-  - `http://www.nowhere.abc/printinfo.php?name=<script>\nbalance=1000000;\n&lt;</script>Aaron`
+  - `http://www.nowhere.abc/printinfo.php?name=<script>\nbalance=1000000;\n</script>Aaron`
 - That has some non-standard characters (spaces, quotes, returns), but we can fix those
 
 
@@ -510,6 +510,7 @@ Output: Hello Aaron! Your account balance is 1000000
   - ! with %21
   - \- with %2d
   - / with %2f
+  - etc.
 - Some are definitely necessary, others are just in case they are necessary
 
 
