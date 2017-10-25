@@ -1,5 +1,5 @@
-DADA: HW 9: Hashing
-===================
+DADA: HW 9: Hashes
+==================
 
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 

@@ -753,7 +753,7 @@ Formula is $c = m^e mod n$
 
 
 ## How to "crack" PGP
-- Factoring n is not feasible
+- Factoring $n$ is not feasible
 - Thus, "cracking" PGP is done by other means
 - Intercepting the private key
   - "Hacking" into the computer, stealing the computer, etc.
@@ -770,74 +770,86 @@ Formula is $c = m^e mod n$
 
 
 ## SSH display to get a key
-![ssh 1](images/11-encryption/ssh-good.png)
+![ssh good](images/11-encryption/ssh-good.png)
 
 
 ## Man-in-the-middle attack
-- An attacker ("Eve") makes separate connections with both participants, and relays messages between them
+- An attacker ("Eve") makes intercepts the communications between two participants, and relays messages between them
+  - Perhaps Eve has access to a router that the messags pass through
   - Obviously, the participants ("Alice" and "Bob") are unaware that Eve is relaying the messages
 
-- SSH display with a possible MITM
-- How to prevent against MITM attacks
+
+## SSH display with a possible MITM
+![ssh bad](images/11-encryption/ssh-bad.png)
+
+
+## How to prevent MITM attacks
 - You need a way to ensure that the key you get is the correct key
 - This gave rise to key stores
-- Store in the sense of storage, not selling things
-- A key store's key was well known and widely published
-- When you created your key, you would upload it to the key store
-- Somebody else would get your key from the key store
+  - Store in the sense of storage, not selling things
+- A key store's public key was well known and widely published
+- When you create a key, you upload it to the key store
+  - Somebody else would get your key from the key store
 - Still possible for me to upload a key and claim it's yours, though...
-- Other public key encryption methods
+
+
+## Other public key encryption methods
 - The goals are the same as RSA
-- There must be two keys, which are paired
-- Encryption and decryption (with the key!) should be "easy" (i.e. polynomial time)
-- Cracking the message should be "hard" (i.e. exponential time)
+  - There must be two keys, which are paired
+  - Encryption and decryption (with the key!) should be "easy" (i.e. polynomial time)
+  - Cracking the message should be "hard" (i.e. exponential time)
 - Other ideas:
-- Discrete logarithms (next slide)
-- Elliptic curves
-- 
-- Discrete logarithms
-- Consider a mathematical group, or a congruence class, such as Z12 
-- This is the same as a clock: add numbers, and mod the result by 12
-- Exponentiation: 34 = 81
-- But in the group Z17, 81 is really 13 (81 mod 17 = 13)
-- Thus 34 = 13 in Z17 
-- Or log3 13 = 4 in Z17 
+  - Discrete logarithms (next slide)
+  - Elliptic curves
+
+
+## Discrete logarithms
+- Consider a mathematical group, or a congruence class, such as $Z_{12}$
+  - This is the same as a clock: add numbers, and mod the result by 12
+- Exponentiation: $3^4 = 81$
+  - But in the $Z_{17}$, 81 is really 13 as $81\text{ mod }17 = 13$)
+  - Thus $3^4 = 13$ in $Z_{17}$
+  - Or ${\log}_3  13 = 4$
 - Exponentiation is "easy", but finding a logarithm is "hard"
-- http://en.wikipedia.org/wiki/Discrete_logarithm_problem 
-- History
+- [Reference](http://en.wikipedia.org/wiki/Discrete_logarithm_problem)
+
+
+## History
 - 1976: Whitfield Diffe and Martin Hellman publish "New Directions in Cryptography", which proposes a public-key (i.e. asymmetric) system
 - 1978: RSA is invented by Rivest, Shamir, and Adleman
 - 1997: Whoops!  It turns out Diffe-Hellman and RSA were invented (independently) a bit earlier
-- Diffe-Hellman by a British intelligence service (GCHQ) in '74
-- RSA, also by the same British intelligence service, in 1975
-- Quantum computers
+  - Diffe-Hellman by a British intelligence service (GCHQ) in '74
+  - RSA, also by the same British intelligence service, in 1975
+
+
+## Quantum computers
 - A quantum computer could (in principle) factor n in reasonable time (O(b3), where b is the number of bits)
-- This would make RSA obsolete!
-- Shown (in principle) by Peter Shor in 1993
-- https://en.wikipedia.org/wiki/Shor's_algorithm
-- You would need a new (quantum) encryption algorithm to encrypt your messages
-- 
+  - This would make RSA obsolete!
+  - Shown (in principle) by [Peter Shor in 1993](https://en.wikipedia.org/wiki/Shor's_algorithm)
+  - You would need a new (quantum) encryption algorithm to encrypt your messages
 - This is like saying, "in principle, you could program a computer to correctly predict the weather"
-- 
 - I bet the NSA is working on such a computer, also
-- Quantum computing factorization
+
+
+## Quantum computing factorization
 - In 2012, UCSB built a quantum computer that can factor 15 into 3*5 with 48% accuracy
-- Yes, really
-- (Okay, I realize that it was a big advancement, but come on now...)
-- And it cost a lot of money...
-- 
-- (source)
-- Latest quantum computing stats
+  - Yes, really
+  - (Okay, I realize that it was a big advancement, but come on now...)
+  - And it cost a *lot* of money...
+- [reference](http://www.popsci.com/science/article/2012-08/quantum-processor-calculates-15-3x5-about-half-time)
+
+
+## Latest quantum computing stats
 - April 2012: 143 factored into 13*11
 - April 2016: factored 200,099 into 401*499
-- 
-- 
-- (source)
-- Should we be worried?
+- [reference](https://en.wikipedia.org/wiki/Integer_factorization_records)
+
+
+## Should we be worried?
 - Probably not
 - It will likely be a while before quantum computers can be used to factor numbers used in modern encryption
 - And, at that point, we'll just use quantum encryption
-- https://en.wikipedia.org/wiki/Quantum_key_distribution
+  - See [here](https://en.wikipedia.org/wiki/Quantum_key_distribution) for more details...
 	</textarea></section>
 
 	</section>
@@ -1002,88 +1014,114 @@ Formula is $c = m^e mod n$
 	  </textarea></section>
 	  
 	  <section data-markdown data-separator="^\n$"><textarea data-template>
-- Hashing
-- Ensuring the download is correct...
+## Ensuring the download is correct...
 - What if we don't want to encrypt the data?
-- So anybody can download it: patches, open source code, etc.
-- But we want to be sure to allow those people to verify that they downloaded the correct file
-- And that they didn't have any download errors
+  - So anybody can download it: patches, open source code, etc.
+  - But we want to be sure to allow those people to verify that they downloaded the correct file
+    - And that they didn't have any download errors
 - Solution: provide a hash code of the file
-- Hashing properties
+
+
+## Hashing properties
 - Hash goals:
-- Changing a single bit has a dramatic effect on the hash code
+  - Changing a single bit has a dramatic effect on the hash code
 - Pigeon hole principle
-- If we use a 128-bit hash, that yields 2128 ? 3.4 x 1038 possible values
-- If we have files that are at least 129 bits, then there will be more possible files than there are hashes
-- Thus, multiple files will provide the same hash
-- This will hold for all hashes, as long as the hash code is of a finite length
-- 
-- Hash vulnerabilities
-- For a hash function to be really vulnerable, we want to be able to take an arbitrary text and make it match the desired hash code
-- Sender sends: "deposit $1 million into account 12345" with hash abcdefg
-- You intercept and send a new message: "deposit $1 million into account 67890; *(fl*_0" with hash abcdefg
-- The trailing "; *(fl*_0" allowed the different document to match the same hash
+  - If we use a 128-bit hash, that yields $2^{128} \approx 3.4 \* 10^{38}$ possible values
+  - If we have files that are 129+ bits, then there will be more possible files than there are hashes
+  - Thus, multiple files will provide the same hash
+  - This will hold for *all* hashes, as long as the hash code is of a finite length
+
+
+## Hash vulnerabilities
+- For a hash function to be really vulnerable, we want to be able to take an *arbitrary* text and make it match the desired hash code
+  - Sender sends: "deposit $1 million into account 12345" with hash abcdefg
+  - You intercept and send a new message: "deposit $1 million into account 67890; *(fl*_0" with hash abcdefg
+    - The trailing "; *(fl*_0" allowed the different document to match the same hash
+
+
+## Hash vulnerabilities
 - Being able to create two "random" files that match the same hash indicates a weakness, but is not yet a vulnerability...
-- Collision resistant hashes
+
+
+## Collision resistant hashes
 - A collision resistant hash means that it is "hard" to find two inputs that hash to the same value
-- Harder than, say, brute force
-- If there is any way easier than brute force, that's bad
-- Due to the birthday paradox, one will typically have to brute force 2n/2 values before a collision is found
-- For MD5 (128 bits): 2128/2 = 264 = 1.84 x 1019 
-- Computing 1 million a second takes 5.85 x 1011 years
-- But a better attack can achieve this in under a minute
-- For SHA-256 (256 bits): 2256/2 = 2128 = 3.40 x 1038 
-- Computing 1 million a second takes 1.08 x 1031 years
-- http://en.wikipedia.org/wiki/Collision_resistant 
-- CRC32: Cyclic Redundancy Check
+  - Harder than, say, brute force
+  - If there is any way easier than brute force, that's bad
+
+
+## Collision resistant hashes
+- Due to the birthday paradox, one will typically have to brute force $2^{n/2}$ values before a collision is found
+  - For MD5 (128 bits): $2^{128/2} = 2^{64} = 1.84 \* 10^{19}$
+    - Computing 1 million a second takes $5.85 \* 10^{11}$ years
+    - But a better attack can achieve this in under a minute
+- For SHA-256 (256 bits): $2^{256/2} = 2^{128} = 3.40 \* 10^{38}$
+  - Computing 1 million a second takes $1.08 \* 10^{31}$ years
+- [reference](http://en.wikipedia.org/wiki/Collision_resistant )
+
+
+## CRC32: Cyclic Redundancy Check
 - The hash value is a 32-bit integer
-- There are variants of other bits: 16, 64, etc.
-- Is used for downloading files (via modem, download program, etc.)
-- I.e. as a checksum
-- It works great for this purpose
+  - There are variants of other bits: 16, 64, etc.
+- Is used for downloading files (via modem, download program, etc.) -- i.e. as a checksum
+  - It works great for this purpose
 - With the (simple) math behind the checksum, and "only" 4 billion possibilities, one can target a specific CRC 32 hash value
-- This is going to be a homework problem
-- http://en.wikipedia.org/wiki/Crc32 
-- 
-- MD5: Message Digest 5
-- Produces a 128-bit value (3.4 x 1038 possible values)
-- Expressed as a 32-digit hex number
+  - This is a homework problem in [HW 9: hashes](../hws/hw9-hashes.html)
+- [reference](http://en.wikipedia.org/wiki/Crc32)
+
+
+## MD5: Message Digest 5
+- Produces a 128-bit value ($3.4 x 10^{38}$ possible values)
+  - Expressed as a 32-digit hex number
 - Probably the most widely used algorithm
 - Designed in 1991 when research indicated it's predecessor (MD4) was insecure
-- A number of collisions have been found:
-- 1996: "first" collisions found
-- 2005: public keys (with associated private keys) could be constructed that have the same MD5 hash
-- 2008: researchers faked SSL certificate validity by creating keys with desired MD5 hashes
+- Printed in hex:
+```
+$ md5sum message1.txt 
+afe68f753a65f773a591bcf6f9ce3c63  message1.txt
+```
+
+
+## MD5: Message Digest 5
 - Still widely used for file downloading
-- CERT: "should be considered cryptographically broken and unsuitable for further use"
-- http://en.wikipedia.org/wiki/Md5 
-- SHA-0 and SHA-1
+  - CERT: "should be considered cryptographically broken and unsuitable for further use"
+  - [reference](- http://en.wikipedia.org/wiki/Md5)
+- A number of collisions have been found:
+  - 1996: "first" collisions found
+  - 2005: public keys (with associated private keys) could be constructed that have the same MD5 hash
+  - 2008: researchers faked SSL certificate validity by creating keys with desired MD5 hashes
+
+
+## SHA-0 and SHA-1
 - Designed by the NSA
-- After the DES debacle, it's became an open standard
-- Published by NIST (National Institute of Standards and Technology)
+  - After the DES debacle, it's become an open standard
+  - Published by NIST (National Institute of Standards and Technology)
 - 160 bit hash
 - SHA-0 (1993): had a flaw, was quickly corrected
-- The flaw introduced an unintended weakness
+  - The flaw introduced an unintended weakness
 - SHA-1 (1995): fixed that flaw, was very widely used for security applications
-- Not downloading files
+  - Not downloading files
+
+
+## SHA-0 and SHA-1
 - In 2005, security flaws were discovered in SHA-1
-- A vulnerability has not been shown, however
-- http://en.wikipedia.org/wiki/Sha-1 
-- SHA-2
+  - A vulnerability has not been shown, however
+  - [reference](http://en.wikipedia.org/wiki/Sha-1)
+
+
+## [SHA-2](http://en.wikipedia.org/wiki/SHA-2)
 - Designed in 2001 to address the flaw discovered in SHA-1
-- There are 4 variants, depending on the length of key desired: SHA-224, SHA-256, SHA-384, SHA-512
-- SHA-2 is mathematically similar to SHA-1
-- So if there are vulnerabilities in SHA-1, do they exist in SHA-2?
-- Nobody knows, but this lead to the development of SHA-3
+  - There are 4 variants, depending on the length of key desired: SHA-224, SHA-256, SHA-384, SHA-512
+- SHA-2 is mathematically similar (but not identical!) to SHA-1
+  - So if there are vulnerabilities in SHA-1, do they exist in SHA-2?
+  - Nobody knows, but this lead to the development of SHA-3
 - Most US gov't applications require a SHA-2 hash
-- http://en.wikipedia.org/wiki/SHA-2 
-- 
-- SHA-3
+
+
+## [SHA-3](http://en.wikipedia.org/wiki/SHA-3)
 - Intent is for it NOT to derive (or be similar to) SHA-2
-- So if the SHA-1 vulnerability exists in SHA-2, it thus will not affect SHA-3
+  - So if the SHA-1 vulnerability exists in SHA-2, it thus will not affect SHA-3
 - NIST (National Institute for Standards and Technology) had an open solicitation / compettion for the algorithm
-- The particular one selected was Keccak
-- http://en.wikipedia.org/wiki/SHA-3 
+  - The particular one selected was Keccak
 	</textarea></section>
 
 	</section>
@@ -1091,58 +1129,83 @@ Formula is $c = m^e mod n$
 	<section>
       
 	  <section data-markdown id="uncracked"><textarea data-template>
-# Top 10 uncracked codes
+# [Top 10 uncracked codes](http://listverse.com/miscellaneous/top-10-uncracked-codes)
 	  </textarea></section>
 	  
 	  <section data-markdown data-separator="^\n$"><textarea data-template>
-- Top 10 Uncracked Codes
-- http://listverse.com/miscellaneous/top-10-uncracked-codes 
-- 10. D'agapeyeff Cipher
+## 10. D'agapeyeff Cipher
 - A "challenge cipher" at the end of a 1939 book on cryptography
 - The author forgot how he encrypted it (and what it meant)
 - Many think that he made a mistake during encryption, hence why it has not been solved
-- 9. Kryptos
+![d'agapeyeff cipher](images/11-encryption/dagapeyeff-cipher.png)
+
+
+## 9. Kryptos
 - A monument in the CIA headquarters, erected in 1990
 - In 1999, the first person publically admitted to solving about 90% of it
 - The other 10% remains unsolved (even by gov't cryptographers)
-- 
-- 8. Shugborough Hall Inscription
+![kryptos](http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2007/10/kryptos-tm.jpg)+
+
+
+## 8. Shugborough Hall Inscription
 - Based (somewhat) on a painting, but with a few differences
 - Has the following inscription:
 - D    O.U.O.S.V.A.V.V.    M
 - Is involved in the Holy Grail legend
-- 7. Chinese Gold Bar Cipher
+![shugborough hall inscription](http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2007/10/shug4big-tm.jpg)
+
+
+## 7. Chinese Gold Bar Cipher
 - Gold bars issued to a General Wang in 1933
 - It supposedly is a deposit greater than $300 billion
 - But the bank is unknown
-- 6. Chaocipher
+![chinese gold bar cipher](http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2007/10/10.1-tm.jpg)
+
+
+## 6. Chaocipher
 - An 'unbreakable' cipher from 1918
 - The gov't was rather uninterested in it
-- 5. The Dorabella Cipher
+![chaocipher](http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2007/10/jfb-tm.jpg)
+
+
+## 5. The Dorabella Cipher
 - A letter from Edward Elgar to Dora Penny in 1897 - she never figured it out, either
 - 87 characters from 24 symbols
 - Analysis indicates a frequency that would be expected from a substitution cipher
-- 4. Beale Ciphers
+![dorabella cipher](http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2007/10/elgciph-tm.jpg)
+
+
+## 4. Beale Ciphers
 - According to the story, a man in 1820 buried a load of treasure in VA
 - One of the ciphers has been decrypted, and it details the treasure itself
 - Perhaps the others lead to the treasure...
-- 3. Linear A
+![beale ciphers](http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2007/10/700px-beale-1.svg-tm.jpg)
+
+
+## 3. Linear A
 - A script used in ancient Crete
-- This is from 1450 A.D.
+  - This is from 1450 A.D.
 - It is somewhat similar to Linear B, and thus some info on this tablet is understood
 - But not all...
-- 2. Voynich Manuscript
+![linear a](http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2007/10/lina-tm.jpg)
+
+
+## 2. [Voynich Manuscript](https://en.wikipedia.org/wiki/Voynich_manuscript)
 - An entire book in a secret script that is at least 400 years old
-- 272 pages, although about 30 are missing
+  - 272 pages, although about 30 are missing
 - Lists unidentified plants, as well as herbal recipies, astrological diagrams
 - Has an 'alphabet' of 20-30 glyphs
 - Written in a 'confident' style - perhaps a hoax
 - Nobody has deciphered a single word
-- 1. The Phaistos Disk
+![voynich manuscript](http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2007/10/awr-6vm2-tm.jpg)
+
+
+## 1. The Phaistos Disk
 - Also from ancient Crete
-- And found along with Linear A
+  - And found along with Linear A
 - An inscription of hieroglyphics
 - Theories: a religious hymn, a list of soldiers, or a document about the building of a palace
+![phaistos disk](http://listverse.wpengine.netdna-cdn.com/wp-content/uploads/2007/10/phaistos-tm.jpg)
 	</textarea></section>
 
       </section>
