@@ -42,6 +42,7 @@
 [Classical ciphers & rotor machines](#/classical)  
 [Private key "symetric" ciphers](#/private)  
 [RSA](#/rsa)  
+[Randomness](#/random)  
 [Hashing](#/hashing)  
 [Top 10 uncracked codes](#/uncracked)  
 </textarea></section>
@@ -319,22 +320,25 @@ A D C E D E T C X
 - It is susceptible to brute force attacks (256 = 7 x 1016 keys)
 - Solution: use DES three times => "Tripe DES"
 - Use a 56*3 = 168 bit key, and encrypt the message three times, once with each key
-- 
-- Cracking Triple DES encryption
+
+
+## Cracking Triple DES encryption
 - Brute-force attacks:
 - 2168 keys, but due to various mathematical properties, this ends up being 2112 different keys
 - "The best attack known on 3-key TDES requires around 232 known plaintexts, 2113 steps, 290 single DES encryptions, and 288 memory"
 - NIST (National Institute of Standards and Technology) considers it secure through 2030
-- 
-- DES conspiracy theories
+
+
+## DES conspiracy theories
 - NSA was involved with DES' creation
 - Convinced IBM to lower the key length from 128 to 64, and then to 56
 - And kept many of the details secret
 - Many well-respected people criticized the NSA for "improper interference" with the algorithmic design
 - In 1977, Diffe and Hellman (major names in cryptography) proposed a $20 million machine that could crack a DES message in a single day
 - It's known that the NSA had the budget for such a machine.  But did they build it?
-- 
-- Advanced Encryption Standard (AES)
+
+
+## Advanced Encryption Standard (AES)
 - The successor to DES
 - Has thee possible key lengths: 128, 192, and 256
 - NSA approved this standard, and kept the process open
@@ -784,8 +788,160 @@ A D C E D E T C X
 - It will likely be a while before quantum computers can be used to factor numbers used in modern encryption
 - And, at that point, we'll just use quantum encryption
 - https://en.wikipedia.org/wiki/Quantum_key_distribution
-- 
 	</textarea></section>
+
+	</section>
+
+	<section>
+      
+	  <section data-markdown id="random"><textarea data-template>
+# Randomness
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Dilbert on random numbers
+![dilbert on random numbers](http://assets.amuniversal.com/321a39e06d6401301d80001dd8b71c47)
+
+
+## Computers and randomness
+- A computer, by definition, produces the same output for the same input
+- So how, then, can it produce truly random numbers?
+- The answer: it can't
+  - We instead generate [*pseudo-random* numbers](https://en.wikipedia.org/wiki/Pseudorandomness)
+- Pseudorandomness: "A pseudorandom process is a process that appears to be random but is not"
+  - That's all a computer can really generate
+
+
+## Necessity of randomness
+- Much of encryption depends on randomness
+- If you could "guess" the random number sequence, then you could figure out the one-time pad
+  - ... or the generated ssh keys, or the RSA keys...
+- So we need really good random numbers
+- Formally, we need a [cryptographically secure pseudorandom number generator](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator)
+  - Formal definition shortly, but basically, it produces pseudo-random numbers that appear truly random
+
+
+## Typical generation method
+- The [linear congruential generator (LCG)](https://en.wikipedia.org/wiki/Linear_congruential_generator)
+- $X_{n+1}=(a*X_n+c) \text{ mod } m$
+  - $m$ is the modulus, and must be positive
+  - $a$ is the multiplier: $0 < a < m$
+  - $c$ is the increment: $0 < c < m$
+  - $X_0$ is the seed value
+- This will cycle through all values less than $m$ iff:
+  - $m$ and $c$ are relatively prime
+  - $a-1$ is divisible by all prime factors of $m$
+  - $a-1$ is divisible by 4 if $m$ is divisible by 4
+
+
+## Typical method: example
+- Let $m=11$, $a=7$, $c=9$, and $X_0=1$
+  - They will cycle through all the values, as per the requirements on the last slide
+- We'll arbitrarily decide to start the sequence at 1
+- $X_{n+1}=(a*X_n+c) \text{ mod } m$
+  - $X_0$ = 1
+  - $X_1 = (7*1+9) \text{ mod } 11 = 5$
+  - $X_2 = (7*5+9) \text{ mod } 11 = 0$
+  - $X_2 = (7*0+9) \text{ mod } 11 = 9$
+  - $X_3 = (7*9+9) \text{ mod } 11 = 6$
+  - Rest of the sequence: 7, 3, 8, 10, 2, then back to 1
+
+
+## Typical method: example
+- The linear congruential generator (LCG) sequence with $m=11$, $a=7$, $c=9$:
+  - 1, 5, 0, 9, 6, 7, 3, 8, 10, 2, then back to 1
+- But where to start in the sequence?
+  - We could start anywhere therein
+- Where we start is called the *seed*
+- Different seed values just start at a different spot in the cycle of random numbers
+
+
+## LCG parameters in use
+- libc uses $a=1103515245$, $c=12345$, and $m=2^{31}$
+  - This is what is called by `rand()` in C and C++; setting the seed is done by `srand()`
+  - This will cycle through 2 billion ($2^{31}$) values before repeating
+- [RANDU](https://en.wikipedia.org/wiki/RANDU) used $a=65539$, $c=0$, and $m=2^{31}$
+  - Used from the 1960's, it created a very easy to calculate sequence on old hardware
+  - But a *very* poor random sequence
+- See [here](https://en.wikipedia.org/wiki/Linear_congruential_generator#Parameters_in_common_use) for more possibilities
+
+
+## What seed to use?
+- If you use the same seed, you will always get the same random sequence
+- Many people use `time(NULL)` in C/C++
+  - This is the current number of seconds since January 1st, 1970
+  - Which is how UNIX systems keep track of time
+- But if you run the program twice in the same second, it will use the same sequence!
+- That being said, this is probably sufficient for non-cryptographic purposes
+  - You could use the current time in milliseconds...
+
+
+## More randomness
+- There are many and better pseudo-random number generators
+- Those that are [computationally indistinguishable](https://en.wikipedia.org/wiki/Computational_indistinguishability) from true random numbers are considered suitable for cryptography
+  - These is what defines a [cryptographically secure pseudorandom number generator](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator)
+- But how to get the initial seed?
+  - When computers produce the same output on the same input?
+
+
+## More randomness
+- We need a [randomness extractor](https://en.wikipedia.org/wiki/Randomness_extractor):
+> "a function, which being applied to output from a weakly random entropy source, together with a short, uniformly random seed, generates a highly random output that appears independent from the source and uniformly distributed"
+
+
+## More randomness
+- So how to get that "weakly random entropy source"?
+- You could use *other* input values such as:
+  - The 10th and 11th bit of the floating point value read in from the CPU temperature sensor
+  - Or the hash of that entire temperature value (use a good hash, as described later in this slide set)
+  - Or any other sensor that the computer has available
+  - Or many other methods
+
+
+## Determining randomness
+- To tell if a number sequence is truly (pseudo-) random, you run [randomness tests](https://en.wikipedia.org/wiki/Randomness_tests) on it
+- Examples:
+  - Run it a bagillion times and see if the distributions of the numbers is uniform across the range
+  - See if the numbers follow a [normal distribution](https://en.wikipedia.org/wiki/Normal_distribution) (when run through the correct formulas)
+  - Interpret the numbers as 5 card stud poker hands, and see if the distrubtion of hands is the expected distribution
+  - And many others...
+
+
+## Debian OpenSSL predictability
+- A bit of background first...
+- Open source software is maintained by certain individuals
+  - Here called the "upstream developers"
+- Different Linux distrubtions will package them for easy installation
+  - Example: `sudo apt-get install openssl`
+  - Volunteers, called "package maintainers" do this work
+
+
+## Debian OpenSSL predictability
+- Package maintainers do the following:
+  - Compile the (upstream) source code for various hardware platforms
+  - Changing the configuration to match the system default (location of config files, etc.)
+  - Specifying the necessary dependent libraries / packages
+  - Putting all this together into an installable package, and uploading that to the distribution's servers
+
+
+## Debian OpenSSL predictability
+- In 2007 or 2008, the package maintainer for OpenSSL (the primary cryptographic library) noticed a series of warnings the compiler generated, and tracked them down to a given line in the code
+- Not being familiar with the code, he asked the upstream developer if that line could be removed
+- The upstream developer said "yes"
+- The line was removed, and the package distributed
+
+
+## Debian OpenSSL predictability
+- But that line is what added the randomness!
+- Without it, there were only 65k possible SSH keys that could be generated!
+  - Any computer could generate all of them in less than a day
+- Once patched, *everybody* had to regenerate their ssh keys...
+- Read more [here](https://www.debian.org/security/2008/dsa-1571)
+
+
+<h2><a href="http://xkcd.com/424/">Security Holes</a></h2>
+<img class="stretch" src="http://imgs.xkcd.com/comics/security_holes.png" title="True story: I had to try several times to upload this comic because my ssh key was blacklisted." alt="Security Holes">
+</textarea></section>
 
 	</section>
 
