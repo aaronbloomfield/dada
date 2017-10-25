@@ -8,7 +8,7 @@ DADA: HW 9: Hashing
 
 In this assignment, you will be examining some of the issues surrounding hashes and their security applications.
 
-Note that due to the time issues related to task 2, there will be no extensions granted on this assignment.  Task 2 will take many hours of the computer thinking, and if you wait to the last minute to start, you will end up with a late assignment.
+Note that due to the time issues related to task 2, there will be no extensions granted on this assignment.  Task 2 will take some hours of the computer thinking, and if you wait to the last minute to start, you will end up with a late assignment.
 
 
 ### Task 1: CRC insecurity
@@ -110,7 +110,7 @@ Initial vector: 0xfda9af93 0xb20a5c10 0x653aa3af 0x8e2347d2
 ```
 5. Create an MD5 collision by running the following command (but replace the vector on the command line with the one you found in step 4):
 ```
-./md5coll 0xfda9af93 0xb20a5c10 0x653aa3af 0x8e2347d2
+./md5coll 0xfda9af93 0xb20a5c10 0x653aa3af 0x8e2347d2 > init.txt
 ```
 Note: this step can take several hours.
 6. Create a pair of good and evil programs by running:

@@ -13,7 +13,7 @@
 <p><a href="index.html">Go up to the main DADA homeworks page</a> (<a href="index.md">md</a>)</p>
 <h3 id="purpose">Purpose</h3>
 <p>In this assignment, you will be examining some of the issues surrounding hashes and their security applications.</p>
-<p>Note that due to the time issues related to task 2, there will be no extensions granted on this assignment. Task 2 will take many hours of the computer thinking, and if you wait to the last minute to start, you will end up with a late assignment.</p>
+<p>Note that due to the time issues related to task 2, there will be no extensions granted on this assignment. Task 2 will take some hours of the computer thinking, and if you wait to the last minute to start, you will end up with a late assignment.</p>
 <h3 id="task-1-crc-insecurity">Task 1: CRC insecurity</h3>
 <p>Your job is to write a C/C++ program (necessary for speed reasons) that, when given an input file and a CRC checksum, will modify that message, and ensure that the modified version matches the CRC checksum.</p>
 <p>For this program, you are to use the CRC library in <a href="https://en.wikipedia.org/wiki/Boost_(C%2B%2B_libraries)">Boost</a>. Boost is a C++ library somewhat similar to Java's SDK. Details about the Boost library can be found <a href="http://www.boost.org/doc/libs/1_65_1/libs/crc/crc.html">here</a>; that page includes a sample program. Also see <a href="http://stackoverflow.com/questions/2573726/how-to-use-boostcrc">here</a> for another example as to how to use the CRC functions.</p>
@@ -76,7 +76,7 @@ This creates the programs <code>evilize</code>, <code>md5coll</code>, and the ob
 <p>This will output something like the following:</p>
 <pre><code>Initial vector: 0xfda9af93 0xb20a5c10 0x653aa3af 0x8e2347d2</code></pre></li>
 <li><p>Create an MD5 collision by running the following command (but replace the vector on the command line with the one you found in step 4):</p>
-<pre><code>./md5coll 0xfda9af93 0xb20a5c10 0x653aa3af 0x8e2347d2</code></pre>
+<pre><code>./md5coll 0xfda9af93 0xb20a5c10 0x653aa3af 0x8e2347d2 &gt; init.txt</code></pre>
 Note: this step can take several hours.</li>
 <li><p>Create a pair of good and evil programs by running:</p>
 <pre><code>./evilize hello-erase -c init.txt -g good -e evil</code></pre>
