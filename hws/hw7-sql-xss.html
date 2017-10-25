@@ -73,7 +73,7 @@
 <ul>
 <li>What websites were visited that encoded the data using gzip? We are looking for the domain names (domain.tld), not the exact URL (foo.bar.baz.domain.tld).</li>
 <li>What types of files were transferred? This is encoded in the 'Content-Type' header.</li>
-<li>What network ports were accessed? A network port corresponds to an application-level protocol, such as http and https. This is encoded as &quot;gemini.http-alt&quot; (here 'http-alt' means an alternative to http) - see the example packet explanation, below.</li>
+<li>What network ports were accessed? A network port corresponds to an application-level protocol, such as http and https. This is encoded as <code>gemini.http-alt</code> (here <code>http-alt</code> means an alternative to http) - see the example packet explanation, below. The <code>http-alt</code> port is 8080 -- you can find this out by looking in <code>/etc/services</code>, which maps port names (such as <code>http-alt</code>) to port numbers. We aren't interested in port numbers above 10,000.</li>
 <li>What is the username(s) and password(s) were used when logging in? Where were they used to log in to? Not surprisingly, all passwords were changed for this file. (There is only one that can be sniffed)</li>
 <li>Can you determine my ebay password? Why or why not?</li>
 <li>What other network-level and transport-level protocols were used, other than TCP? TCP is used quite frequently (so much so that TCP packets are not labeled as TCP). You can find a listing of the protocols at http://www.wildpackets.com/resources/compendium/tcp_ip/overview.</li>
