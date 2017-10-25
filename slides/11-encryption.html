@@ -312,28 +312,27 @@ A D C E D E T C X
 	  </textarea></section>
 	  
 	  <section data-markdown data-separator="^\n$"><textarea data-template>
-## Data Encryption Standard (DES)
+## Data Encryption Standard ([DES](http://en.wikipedia.org/wiki/Data_Encryption_Standard))
 - Adopted in 1976, it's a private-key encryption/decryption block cipher
 - Briefly, it does a lot of (invertible) bit-shifting in rounds to encrypt/decrypt a message
-- Reference: http://en.wikipedia.org/wiki/Data_Encryption_Standard 
 - How to crack?
-- It is susceptible to brute force attacks (256 = 7 x 1016 keys)
+  - It is susceptible to brute force attacks ($2^{56} = 7 * 10^{16}$ keys)
 - Solution: use DES three times => "Tripe DES"
-- Use a 56*3 = 168 bit key, and encrypt the message three times, once with each key
+  - Use a 56*3 = 168 bit key, and encrypt the message three times, once with each key
 
 
 ## Cracking Triple DES encryption
 - Brute-force attacks:
-- 2168 keys, but due to various mathematical properties, this ends up being 2112 different keys
-- "The best attack known on 3-key TDES requires around 232 known plaintexts, 2113 steps, 290 single DES encryptions, and 288 memory"
+  - $2^{168}$ keys, but due to various mathematical properties, this ends up being $2^{112}$ different keys
+- "The best attack known on 3-key TDES requires around $2^{32}$ known plaintexts, $2^{113}$ steps, $2^{90}$ single DES encryptions, and $2^{88}$ memory"
 - NIST (National Institute of Standards and Technology) considers it secure through 2030
 
 
 ## DES conspiracy theories
 - NSA was involved with DES' creation
-- Convinced IBM to lower the key length from 128 to 64, and then to 56
-- And kept many of the details secret
-- Many well-respected people criticized the NSA for "improper interference" with the algorithmic design
+  - They convinced IBM to lower the key length from 128 to 64, and then to 56
+  - And kept many of the details secret
+  - Many well-respected people criticized the NSA for "improper interference" with the algorithm
 - In 1977, Diffe and Hellman (major names in cryptography) proposed a $20 million machine that could crack a DES message in a single day
 - It's known that the NSA had the budget for such a machine.  But did they build it?
 
@@ -344,9 +343,8 @@ A D C E D E T C X
 - NSA approved this standard, and kept the process open
 - Like DES, it's a series of (invertible) bit-shifting in rounds to encrypt/decrypt a message
 - Many worry about the security of the standard
-- ... that somebody may figure a way to crack it mathematically, in particular
-- Reference: http://en.wikipedia.org/wiki/Advanced_Encryption_Standard
-- 
+  - ... that somebody may figure a way to crack it mathematically, in particular
+- [Reference](http://en.wikipedia.org/wiki/Advanced_Encryption_Standard)
 	</textarea></section>
 
 	</section>
@@ -354,379 +352,431 @@ A D C E D E T C X
 	<section>
       
 	  <section data-markdown id="rsa"><textarea data-template>
-# RSA
+# [RSA](http://en.wikipedia.org/wiki/RSA)
 	  </textarea></section>
 	  
 	  <section data-markdown data-separator="^\n$"><textarea data-template>
-- RSA
-- http://en.wikipedia.org/wiki/RSA
-- Private key cryptography
+## Private key cryptography
 - The function and/or key to encrypt/decrypt is a secret
-- (Hopefully) only known to the sender and recipient
-- 
+ - (Hopefully) only known to the sender and recipient
 - The same key encrypts and decrypts
-- 
 - How do you get the key to the recipient?
-- Public key cryptography
+
+
+## Public key cryptography
 - Everybody has a key that encrypts and a separate key that decrypts
-- They are not interchangable!
-- 
+ - They are not interchangable!
 - The encryption key is made public
-- 
 - The decryption key is kept private
-- Public key cryptography goals
+
+
+## Public key cryptography goals
 - Key generation should be relatively easy
-- 
 - Encryption should be easy (polynomial time)
 - Decryption should be easy (polynomial time)
-- With the right key!
-- 
+  - With the right key!
 - Cracking should be very hard (exponential time)
-- Is that number prime?
+
+
+## Is that number prime?
 - Use the Fermat primality test
-- 
 - Given:
-- n: the number to test for primality
-- k: the number of times to test (the certainty)
-- 
+ - $n$: the number to test for primality
+ - $k$: the number of times to test (the certainty)
 - The algorithm is:
-- repeat k times: 
-- pick a randomly in the range [1, n-1]
-- if an-1 mod n != 1 then return composite
-- return probably prime
-- Is that number prime?
+```
+repeat k times: 
+    pick a randomly in the range [1, n-1]
+    if a^{n-1} mod n != 1 then return composite
+return probably prime
+```
+
+
+## Is that number prime?
 - The algorithm is:
-- repeat k times: 
-- pick a randomly in the range [1, n-1]
-- if an-1 mod n != 1 then return composite
-- return probably prime
+```
+repeat k times: 
+    pick a randomly in the range [1, n-1]
+    if a^{n-1} mod n != 1 then return composite
+return probably prime
+```
 - Let n = 105
-- Iteration 1: a = 92: 92104 mod 105 = 1
-- Iteration 2: a = 84: 84104 mod 105 = 21
-- Therefore, 105 is composite
-- 
-- Is that number prime?
+  - Iteration 1: $a = 92: 92^{104} \text{ mod }105 = 1$
+  - Iteration 2: $a = 84: 84^{104} \text{ mod }105 = 21$
+  - Therefore, 105 is composite
+
+
+## Is that number prime?
 - The algorithm is:
-- repeat k times: 
-- pick a randomly in the range [1, n-1]
-- if an-1 mod n != 1 then return composite
-- return probably prime
+```
+repeat k times: 
+    pick a randomly in the range [1, n-1]
+    if a^{n-1} mod n != 1 then return composite
+return probably prime
+```
 - Let n = 101
-- Iteration 1: a = 55: 55100 mod 101 = 1
-- Iteration 2: a = 60: 60100 mod 101 = 1
-- Iteration 3: a = 14: 14100 mod 101 = 1
-- Iteration 4: a = 73: 73100 mod 101 = 1
-- At this point, 101 has a ( 1/2)4 = 1/16 chance of still being composite
-- More on the Fermat primality test
+ - Iteration 1: $a = 55: 55^{100} \text{ mod } 101 = 1$
+  - Iteration 2: $a = 60: 60^{100} \text{ mod } 101 = 1$
+  - Iteration 3: $a = 14: 14^{100} \text{ mod } 101 = 1$
+  - Iteration 4: $a = 73: 73^{100} \text{ mod } 101 = 1$
+  - At this point, 101 has a $(1/2)^4 = 1/16$ chance of still being composite
+
+
+## More on the Fermat primality test
 - Each iteration halves the probability that the number is a composite
-- Probability = ( 1/2)k
-- If k = 100, probability it's a composite is ( 1/2)100 = 1 in 1.2 ?? 1030 that the number is composite
-- Greater chance of having a hardware error!
-- Thus, k = 100 is a good value
-- 
-- However, this is not certain!
-- There are known numbers that are composite but will always report prime by this test
-- The Carmichael numbers: 561, 1105, 1729, ...
-- 
-- Source: http://en.wikipedia.org/wiki/Fermat_primality_test 
-- Google's recruitment campaign
-- The prime number theorem
-- The number of prime numbers less than x is approximately x/ln(x)
-- Rephrased: the chance of an number x being a prime number is 
-- 1 / ln(x)
-- 
+  - Probability = $(1/2)^k$
+  - If $k = 100$, the probability it's a composite is $(1/2)^{100} = 1 in 1.2 * 10^30$ that the number is composite
+    - Greater chance of having a hardware error!
+  - Thus, $k = 100$ is a good value
+
+
+## More on the Fermat primality test
+- Even with a certainty of $k=100$, it is not certain that the number is prime!
+  - There are known numbers that are composite but will always report prime by this test
+  - The Carmichael numbers: 561, 1105, 1729, ...
+- [Reference](http://en.wikipedia.org/wiki/Fermat_primality_test)
+
+
+## Google's recruitment campaign
+![google billboard](https://statisticallyinsignificant.files.wordpress.com/2011/05/google.jpg)
+
+
+## The prime number theorem
+- The number of prime numbers less than $x$ is approximately $x/\text{ln}(x)$
+  - Rephrased: the chance of an number x being a prime number is  $1 / \text{ln}(x)$
 - Consider 200 digit prime numbers
-- ln (10200) ?? 460
-- The chance of a random 200 digit number being prime is 1/460
-- If we only choose odd numbers, the chance is 2/460 = 1/230
-- This result will be used shortly
-- 
-- Reference: http://en.wikipedia.org/wiki/Prime_number_theorem 
-- 
-- RSA
+  - $\text{ln} (10^{200}) \approx 460$
+  - The chance of a random 200 digit number being prime is thus 1/460
+  - If we only choose odd numbers, the chance is 2/460 = 1/230
+  - For a 2048 bit number (616 decimal digits) it's about 1/710
+- [Reference](http://en.wikipedia.org/wiki/Prime_number_theorem)
+
+
+## RSA
 - Stands for the inventors: Ron Rivest, Adi Shamir and Len Adleman
-- 
 - Three parts:
-- Key generation
-- Encrypting a message
-- Decrypting a message
-- Key generation steps
-- Choose two random large prime numbers p != q, and 
-- n = p*q
-- 
-- Choose an integer 1 < e < n which is relatively prime to (p-1)(q-1)
-- 
-- Compute d such that d * e == 1 (mod (p-1)(q-1))
-- Rephrased: d*e mod (p-1)(q-1) = 1
-- 
-- Destroy all records of p and q
-- Key generation, step 1
-- Choose two random large prime numbers p != q
-- In reality, 2048 bit numbers are recommended
-- That's ? 617 digits
-- Chance of a random odd 2048 bit number being prime is about 1/710
-- We can compute if a number is prime relatively quickly via the Fermat primality test
-- 
-- We choose p = 107 and q = 97
-- Compute n = p*q
-- n = 10379
-- Key generation, step 1
+  - Key generation
+  - Encrypting a message
+  - Decrypting a message
+
+
+## Key generation steps
+1. Choose two random large prime numbers $p != q$, and $n = p*q$
+2. Choose an integer $1 < e < n$ which is relatively prime to $(p-1)(q-1)$
+3. Compute $d$ such that:
+    - $d * e == 1 (mod (p-1)(q-1))$
+   - Rephrased: $d*e \text{ mod  }(p-1)(q-1) = 1$
+4. Destroy all records of $p$ and $q$
+
+
+## Key generation, step 1
+- Choose two *random* large prime numbers $p != q$
+  - In reality, 2048 bit numbers are recommended
+    - That's about 617 decimal digits
+  - Chance of a random odd 2048 bit number being prime is about 1/710
+    - We can compute if a number is prime relatively quickly via the Fermat primality test
+- We choose $p = 107$ and $q = 97$
+- Compute $n = p*q$
+  - $n = 10379$
+
+
+## Key generation, step 1
 - Java code to find a big prime number:
-- Key generation, step 1
+```
+BigInteger prime = new BigInteger
+(numBits, certainty, random);
+```
+- Yes, it's that easy
+
+
+## Key generation, step 1
 - Java code to find a big prime number:
-- 
-- import java.math.*;
-- import java.util.*;
-- 
-- public class BigPrime {
-- 	
-- 	static int numDigits = 617;
-- 	static int certainty = 100;
-- 	
-- 	static final double LOG_2 = Math.log(10)/Math.log(2);
-- 	static int numBits = (int) (numDigits * LOG_2);
-- 	
-- 	public static void main (String args[]) {
-- 		Random random = new Random();
-- 		BigInteger prime = new BigInteger (numBits, certainty, 
-- 						     random);
-- 		System.out.println (prime);
-- 	}
-- }
-- Key generation, step 1
+```
+import java.math.*;
+import java.util.*;
+public class BigPrime {
+	static int numDigits = 617;
+	static int certainty = 100;
+	static final double LOG_2 = Math.log(10)/Math.log(2);
+	static int numBits = (int) (numDigits * LOG_2);
+	public static void main (String args[]) {
+		Random random = new Random();
+		BigInteger prime = new BigInteger (numBits, 
+						     certainty, random);
+		System.out.println (prime);
+	}
+}
+```
+
+
+## Key generation, step 1
 - How long does this take?
-- Keep in mind this is Java!
-- These tests done on a very old (850 Mhz) Pentium machine
-- Average of 100 trials (certainty = 100)
-- 
-- 200 digits (664 bits): about 1.5 seconds
-- 617 digits (2048 bits): about 75 seconds 
-- Key generation, step 1
+  - On a modern (3.4 Ghz) machine, it took about 1 second
+  - And this is Java -- it would be faster in C or C++
+
+
+## Key generation, step 1
 - Practical considerations
-- p and q should not be too close together
-- (p-1) and (q-1) should not have small prime factors
+  - $p$ and $q$ should not be too close together
+  - $(p-1)$ and $(q-1)$ should not have small prime factors
 - Use a good random number generator
-- Key generation, step 2
-- Choose an integer 1 < e < n which is relatively prime to (p-1)(q-1)
-- 
+
+
+## Key generation, step 2
+- Choose an integer $1 < e < n$ which is relatively prime to $(p-1)(q-1)$
 - There are algorithms to do this efficiently
-- We aren't going over them in this course
-- 
-- Easy way to do this: make e be a prime number
-- It only has to be relatively prime to (p-1)(q-1), but can be fully prime
-- Key generation, step 2
-- Recall that p = 107 and q = 97
-- (p-1)(q-1) = 106*96 = 10176 = 26*3*53
-- 
-- We choose e = 85
-- 85 = 5*17
-- gcd (85, 10176) = 1
+  - We aren't going over them in this course
+- Easy way to do this: make $e$ be a prime number
+  - It only has to be relatively prime to $(p-1)(q-1)$, but can be fully prime
+
+
+## Key generation, step 2
+- Recall that $p = 107$ and $q = 97$
+  - $(p-1)(q-1) = 106 \* 96 = 10176 = 2^6\*3\*53$
+- We choose $e = 85$
+  - $85 = 5*17$
+  - $\text{gcd}(85, 10176) = 1$
 - Thus, 85 and 10176 are relatively prime
-- Key generation, step 3
+
+
+## Key generation, step 3
 - Compute d such that:
-- 			d * e == 1 (mod (p-1)(q-1))
-- Rephrased: d*e mod (p-1)(q-1) = 1
-- d should be a bit smaller than n (maybe by a factor of 10 or 100 or so)
-- 
+  - $d \* e == 1 (\text{mod } (p-1)(q-1))$
+  - Rephrased: $d\*e \text{ mod } (p-1)(q-1) = 1$
+  - $d$ should be a bit smaller than $n$ (maybe by a factor of 10 or 100 or so)
 - There are algorithms to do this efficiently
-- We aren't going over them in this course
-- 
-- We choose d = 4669
-- 4669*85 mod 10176 = 1
-- 
+  - We aren't going over them in this course
+- We choose $d = 4669$
+  - $4669\*85 \text{ mod } 10176 = 1$
 - Use the script at http://www.cs.virginia.edu/~asb/utils/modpow.php
-- Key generation, step 3
+
+
+## Key generation, step 3
 - Java code to find d:
-- 
-- import java.math.*;
-- 
-- public class FindD {
-- 	public static void main (String args[]) {
-- 
-- 		BigInteger pq = new BigInteger("10176");
-- 		BigInteger e = new BigInteger ("85");
-- 
-- 		System.out.println (e.modInverse(pq));
--   }
-- }
-- 
+```
+import java.math.*;
+public class FindD {
+	public static void main (String args[]) {
+		BigInteger pq = new BigInteger("10176");
+		BigInteger e = new BigInteger ("85");
+		System.out.println (e.modInverse(pq));
+    }
+}
+```
 - Result: 4669
-- Key generation, step 4
-- Destroy all records of p and q
-- 
-- If we know p and q, then we can compute the private encryption key from the public decryption key
-- 
-- 			d * e == 1 (mod (p-1)(q-1))
-- The keys
-- We have n = p*q = 10379, e = 85, and d = 4669
-- 
-- The public key is (n,e) = (10379, 85)
-- The private key is (n,d) = (10379, 4669)
-- 
-- Thus, n is not private
-- Only d is private
-- 
-- In reality, p and q are 600 (or so) digit numbers
-- As that is 2048 bits
-- Thus n is a 1200 (or so) digit number
-- d and e are about 1,199 (or so) digit numbers
-- Encrypting messages
+
+
+## Key generation, step 4
+- Destroy all records of $p$ and $q$
+  - If we know $p$ and $q$, then we can compute the private encryption key from the public decryption key via:
+  - $d * e == 1 (\text{mod }(p-1)(q-1))$
+
+
+## The keys
+- We have $n = p*q = 10379$, $e = 85$, and $d = 4669$
+- The public key is $(n,e) = (10379, 85)$
+- The private key is $(n,d) = (10379, 4669)$
+- Thus, $n$ is not private
+- Only $d$ is private
+- In reality, $p$ and $q$ are 616 (or so) digit numbers
+  - As that is 2048 bits
+  - Thus $n$ is a 1200 (or so) digit number
+  - $d$ and $e$ are about 1,199 (or so) digit numbers
+
+
+## Encrypting messages
 - To encode a message:
-- Encode the message m into a number
-- Split the number into smaller numbers m < n
-- Use the formula c = me mod n
-- c is the ciphertext, and m is the message
-- 
+  1. Encode the message $m$ into a number
+  2. Split the number into smaller numbers $m < n$
+  3. Use the formula $c = m^e \text{ mod }n$
+	 - $c$ is the ciphertext, and m is the message
 - Java code to do the last step:
-- m.modPow (e, n)
-- Where the object m is the BigInteger to encrypt
-- Encrypting RSA messages
-- Formula is c = me mod n
-- Encrypting messages example
+```
+m.modPow (e, n)
+```
+	- Where the object m is the BigInteger to encrypt
+
+
+## Encrypting RSA messages
+Formula is $c = m^e mod n$
+![RSA license plage](images/11-encryption/license-plate.jpg)
+
+
+## Encrypting messages example
 - Encode the message into a number
-- String is "Go Cavaliers!!"
-- Modified ASCII codes: 
-- 41  81  02  37  67  88  67  78  75  71  84  85  03  03
-- 
-- Split the number into numbers < n
-- Recall that n = 10379
-- 4181  0237  6788  6778  7571  8485  0303
-- 
-- Use the formula c = me mod n
-- 418185 mod 10379 = 4501
-- 023785 mod 10379 = 2867
-- 678885 mod 10379 = 4894
-- Etc...
-- 
+   - String is "Go Cavaliers!!"
+   - Modified ASCII codes: 
+   - 41  81  02  37  67  88  67  78  75  71  84  85  03  03
+- Split the number into numbers $< n$
+   - Recall that $n = 10379$
+   - 4181  0237  6788  6778  7571  8485  0303
+
+
+## Encrypting messages example
+- Use the formula $c = m^e \text{ mod }n$
+   - $4181^{85}\text{ mod }10379 = 4501$
+   - $0237^{85}\text{ mod }10379 = 2867$
+   - $6788^{85}\text{ mod }10379 = 4894$
+   - Etc...
 - Encrypted message:
-- 4501  2867  4894  0361  3630  4496  6720
-- Decrypting messages
-- Use the formula m = cd mod n on each number
-- 
-- Split the number into individual ASCII character numbers
-- 
-- Decode the message into a string
-- Decrypting messages example
+  - 4501  2867  4894  0361  3630  4496  6720
+
+
+## Decrypting messages
+1. Use the formula $m = c^d\text{ mod }n$ on each number
+2. Split the number into individual ASCII character numbers
+3. Decode the message into a string
+
+
+## Decrypting messages example
 - Encrypted message:
-- 4501  2867  4894  0361  3630  4496  6720
-- 
-- Use the formula m = cd mod n on each number
-- 45014669 mod 10379 = 4181
-- 28674669 mod 10379 = 0237
-- 48944669 mod 10379 = 6788
-- Etc...
-- 
+   - 4501  2867  4894  0361  3630  4496  6720
+- Use the formula $m = c^d\text{ mod }n$ on each number
+   - $4501^{4669}\text{ mod }10379 = 4181$
+   - $2867^{4669}\text{ mod }10379 = 0237$
+   - $4894^{4669}\text{ mod }10379 = 6788$
+   - Etc...
+
+
+## Decrypting messages example
 - Split the numbers into individual characters
-- 41  81  02  37  67  88  67  78  75  71  84  85  03  03
-- 
+  - 41  81  02  37  67  88  67  78  75  71  84  85  03  03
 - Decode the message into a string
-- Modified ASCII codes: 
-- 41  81  02  37  67  88  67  78  75  71  84  85  03  03 
-- Retrieved String is "Go Cavaliers!!"
-- modPow computation
-- How to compute c = me mod n or m = cd mod n?
-- Example: 45014669 mod 10379 = 4181
-- 
+  - Modified ASCII codes: 
+	- 41  81  02  37  67  88  67  78  75  71  84  85  03  03 
+	- Retrieved String is "Go Cavaliers!!"
+
+
+## modPow computation
+- How to compute $c = m^e\text{ mod }n$ or $m = c^d\text{ mod }n$?
+  - Example: $4501^{4669}\text{ mod }10379 = 4181$
 - Use the script at http://www.cs.virginia.edu/~asb/utils/modpow.php
-- 
 - Other means:
-- Java: use the BigInteger.modPow() method
-- Perl: use the bmodpow function in the BigInt library
-- C++: Use the bigint class (http://sourceforge.net/projects/cpp-bigint/) 
-- Etc...
-- Cracking a message
-- In order to decrypt a message m, we must compute 
-- m = cd mod n
-- n is known (part of the public key)
-- c is known (the ciphertext)
-- e is known (the encryption key)
-- Thus, we must compute d with no other information
-- Recall: n = p*q
-- Recall: choose an integer 1 < e < n which is relatively prime to 
-- (p-1)(q-1)
-- Recall: Compute d such that: d*e mod (p-1)(q-1) = 1 
-- Thus, we must factor the composite n into it's component primes
-- There is no efficient way to do this!
-- We can, very easily, tell that n is composite, but we can't tell what its factors are
-- Once n is factored into p and q, we compute d as above
-- Then we can decrypt c to obtain m
-- Cracking a message example
-- In order to decrypt a message, we must compute m = cd mod n
-- n = 10379
-- c is the ciphertext being cracked
-- e = 85
-- In order to determine d, we need to factor n
-- d*e mod (p-1)(q-1) = 1 
-- We factor n into p and q: 97 and 107
-- This would not have been feasible with two large prime factors!!!
-- d * 85 (mod (96)(106)) = 1
+  - Java: use the `BigInteger.modPow()` method
+  - Perl: use the `bmodpow()` function in the BigInt library
+  - C++: Use the `bigint` class (http://sourceforge.net/projects/cpp-bigint/) 
+  - Etc...
+
+
+## Cracking a message
+- In order to decrypt a m, we must compute $m = c^d \text{ mod }n$
+  - $n$ is known (part of the public key)
+  - $c$ is known (the ciphertext)
+  - $e$ is known (the encryption key)
+- Thus, we must compute $d$ with no other information
+  - Recall: $n = p\*q$
+  - Recall: choose an integer $1 < e < n$ which is relatively prime to $(p-1)(q-1)$
+  - Recall: Compute $d$ such that: $d\*e\text{ mod }(p-1)(q-1) = 1$
+
+
+## Cracking a message
+- Thus, we must factor the composite $n$ into it's component primes
+  - There is no efficient way to do this!
+  - We can, very easily, tell that $n$ is composite, but we can't tell what its factors are
+- Once $n$ is factored into $p$ and $q$, we compute $d$ as above
+  - Then we can decrypt $c$ to obtain $m$
+
+
+## Cracking a message example
+- In order to decrypt a message, we must compute $m = c^d\text{ mod }n$
+  - $n = 10379$, $e = 85$, and $c$ is the ciphertext
+- In order to determine $d$, we need to factor $n$
+  - $d\*e\text{ mod }(p-1)(q-1) = 1$
+  - We factor $n$ into $p$ and $q$: 97 and 107
+  - <font color='red'>This would not have been feasible with two large prime factors!!!</font>
+  - $d \* 85 (\text{mod }(96)(106)) = 1$
 - We then compute d as above, and crack the message
-- Signing a message
+
+
+## Signing a message
 - Recall that we computed:
-- 	d*e mod (p-1)(q-1) = 1
-- 
-- Note that d and e are interchangeable!
-- You can use either for the encryption key
-- 
+  - $d*e\text{ mod }(p-1)(q-1) = 1$
+- Note that $d$ and $e$ are interchangeable!
+  - You can use either for the encryption key
 - You can encrypt with either key!
-- Thus, you must use the other key to decrypt
-- Signing a message
+  - Thus, you must use the other key to decrypt
+
+
+## Signing a message
 - To "sign" a message:
-- Write a message, and determine the MD5 hash
-- Encrypt the hash with your private (encryption) key
-- Anybody can verify that you created the message because ONLY the public (encryption) key can decrypt the hash
-- The hash is then verified against the message
-- PGP and GnuPG
+  1. Write a message, and determine the MD5 hash
+  2. Encrypt the hash with your private (encryption) key
+  3. Anybody can verify that you created the message because ONLY the public (encryption) key can decrypt the hash
+  4. The hash is then verified against the message
+
+
+## PGP and GnuPG
 - Two applications which implement the RSA algorithm
-- 
 - PGP was written in 1991 by Phil Zimmerman
-- The US government didn't like PGP...
-- 
+  - The US government didn't like PGP...
 - Gnu Privacy Guard (GnuPG) Is open-source (thus it's free) implementation of PGP, written in 1999
-- 
 - Both follow the OpenPGP Message Format
-- Specified in RFC 4880: http://tools.ietf.org/html/rfc4880 
-- 
-- The US gov't and war munitions
-- Current state of the art for factoring
-- As of the end of 2007, thanks to the constant decline in memory prices, the ready availability of multi-core 64-bit computers, and the availability of [efficient factoring software], special-form numbers of up to 750 bits and general-form numbers of up to about 520 bits can be factored [...]. These bounds would increase to about 900 and 600 [on a] few dozen PCs
-- We used 2048 bit (617 decimal digit) numbers!
-- http://en.wikipedia.org/wiki/Integer_factorization_records 
-- 
-- Why RSA is considered secure
+  - Specified in RFC 4880: http://tools.ietf.org/html/rfc4880 
+
+
+## The US gov't and war munitions
+![war muntition shirt 1](images/11-encryption/war-munition-1.jpg)
+![war muntition shirt 2](images/11-encryption/war-munition-2.jpg)
+
+
+## Current state of the art for factoring
+- "As of the end of 2007, thanks to the constant decline in memory prices, the ready availability of multi-core 64-bit computers, and the availability of [efficient factoring software], special-form numbers of up to 750 bits and general-form numbers of up to about 520 bits can be factored [...]. These bounds would increase to about 900 and 600 [on a] few dozen PCs"
+  - We used 2048 bit (617 decimal digit) numbers!
+  - http://en.wikipedia.org/wiki/Integer_factorization_records 
+
+
+## Why RSA is considered secure
 - RSA security is based on two factors:
-- Factoring large composites into their prime factors is hard
-- In 2005, a 193-digit number was factored using 12.5 CPU years on a 2.2 GHz Operon CPU (actually 5 months on 30 CPUs)
-- The best algorithm for factoring large numbers (general number field sieve) is O(en)
-- The "RSA problem": finding the eth roots modulo a composite number N is hard
-- Specifically, given c = pe mod n,  and knowing c, e, and n, finding  p is hard
-- Considered as hard as integer factorization
-- 
-- RSA vulnerabilities
-- If e is small, and m is small (such that me < n), then the ciphertext can be easily decrypted
-- If multiple receivers share the same e, but different p, q, and n, then the same clear text message encrypted for the multiple receivers can be cracked via the Chinese remainder thoerem
+  - Factoring large composites into their prime factors is hard
+	- In 2005, a 193-digit number was factored using 12.5 CPU years on a 2.2 GHz Operon CPU (actually 5 months on 30 CPUs)
+	- The best algorithm for factoring large numbers (general number field sieve) is $O(e^n)$
+
+
+## Why RSA is considered secure
+- RSA security is based on two factors:
+  - The "RSA problem": finding the $e^{th}$ roots modulo a composite number $N$ is hard
+	- Specifically, given $c = p^e\text{ mod } n$,  and knowing $c$, $e$, and $n$, finding $p$ is hard
+	- Considered as hard as integer factorization
+
+
+## RSA vulnerabilities
+- If $e$ is small, and $m$ is small (such that $m^e < n$), then the ciphertext can be easily decrypted
+- If multiple receivers share the same $e$, but different $p$, $q$, and $n$, then the same clear text message encrypted for the multiple receivers can be cracked via the Chinese remainder thoerem
 - RSA is vulnerable to chosen plaintext attacks (where you encrypt likely plain texts and compare it to the cipher text)
 - Etc.
-- Solution
+
+
+## Solution
 - Pad the message to make it longer
-- And add random bits in the padding to prevent multiple encryptions of the same plain text from being the same cipher text
-- There are standards for doing this (PKCS#1)
-- How to "crack" PGP
+  - And add random bits in the padding to prevent multiple encryptions of the same plain text from being the same cipher text
+- There are standards for doing this ([PKCS#1](https://en.wikipedia.org/wiki/PKCS_1))
+
+
+## How to "crack" PGP
 - Factoring n is not feasible
 - Thus, "cracking" PGP is done by other means
 - Intercepting the private key
-- "Hacking" into the computer, stealing the computer, etc.
-- Man-in-the-
-- middle attack 
-- (next 2 slides)
-- Etc.
-- "Normal" RSA communication
-- SSH display to get a key
-- Man-in-the-middle attack
+  - "Hacking" into the computer, stealing the computer, etc.
+  - Man-in-the-middle attack (next 2 slides)
+  - Etc.
+
+
+<h2><a href="http://xkcd.com/538">Security</a></h2>
+<img class="stretch" src="http://imgs.xkcd.com/comics/security.png" title="Actual actual reality: nobody cares about his secrets.  (Also, I would be hard-pressed to find that wrench for $5.)" alt="Security">
+
+
+## "Normal" RSA communication
+![rsa communication 1](images/11-encryption/rsa-communication-1.png)
+
+
+## SSH display to get a key
+![ssh 1](images/11-encryption/ssh-good.png)
+
+
+## Man-in-the-middle attack
 - An attacker ("Eve") makes separate connections with both participants, and relays messages between them
-- Obviously, the participants ("Alice" and "Bob") are unaware that Eve is relaying the messages
-- 
-- 
+  - Obviously, the participants ("Alice" and "Bob") are unaware that Eve is relaying the messages
+
 - SSH display with a possible MITM
 - How to prevent against MITM attacks
 - You need a way to ensure that the key you get is the correct key
