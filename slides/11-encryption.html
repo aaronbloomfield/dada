@@ -763,12 +763,20 @@ Formula is $c = m^e mod n$
 
 <h2><a href="http://xkcd.com/538">Security</a></h2>
 <img class="stretch" src="http://imgs.xkcd.com/comics/security.png" title="Actual actual reality: nobody cares about his secrets.  (Also, I would be hard-pressed to find that wrench for $5.)" alt="Security">
+</textarea></section>
 
+	  <section class='rsa-anim'>
+<h2>"Normal" RSA communication</h2>
+<img alt="rsa communication bars" src="images/11-encryption/rsa-com-1-top.png">
+<img class="fragment fade-in"  data-fragment-index="1" alt="rsa communication 1a"  src="images/11-encryption/rsa-com-1-a.png">
+<img class="fragment fade-in"  data-fragment-index="2" alt="rsa communication 1b"  src="images/11-encryption/rsa-com-1-b.png">
+<img class="fragment fade-in"  data-fragment-index="3" alt="rsa communication 1c"  src="images/11-encryption/rsa-com-1-c.png">
+<img class="fragment fade-in"  data-fragment-index="4" alt="rsa communication 1d"  src="images/11-encryption/rsa-com-1-d.png">
+<img class="fragment fade-in"  data-fragment-index="5" alt="rsa communication 1e"  src="images/11-encryption/rsa-com-1-e.png">
+<img class="fragment fade-in"  data-fragment-index="6" alt="rsa communication 1f"  src="images/11-encryption/rsa-com-1-f.png">
+	  </section>
 
-## "Normal" RSA communication
-![rsa communication 1](images/11-encryption/rsa-communication-1.png)
-
-
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
 ## SSH display to get a key
 ![ssh good](images/11-encryption/ssh-good.png)
 
@@ -777,7 +785,20 @@ Formula is $c = m^e mod n$
 - An attacker ("Eve") makes intercepts the communications between two participants, and relays messages between them
   - Perhaps Eve has access to a router that the messags pass through
   - Obviously, the participants ("Alice" and "Bob") are unaware that Eve is relaying the messages
+</textarea></section>
 
+	  <section class='rsa-anim'>
+<h2>MITM RSA communication</h2>
+<img alt="rsa communication bars" src="images/11-encryption/rsa-com-2-top.png">
+<img class="fragment fade-in"  data-fragment-index="1" alt="rsa communication 2a"  src="images/11-encryption/rsa-com-2-a.png">
+<img class="fragment fade-in"  data-fragment-index="2" alt="rsa communication 2b"  src="images/11-encryption/rsa-com-2-b.png">
+<img class="fragment fade-in"  data-fragment-index="3" alt="rsa communication 2c"  src="images/11-encryption/rsa-com-2-c.png">
+<img class="fragment fade-in"  data-fragment-index="4" alt="rsa communication 2d"  src="images/11-encryption/rsa-com-2-d.png">
+<img class="fragment fade-in"  data-fragment-index="5" alt="rsa communication 2e"  src="images/11-encryption/rsa-com-2-e.png">
+<img class="fragment fade-in"  data-fragment-index="6" alt="rsa communication 2f"  src="images/11-encryption/rsa-com-2-f.png">
+	  </section>
+
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
 
 ## SSH display with a possible MITM
 ![ssh bad](images/11-encryption/ssh-bad.png)

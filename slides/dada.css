@@ -216,3 +216,11 @@ span.yellow { color:yellow; }
 
 span.junkcode { color:palevioletred; }
 span.spotcode { color:springgreen; }
+
+.rsa-anim img {
+    border:0 !important;
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+    background:white;
+    background-color:white;
+}
