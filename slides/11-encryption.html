@@ -441,13 +441,23 @@ return probably prime
 ![google billboard](https://statisticallyinsignificant.files.wordpress.com/2011/05/google.jpg)
 
 
+## Primarily test conclusions
+- If it says "composite" just once, it's definitely composite
+- Otherwise, it just says "probably prime"
+- Takes polynomial time (it's "easy" to compute)
+- We use $k=100$, as a hardware error is more likely beyond that
+- The computation involved is $a^{n-1}\text{ mod }n != 1$
+  - For 1200 digit numbers (what is used in practice), this is a significant computation!
+  - We will use existing libraries to compute this
+
+
 ## The prime number theorem
 - The number of prime numbers less than $x$ is approximately $x/\text{ln}(x)$
-  - Rephrased: the chance of an number x being a prime number is  $1 / \text{ln}(x)$
+  - Rephrased: the chance of an number $x$ being a prime number is  $1 / \text{ln}(x)$
 - Consider 200 digit prime numbers
   - $\text{ln} (10^{200}) \approx 460$
   - The chance of a random 200 digit number being prime is thus 1/460
-  - If we only choose odd numbers, the chance is 2/460 = 1/230
+  - For only odd numbers, the chance is 2/460 = 1/230
   - For a 2048 bit number (616 decimal digits) it's about 1/710
 - [Reference](http://en.wikipedia.org/wiki/Prime_number_theorem)
 
@@ -461,7 +471,7 @@ return probably prime
 
 
 ## Key generation steps
-1. Choose two random large prime numbers $p != q$, and $n = p*q$
+1. Choose two random large prime numbers $p$ and $q$ such that $p != q$, and then compute $n = p*q$
 2. Choose an integer $1 < e < n$ which is relatively prime to $(p-1)(q-1)$
 3. Compute $d$ such that:
     - $d * e == 1 (mod (p-1)(q-1))$
@@ -484,13 +494,13 @@ return probably prime
 - Java code to find a big prime number:
 ```
 BigInteger prime = new BigInteger
-(numBits, certainty, random);
+          (numBits, certainty, random);
 ```
 - Yes, it's that easy
 
 
 ## Key generation, step 1
-- Java code to find a big prime number:
+- Full Java class to find a big prime number:
 ```
 import java.math.*;
 import java.util.*;
@@ -524,9 +534,9 @@ public class BigPrime {
 
 ## Key generation, step 2
 - Choose an integer $1 < e < n$ which is relatively prime to $(p-1)(q-1)$
-- There are algorithms to do this efficiently
-  - We aren't going over them in this course
-- Easy way to do this: make $e$ be a prime number
+- There are algorithms to do this efficiently...
+  - ... but we aren't going to go over them in this course
+- One easy way to do this: make $e$ be a prime number
   - It only has to be relatively prime to $(p-1)(q-1)$, but can be fully prime
 
 
@@ -537,6 +547,7 @@ public class BigPrime {
   - $85 = 5*17$
   - $\text{gcd}(85, 10176) = 1$
 - Thus, 85 and 10176 are relatively prime
+  - Even though 85 is compisite
 
 
 ## Key generation, step 3
@@ -544,8 +555,8 @@ public class BigPrime {
   - $d \* e == 1 (\text{mod } (p-1)(q-1))$
   - Rephrased: $d\*e \text{ mod } (p-1)(q-1) = 1$
   - $d$ should be a bit smaller than $n$ (maybe by a factor of 10 or 100 or so)
-- There are algorithms to do this efficiently
-  - We aren't going over them in this course
+- There are algorithms to do this efficiently...
+  - ... but we aren't going to go over them
 - We choose $d = 4669$
   - $4669\*85 \text{ mod } 10176 = 1$
 - Use the script at http://www.cs.virginia.edu/~asb/utils/modpow.php
