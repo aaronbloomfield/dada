@@ -47,7 +47,7 @@ Lectures (fall 2017)
 | 25  | Oct&nbsp;20 | Friday      | [advanced coding techniques][109], [SQL & XSS][110] | [advanced coding techniques][109], slides 6.21 to 7.9 (end); [SQL & XSS][110], slides 1 to 3.13 |
 | 26  | Oct&nbsp;23 | Monday      | [SQL & XSS][110] | [SQL & XSS][110], slides 4.1 to 6.14 (end) |
 | 27  | Oct&nbsp;25 | Wednesday   | [Encryption][111] | [Encryption][111], slides 1 to 4.16 |
-| 28  | Oct&nbsp;27 | Friday      | [Encryption][111] |                 |
+| 28  | Oct&nbsp;27 | Friday      | [Encryption][111] | [Encryption][111], slides 4.16 to 6.10 |
 | 29  | Oct&nbsp;30 | Monday      | [Encryption][111] |                 |
 | 30  | Nov&nbsp;1  | Wednesday   |               |               |
 | 31  | Nov&nbsp;3  | Friday      |               |               |
