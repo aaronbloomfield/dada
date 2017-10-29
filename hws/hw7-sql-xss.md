@@ -64,7 +64,7 @@ A few notes:
 - To write some text from Javascript to the web page, use 'document.write("foo");'
 - To read a cookie in Javascript, print out the document.cookie variable
 - Typically, once you have the form posting, you will encode that using the encoder URL, and put that onto the XSS script URL setting the 'userid' variable to the URL-encoded text
-- Do not use the plus sign inside your script!  This includes in the document.write() call.  The server sees them as separating GET variables, when you want it to all bee one variable.
+- Do not use the plus sign inside your script!  This includes in the document.write() call.  The server sees them as separating GET variables, when you want it to all be one variable.
 
 Honor pledge details: you are given permission to execute XSS attacks against this particular URL for this assignment.
 
