@@ -446,20 +446,19 @@ return probably prime
 - Otherwise, it just says "probably prime"
 - Takes polynomial time (it's "easy" to compute)
 - We use $k=100$, as a hardware error is more likely beyond that
-- The computation involved is $a^{n-1}\text{ mod }n != 1$
+- The computation involved is $a^{n-1}\text{ mod }n \neq 1$
   - For 1200 digit numbers (what is used in practice), this is a significant computation!
   - We will use existing libraries to compute this
 
 
 ## The prime number theorem
-- The number of prime numbers less than $x$ is approximately $x/\text{ln}(x)$
+- The number of prime numbers less than $x$ is approximately $x/\text{ln}(x)$ [reference](http://en.wikipedia.org/wiki/Prime_number_theorem)
   - Rephrased: the chance of an number $x$ being a prime number is  $1 / \text{ln}(x)$
 - Consider 200 digit prime numbers
   - $\text{ln} (10^{200}) \approx 460$
   - The chance of a random 200 digit number being prime is thus 1/460
   - For only odd numbers, the chance is 2/460 = 1/230
-  - For a 2048 bit number (616 decimal digits) it's about 1/710
-- [Reference](http://en.wikipedia.org/wiki/Prime_number_theorem)
+  - For a 2048 bit *odd* number (616 decimal digits) it's about 1/710
 
 
 ## RSA
@@ -471,16 +470,16 @@ return probably prime
 
 
 ## Key generation steps
-1. Choose two random large prime numbers $p$ and $q$ such that $p != q$, and then compute $n = p*q$
+1. Choose two random large prime numbers $p$ and $q$ such that $p \neq q$, and then compute $n = p*q$
 2. Choose an integer $1 < e < n$ which is relatively prime to $(p-1)(q-1)$
 3. Compute $d$ such that:
-    - $d * e == 1 (mod (p-1)(q-1))$
+    - $d * e \equiv 1 (mod (p-1)(q-1))$
    - Rephrased: $d*e \text{ mod  }(p-1)(q-1) = 1$
 4. Destroy all records of $p$ and $q$
 
 
 ## Key generation, step 1
-- Choose two *random* large prime numbers $p != q$
+- Choose two *random* large prime numbers $p \neq q$
   - In reality, 2048 bit numbers are recommended
     - That's about 617 decimal digits
   - Chance of a random odd 2048 bit number being prime is about 1/710
@@ -521,7 +520,8 @@ public class BigPrime {
 
 ## Key generation, step 1
 - How long does this take?
-  - On a modern (3.4 Ghz) machine, it took about 1 second
+  - On a modern (3.4 Ghz) machine, it took between 1/2 and 3 seconds
+	- Different runs require a different number of random number generations
   - And this is Java -- it would be faster in C or C++
 
 
@@ -537,12 +537,13 @@ public class BigPrime {
 - There are algorithms to do this efficiently...
   - ... but we aren't going to go over them in this course
 - One easy way to do this: make $e$ be a prime number
-  - It only has to be relatively prime to $(p-1)(q-1)$, but can be fully prime
+  - It only has to be relatively prime to $(p-1)(q-1)$, but it can be fully prime
 
 
 ## Key generation, step 2
 - Recall that $p = 107$ and $q = 97$
-  - $(p-1)(q-1) = 106 \* 96 = 10176 = 2^6\*3\*53$
+  - $(p-1)(q-1) = 106 \* 96 = 10176$
+  - $10176 = 2^6\*3\*53$
 - We choose $e = 85$
   - $85 = 5*17$
   - $\text{gcd}(85, 10176) = 1$
@@ -552,14 +553,13 @@ public class BigPrime {
 
 ## Key generation, step 3
 - Compute d such that:
-  - $d \* e == 1 (\text{mod } (p-1)(q-1))$
+  - $d \* e \equiv 1 (\text{mod } (p-1)(q-1))$
   - Rephrased: $d\*e \text{ mod } (p-1)(q-1) = 1$
   - $d$ should be a bit smaller than $n$ (maybe by a factor of 10 or 100 or so)
 - There are algorithms to do this efficiently...
   - ... but we aren't going to go over them
 - We choose $d = 4669$
   - $4669\*85 \text{ mod } 10176 = 1$
-- Use the script at http://www.cs.virginia.edu/~asb/utils/modpow.php
 
 
 ## Key generation, step 3
@@ -580,15 +580,14 @@ public class FindD {
 ## Key generation, step 4
 - Destroy all records of $p$ and $q$
   - If we know $p$ and $q$, then we can compute the private encryption key from the public decryption key via:
-  - $d * e == 1 (\text{mod }(p-1)(q-1))$
+  - $d * e \equiv 1 (\text{mod }(p-1)(q-1))$
 
 
 ## The keys
 - We have $n = p*q = 10379$, $e = 85$, and $d = 4669$
 - The public key is $(n,e) = (10379, 85)$
 - The private key is $(n,d) = (10379, 4669)$
-- Thus, $n$ is not private
-- Only $d$ is private
+- Thus, $n$ is not private; only $d$ is private
 - In reality, $p$ and $q$ are 616 (or so) digit numbers
   - As that is 2048 bits
   - Thus $n$ is a 1200 (or so) digit number
@@ -600,23 +599,24 @@ public class FindD {
   1. Encode the message $m$ into a number
   2. Split the number into smaller numbers $m < n$
   3. Use the formula $c = m^e \text{ mod }n$
-	 - $c$ is the ciphertext, and m is the message
+	 - $c$ is the ciphertext, and $m$ is the message
 - Java code to do the last step:
 ```
 m.modPow (e, n)
 ```
-	- Where the object m is the BigInteger to encrypt
+	- Yes, it's that easy
+	- Where the object $m$ is the BigInteger to encrypt
 
 
 ## Encrypting RSA messages
-Formula is $c = m^e mod n$
+Formula is $c = m^e\text{ mod }n$
 ![RSA license plage](images/11-encryption/license-plate.jpg)
 
 
 ## Encrypting messages example
 - Encode the message into a number
    - String is "Go Cavaliers!!"
-   - Modified ASCII codes: 
+   - *Modified* ASCII codes: 
    - 41  81  02  37  67  88  67  78  75  71  84  85  03  03
 - Split the number into numbers $< n$
    - Recall that $n = 10379$
@@ -661,7 +661,7 @@ Formula is $c = m^e mod n$
 ## modPow computation
 - How to compute $c = m^e\text{ mod }n$ or $m = c^d\text{ mod }n$?
   - Example: $4501^{4669}\text{ mod }10379 = 4181$
-- Use the script at http://www.cs.virginia.edu/~asb/utils/modpow.php
+- Use the script at https://www.mtholyoke.edu/courses/quenell/s2003/ma139/js/powermod.html
 - Other means:
   - Java: use the `BigInteger.modPow()` method
   - Perl: use the `bmodpow()` function in the BigInt library
@@ -674,10 +674,14 @@ Formula is $c = m^e mod n$
   - $n$ is known (part of the public key)
   - $c$ is known (the ciphertext)
   - $e$ is known (the encryption key)
+
+
+## Cracking a message
 - Thus, we must compute $d$ with no other information
   - Recall: $n = p\*q$
   - Recall: choose an integer $1 < e < n$ which is relatively prime to $(p-1)(q-1)$
   - Recall: Compute $d$ such that: $d\*e\text{ mod }(p-1)(q-1) = 1$
+- Thus, given $n$ and $e$, we have to compute $d$
 
 
 ## Cracking a message
@@ -855,7 +859,7 @@ Formula is $c = m^e mod n$
 
 
 ## Quantum computers
-- A quantum computer could (in principle) factor n in reasonable time (O(b3), where b is the number of bits)
+- A quantum computer could (in principle) factor n in reasonable time ($O(b^3)$, where $b$ is the number of bits)
   - This would make RSA obsolete!
   - Shown (in principle) by [Peter Shor in 1993](https://en.wikipedia.org/wiki/Shor's_algorithm)
   - You would need a new (quantum) encryption algorithm to encrypt your messages
@@ -1008,12 +1012,13 @@ Formula is $c = m^e mod n$
 - Different Linux distrubtions will package them for easy installation
   - Example: `sudo apt-get install openssl`
   - Volunteers, called "package maintainers" do this work
+    - They are typically *not* the upstream developers
 
 
 ## Debian OpenSSL predictability
 - Package maintainers do the following:
   - Compile the (upstream) source code for various hardware platforms
-  - Changing the configuration to match the system default (location of config files, etc.)
+  - Change the configuration to match the system default (location of config files, etc.)
   - Specifying the necessary dependent libraries / packages
   - Putting all this together into an installable package, and uploading that to the distribution's servers
 
@@ -1056,8 +1061,8 @@ Formula is $c = m^e mod n$
 
 ## Hashing properties
 - Hash goals:
-  - Changing a single bit has a dramatic effect on the hash code
-- Pigeon hole principle
+  - Changing even a single bit has a dramatic effect on the hash code
+- Pigeon hole principle:
   - If we use a 128-bit hash, that yields $2^{128} \approx 3.4 \* 10^{38}$ possible values
   - If we have files that are 129+ bits, then there will be more possible files than there are hashes
   - Thus, multiple files will provide the same hash
@@ -1066,39 +1071,42 @@ Formula is $c = m^e mod n$
 
 ## Hash vulnerabilities
 - For a hash function to be really vulnerable, we want to be able to take an *arbitrary* text and make it match the desired hash code
-  - Sender sends: "deposit $1 million into account 12345" with hash abcdefg
-  - You intercept and send a new message: "deposit $1 million into account 67890; *(fl*_0" with hash abcdefg
+  - Sender sends: "deposit $1 million into account 12345" with hash "abcdefg"
+  - You intercept and send a new message: "deposit $1 million into account 67890; *(fl*_0" with hash "abcdefg"
     - The trailing "; *(fl*_0" allowed the different document to match the same hash
 
 
 ## Hash vulnerabilities
-- Being able to create two "random" files that match the same hash indicates a weakness, but is not yet a vulnerability...
+- Being able to create two "random" files that match the same hash indicates a weakness, but is not yet a vulnerability
 
 
 ## Collision resistant hashes
-- A collision resistant hash means that it is "hard" to find two inputs that hash to the same value
+- A *collision resistant hash* means that it is "hard" to find two inputs that hash to the same value
   - Harder than, say, brute force
   - If there is any way easier than brute force, that's bad
 
 
 ## Collision resistant hashes
-- Due to the birthday paradox, one will typically have to brute force $2^{n/2}$ values before a collision is found
-  - For MD5 (128 bits): $2^{128/2} = 2^{64} = 1.84 \* 10^{19}$
+- Due to the birthday paradox, one will typically have to brute force $2^{n/2}$ attempted values before a collision is found
+  - For MD5 (128 bits): $2^{128/2} = 2^{64} = 1.84 \* 10^{19}$ attempts
     - Computing 1 million a second takes $5.85 \* 10^{11}$ years
     - But a better attack can achieve this in under a minute
-- For SHA-256 (256 bits): $2^{256/2} = 2^{128} = 3.40 \* 10^{38}$
+    - (MD5 is *not* collision resistant, as described later)
+
+
+## Collision resistant hashes
+- For SHA-256 (256 bits): $2^{256/2} = 2^{128} = 3.40 \* 10^{38}$ attempts
   - Computing 1 million a second takes $1.08 \* 10^{31}$ years
 - [reference](http://en.wikipedia.org/wiki/Collision_resistant )
 
 
-## CRC32: Cyclic Redundancy Check
+## [CRC32: Cyclic Redundancy Check](http://en.wikipedia.org/wiki/Crc32)
 - The hash value is a 32-bit integer
   - There are variants of other bits: 16, 64, etc.
 - Is used for downloading files (via modem, download program, etc.) -- i.e. as a checksum
   - It works great for this purpose
 - With the (simple) math behind the checksum, and "only" 4 billion possibilities, one can target a specific CRC 32 hash value
   - This is a homework problem in [HW 9: hashes](../hws/hw9-hashes.html)
-- [reference](http://en.wikipedia.org/wiki/Crc32)
 
 
 ## MD5: Message Digest 5
@@ -1113,10 +1121,9 @@ afe68f753a65f773a591bcf6f9ce3c63  message1.txt
 ```
 
 
-## MD5: Message Digest 5
+## [MD5: Message Digest 5](http://en.wikipedia.org/wiki/Md5)
 - Still widely used for file downloading
   - CERT: "should be considered cryptographically broken and unsuitable for further use"
-  - [reference](- http://en.wikipedia.org/wiki/Md5)
 - A number of collisions have been found:
   - 1996: "first" collisions found
   - 2005: public keys (with associated private keys) could be constructed that have the same MD5 hash
@@ -1131,7 +1138,7 @@ afe68f753a65f773a591bcf6f9ce3c63  message1.txt
 - SHA-0 (1993): had a flaw, was quickly corrected
   - The flaw introduced an unintended weakness
 - SHA-1 (1995): fixed that flaw, was very widely used for security applications
-  - Not downloading files
+  - But typically not for downloading files
 
 
 ## SHA-0 and SHA-1
@@ -1153,7 +1160,7 @@ afe68f753a65f773a591bcf6f9ce3c63  message1.txt
 - Intent is for it NOT to derive (or be similar to) SHA-2
   - So if the SHA-1 vulnerability exists in SHA-2, it thus will not affect SHA-3
 - NIST (National Institute for Standards and Technology) had an open solicitation / compettion for the algorithm
-  - The particular one selected was Keccak
+  - The particular one selected was [Keccak](https://en.wikipedia.org/wiki/SHA-3)
 	</textarea></section>
 
 	</section>
