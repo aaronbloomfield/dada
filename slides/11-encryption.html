@@ -400,7 +400,7 @@ repeat k times:
     if a^{n-1} mod n != 1 then return composite
 return probably prime
 ```
-- Let n = 105
+- Let $n = 105$
   - Iteration 1: $a = 92: 92^{104} \text{ mod }105 = 1$
   - Iteration 2: $a = 84: 84^{104} \text{ mod }105 = 21$
   - Therefore, 105 is composite
@@ -414,7 +414,7 @@ repeat k times:
     if a^{n-1} mod n != 1 then return composite
 return probably prime
 ```
-- Let n = 101
+- Let $n = 101$
  - Iteration 1: $a = 55: 55^{100} \text{ mod } 101 = 1$
   - Iteration 2: $a = 60: 60^{100} \text{ mod } 101 = 1$
   - Iteration 3: $a = 14: 14^{100} \text{ mod } 101 = 1$
@@ -859,7 +859,7 @@ Formula is $c = m^e\text{ mod }n$
 
 
 ## Quantum computers
-- A quantum computer could (in principle) factor n in reasonable time ($O(b^3)$, where $b$ is the number of bits)
+- A quantum computer could (in principle) factor $n$ in reasonable time ($O(b^3)$, where $b$ is the number of bits)
   - This would make RSA obsolete!
   - Shown (in principle) by [Peter Shor in 1993](https://en.wikipedia.org/wiki/Shor's_algorithm)
   - You would need a new (quantum) encryption algorithm to encrypt your messages
@@ -927,27 +927,36 @@ Formula is $c = m^e\text{ mod }n$
   - $c$ is the increment: $0 < c < m$
   - $X_0$ is the seed value
 - This will cycle through all values less than $m$ iff:
-  - $m$ and $c$ are relatively prime
+  - $m$ and $c$ are relatively prime (i.e, $\gcd(m,c)=1$)
   - $a-1$ is divisible by all prime factors of $m$
   - $a-1$ is divisible by 4 if $m$ is divisible by 4
 
 
 ## Typical method: example
-- Let $m=11$, $a=7$, $c=9$, and $X_0=1$
-  - They will cycle through all the values, as per the requirements on the last slide
+- Let $m=9$, $a=4$, $c=7$
 - We'll arbitrarily decide to start the sequence at 1
-- $X_{n+1}=(a*X_n+c) \text{ mod } m$
-  - $X_0$ = 1
-  - $X_1 = (7*1+9) \text{ mod } 11 = 5$
-  - $X_2 = (7*5+9) \text{ mod } 11 = 0$
-  - $X_2 = (7*0+9) \text{ mod } 11 = 9$
-  - $X_3 = (7*9+9) \text{ mod } 11 = 6$
-  - Rest of the sequence: 7, 3, 8, 10, 2, then back to 1
+  - Thus, $X_0=1$
+- Will this cycle through all values less than $m$?
+  - $m$ and $c$ are relatively prime: yes, as $\gcd(9,7)=1$
+  - $a-1$ is divisible by all prime factors of $m$: yes, the factors of 9 (3, 3) also divide 3 (which is $a-1$)
+  - $a-1$ is divisible by 4 if $m$ is divisible by 4: not applicable, as 3 (which is $a-1$) is not divisible by 4
 
 
 ## Typical method: example
-- The linear congruential generator (LCG) sequence with $m=11$, $a=7$, $c=9$:
-  - 1, 5, 0, 9, 6, 7, 3, 8, 10, 2, then back to 1
+- Let $m=9$, $a=4$, $c=7$
+- They will cycle through all the values, as shown on the last slide
+- $X_{n+1}=(a*X_n+c) \text{ mod } m$
+  - $X_0$ = 1
+  - $X_1 = (4*1+7) \text{ mod } 11 = 2$
+  - $X_2 = (4*2+7) \text{ mod } 11 = 6$
+  - $X_2 = (4*6+7) \text{ mod } 11 = 4$
+  - $X_3 = (4*4+7) \text{ mod } 11 = 5$
+  - Rest of the sequence: 0, 7, 8, 3, and then back to 1
+
+
+## Typical method: example
+- The linear congruential generator (LCG) sequence with $m=9$, $a=4$, $c=7$:
+  - 1, 2, 6, 4, 5, 0, 7, 8, 3, and then back to 1
 - But where to start in the sequence?
   - We could start anywhere therein
 - Where we start is called the *seed*
@@ -958,9 +967,24 @@ Formula is $c = m^e\text{ mod }n$
 - libc uses $a=1103515245$, $c=12345$, and $m=2^{31}$
   - This is what is called by `rand()` in C and C++; setting the seed is done by `srand()`
   - This will cycle through 2 billion ($2^{31}$) values before repeating
+- It will cycle through all the values, as per the three properties defined earlier
+- With a seed of 1, the initial sequence is:
+  - 1, 1103527590, 377401575, 662824084, 1147902781, 2035015474, 368800899, ...
+
+
+## LCG parameters in use
 - [RANDU](https://en.wikipedia.org/wiki/RANDU) used $a=65539$, $c=0$, and $m=2^{31}$
   - Used from the 1960's, it created a very easy to calculate sequence on old hardware
   - But a *very* poor random sequence
+- It does *NOT* cycle through all possible numbers
+  - $\gcd(2^{31},0)\neq 1$, as $\gcd(a,0)=a$
+  - $a-1=65538$ is not divisible by 4 whereas $m=2^{31}$ is
+- With a seed of 1, the initial sequence is:
+  - 1, 65539, 393225, 1769499, 7077969, 26542323, ...
+  - All odd numbers!
+
+
+## LCG parameters in use
 - See [here](https://en.wikipedia.org/wiki/Linear_congruential_generator#Parameters_in_common_use) for more possibilities
 
 

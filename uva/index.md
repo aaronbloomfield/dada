@@ -50,7 +50,7 @@ Lectures (fall 2017)
 | 28  | Oct&nbsp;27 | Friday      | [Encryption][111] | [Encryption][111], slides 4.16 to 6.10 |
 | 29  | Oct&nbsp;30 | Monday      | [Encryption][111] | [Encryption][111], slides 6.11 to 6.37 |
 | 30  | Nov&nbsp;1  | Wednesday   | [Encryption][111] | [Encryption][111], slides 6.38 to 6.53 |
-| 31  | Nov&nbsp;3  | Friday      |               |               |
+| 31  | Nov&nbsp;3  | Friday      | [Encryption][111] | [Encryption][111], slides 6.54 to 7.21 |
 | 32  | Nov&nbsp;6  | Monday      |               |               |
 | 33  | Nov&nbsp;8  | Wednesday   |               |               |
 | 34  | Nov&nbsp;10 | Friday      |               |               |
