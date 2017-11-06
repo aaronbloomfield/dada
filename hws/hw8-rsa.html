@@ -157,8 +157,12 @@ afe68f753a65f773a591bcf6f9ce3c63  message1.txt</code></pre>
 <p><strong>Other:</strong> All files (messages, keys, ciphertext, what‐not) will have only printable ASCII characters, so you need not worry about binary files. But there may be whitespace as well: newlines, tabs, linefeeds, etc. Make sure that your code does not have UTF-8 characters in it! Given a file, you can tell what type of characters it has via the <code>file foo.txt</code> command.</p>
 <h3 id="examples">Examples</h3>
 <p>Here is a private key generated via the above requirements; you can name this file <code>test-private.key</code>:</p>
-<pre><code>2224703882376084886028249
-2483289780073148545978469</code></pre>
+<pre><code>2276590825355545213479073
+3061810737282576182393153</code></pre>
+<p>The following is the public key, although it is not needed in this example:</p>
+<pre><code>663487750648903386948037
+3061810737282576182393153</code></pre>
+<p>The keys were generated using the command: <code>java RSA -key test -keygen 41</code>.</p>
 <p>And here is a message encrypted with the public key that is paired with the above private key; you can name this <code>ciphertext.txt</code>:</p>
 <pre><code>10 72
 470320827850321971802656
@@ -170,8 +174,8 @@ afe68f753a65f773a591bcf6f9ce3c63  message1.txt</code></pre>
 1177302764288216426332997
 1997554226513953080629974
 0</code></pre>
-<p>If your code follows these conventions, then you should be able to properly decrypt that message with the following command:</p>
-<pre><code>java RSA -key test -input ciphertext.txt -output plaintext.txt -decrypt</code></pre>
+<p>This was encrypted with the command: <code>java RSA -key test -input plaintext.txt -output ciphertext.txt -encrypt</code>.</p>
+<p>If your code follows these conventions, then you should be able to properly decrypt that message with the following command: <code>java RSA -key test -input ciphertext.txt -output plaintext.txt -decrypt</code>.</p>
 <h3 id="submission-requirements">Submission requirements</h3>
 <p>You should submit two files: <code>RSA.java</code>, which contains all your Java code, and a shell script named <code>man‐in‐the‐middle‐attack.sh</code>. The compilation command will be <code>javac *.java</code>, so your RSA.java should have only one public class called <code>RSA</code>, and not be in a package.</p>
 </body>

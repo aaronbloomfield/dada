@@ -200,9 +200,19 @@ __Other:__ All files (messages, keys, ciphertext, what‐not) will have only pri
 Here is a private key generated via the above requirements; you can name this file `test-private.key`:
 
 ```
-2224703882376084886028249
-2483289780073148545978469
+2276590825355545213479073
+3061810737282576182393153
 ```
+
+The following is the public key, although it is not needed in this example:
+
+```
+663487750648903386948037
+3061810737282576182393153
+```
+
+The keys were generated using the command: `java RSA -key test -keygen 41`.
+
 
 And here is a message encrypted with the public key that is paired with the above private key; you can name this `ciphertext.txt`:
 
@@ -219,11 +229,9 @@ And here is a message encrypted with the public key that is paired with the abov
 0
 ```
 
-If your code follows these conventions, then you should be able to properly decrypt that message with the following command:
+This was encrypted with the command: `java RSA -key test -input plaintext.txt -output ciphertext.txt -encrypt`.
 
-```
-java RSA -key test -input ciphertext.txt -output plaintext.txt -decrypt
-```
+If your code follows these conventions, then you should be able to properly decrypt that message with the following command: `java RSA -key test -input ciphertext.txt -output plaintext.txt -decrypt`.
 
 ### Submission requirements
 
