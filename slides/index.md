@@ -25,3 +25,4 @@ ready to be presented.
 9.  [Advanced virus coding techniques](09-adv-code-tech.html#/)
 10. [SQL & XSS](10-sql-and-xss.html#/)
 11. [Encryption](11-encryption.html#/)
+12. [Rootkits](12-rootkits.html#/)
