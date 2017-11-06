@@ -167,7 +167,7 @@ public static void main (String[] args) throws Exception {
     if ( args[i].equals("-crack") )
       crack();
     if ( args[i].equals("-sign") )
-      sign(false);
+      sign();
     if ( args[i].equals("-checksign") )
       checksign();
   }
