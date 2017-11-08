@@ -75,10 +75,25 @@ line-height:120%;
 	- HWs 5-7 (and, shortly, 8) are being graded
     - The midterm has been returned, grading guidelines on Collab, regrades open until November 13th
 - The final is now moving to the last day of class
-- Today we will likely finish with [encryption](../slides/11-encryption.html#/), starting [here](../slides/11-encryption.html#/7)
+- Today we will likely finish with [encryption](../slides/11-encryption.html#/), starting [here](../slides/11-encryption.html#/7/8)
   - [An interesting source of randomness](https://it.slashdot.org/story/17/11/07/1927239/how-cloudflare-uses-lava-lamps-to-encrypt-the-internet) for encryption...
   - Next up: [rootkits](../slides/12-rootkits.html#/)
-	  </textarea></section>
+
+
+## Badness of the day: RSA algorithm vulnerability
+- A company called [Infineon](https://www.infineon.com/) develops smart cards that can generate RSA keys
+  - They also have develped a [RSA library](https://www.commoncriteriaportal.org/files/epfiles/0782V2a_pdf.pdf) to run on that smart card (and other hardware)
+- The prime generation code has a weakness
+  - To boost performance, they "construct the keys' underlying prime numbers in a way that makes the keys prone to" factorization
+- How long would that take on a commercial cloud service?
+  - $38 and 25 minutes to break a vulnerable 1024-bit key
+  - $20,000 and nine days for a 2048-bit key
+- These keys are used by companies and governments
+  - Estonia abruptly [suspended 760,000 national ID cards](https://medium.com/e-residency-blog/digital-id-cards-will-only-work-with-new-certificates-from-midnight-tonight-6e4db59658b8) used for voting, filing taxes, and encrypting sensitive documents
+- This weakness is in the prime number generation algorithm used, not in the RSA algorithm itself
+- Reference: [Millions of high-security crypto keys crippled by newly discovered flaw](https://arstechnica.com/information-technology/2017/10/crypto-failure-cripples-millions-of-high-security-keys-750k-estonian-ids/)
+
+	</textarea></section>
 
 	</section>
 
