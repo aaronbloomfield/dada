@@ -53,7 +53,7 @@ Lectures (fall 2017)
 | 31  | Nov&nbsp;3  | Friday      | [Encryption][111] | [Encryption][111], slides 6.54 to 7.21 |
 | 32  | Nov&nbsp;6  | Monday      | [Encryption][111] | [Encryption][111], slides 8.1 to 8.9 |
 | 33  | Nov&nbsp;8  | Wednesday   | [Encryption][111] | [Encryption][111], slides 8.9 to 9.11 (end) |
-| 34  | Nov&nbsp;10 | Friday      |               |               |
+| 34  | Nov&nbsp;10 | Friday      | [Rootkits][112] | [Rootkits][112], slides 1 to 4.15 |
 | 35  | Nov&nbsp;13 | Monday      |               |               |
 | 36  | Nov&nbsp;15 | Wednesday   |               |               |
 | 37  | Nov&nbsp;17 | Friday      |               |               |
@@ -87,3 +87,4 @@ Lectures (fall 2017)
 [109]: ../slides/09-adv-code-tech.html#/
 [110]: ../slides/10-sql-and-xss.html#/
 [111]: ../slides/11-encryption.html#/
+[112]: ../slides/12-rootkits.html#/
