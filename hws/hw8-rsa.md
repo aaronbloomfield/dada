@@ -58,12 +58,18 @@ Furthermore, you may assume that we will not give you invalid input, either in t
 
 A sample usage of the program, in which is Alice and Bob are sending messages, is shown below.  This code can be cut‐and‐pasted as a shell script, which we'll call `sample-usage.sh`. Note that this is not a complete test suite!  Just a quick check to see if the basics work.  But if your program does not work with this, then it's incomplete, and will receive a low grade.
 
-This file requires there to be two existing files: message1.txt and message2.txt.  Might we suggest some [great speeches](http://www.historyplace.com/speeches/previous.htm)?  However, make ***SURE*** that the text is all ASCII, since your program will likely not be able to handle UTF-8 characters -- and when you cut-and-paste, characters like the dash and quotes often do not cut-and-paste into their ASCII equivalents.
+This file creates two files (message1.txt and message2.txt), and will overwrite those files if they already exist; those two files are deleted by the last line in the script.  You are welcome (and encouraged) to use other, longer, message test files -- might we suggest some [great speeches](http://www.historyplace.com/speeches/previous.htm)?  However, make ***SURE*** that the text is all ASCII, since your program will likely not be able to handle UTF-8 characters -- and when you cut-and-paste, characters like the dash and quotes often do not cut-and-paste into their ASCII equivalents.
 
 Assuming you don't have any extraneous output (which you shouldn't), the only command that should output anything is step 12.
 
 ```
 #!/bin/bash
+# setup: create the message1.txt and message2.txt files
+/bin/rm -f message[12].txt
+echo "Two things are infinite: the universe and human stupidity;" > message1.txt
+echo "and I'm not sure about the the universe." >> message1.txt
+echo "by Albert Einstein" >> message1.txt
+echo "The quick brown fox jumped over the lazy dog." > message2.txt
 # 1: create keys alice-public.key and alice-private.key
 java RSA -key alice -keygen 200
 # 2: create keys bob-public.key and bob-private.key
@@ -98,7 +104,7 @@ java RSA -key charlie -keygen 10
 java RSA -key charlie -crack
 # 15: is the cracked key the same as the original key?
 diff charlie-private-cracked.key charlie-private.key
-# 16: clean up files (comment out by default)
+# 16: clean up files (commented out by default)
 #/bin/rm -f alice*.key bob*.key charlie*.key message*.sign message?b.txt encrypted?.txt
 ```
  

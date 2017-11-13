@@ -49,9 +49,15 @@
 <p>You may assume (and, in fact, should) that you will only receive one of <code>-encrypt</code>, <code>-decrypt</code>, <code>-sign</code>, <code>-checksign</code>, or <code>-keygen</code>; this specifies what the program is going to do. The program should not output any messages on normal execution (it should output error messages, as appropriate -- but we won't be giving any invalid combination of parameters). With the <code>-showpandq</code> option, it will of course output <em>p</em> and <em>q</em>. And with the <code>-verbose</code> option, it can output a lot of informational messages.</p>
 <p>Furthermore, you may assume that we will not give you invalid input, either in the files we provide, or for the command-line parameters.</p>
 <p>A sample usage of the program, in which is Alice and Bob are sending messages, is shown below. This code can be cut‐and‐pasted as a shell script, which we'll call <code>sample-usage.sh</code>. Note that this is not a complete test suite! Just a quick check to see if the basics work. But if your program does not work with this, then it's incomplete, and will receive a low grade.</p>
-<p>This file requires there to be two existing files: message1.txt and message2.txt. Might we suggest some <a href="http://www.historyplace.com/speeches/previous.htm">great speeches</a>? However, make <strong><em>SURE</em></strong> that the text is all ASCII, since your program will likely not be able to handle UTF-8 characters -- and when you cut-and-paste, characters like the dash and quotes often do not cut-and-paste into their ASCII equivalents.</p>
+<p>This file creates two files (message1.txt and message2.txt), and will overwrite those files if they already exist; those two files are deleted by the last line in the script. You are welcome (and encouraged) to use other, longer, message test files -- might we suggest some <a href="http://www.historyplace.com/speeches/previous.htm">great speeches</a>? However, make <strong><em>SURE</em></strong> that the text is all ASCII, since your program will likely not be able to handle UTF-8 characters -- and when you cut-and-paste, characters like the dash and quotes often do not cut-and-paste into their ASCII equivalents.</p>
 <p>Assuming you don't have any extraneous output (which you shouldn't), the only command that should output anything is step 12.</p>
 <pre><code>#!/bin/bash
+# setup: create the message1.txt and message2.txt files
+/bin/rm -f message[12].txt
+echo &quot;Two things are infinite: the universe and human stupidity;&quot; &gt; message1.txt
+echo &quot;and I&#39;m not sure about the the universe.&quot; &gt;&gt; message1.txt
+echo &quot;by Albert Einstein&quot; &gt;&gt; message1.txt
+echo &quot;The quick brown fox jumped over the lazy dog.&quot; &gt; message2.txt
 # 1: create keys alice-public.key and alice-private.key
 java RSA -key alice -keygen 200
 # 2: create keys bob-public.key and bob-private.key
@@ -86,7 +92,7 @@ java RSA -key charlie -keygen 10
 java RSA -key charlie -crack
 # 15: is the cracked key the same as the original key?
 diff charlie-private-cracked.key charlie-private.key
-# 16: clean up files (comment out by default)
+# 16: clean up files (commented out by default)
 #/bin/rm -f alice*.key bob*.key charlie*.key message*.sign message?b.txt encrypted?.txt</code></pre>
 <p>If you are new to shells scripts, you can see <a href="http://www.freeos.com/guides/lsst/">here</a>. Note that you will have to set the permissions on your shell script properly before you can run it:</p>
 <pre><code>chmod 755 sample-usage.sh</code></pre>
