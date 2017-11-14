@@ -176,7 +176,33 @@ span.lightgreen { color:lightgreen; }
 span.orange { color:orange; }
 span.yellow { color:yellow; }
 
+.max-image-height-200 img {
+    max-height:200px;
+}
+
+.max-image-height-300 img {
+    max-height:300px;
+}
+
+.max-image-height-500 img {
+    max-height:500px;
+}
+
+.right-float-img-200 img {
+    float:right;
+    max-width:200px;
+    max-height:100px;
+    margin-left:20px !important;
+}
+
 .right-float-img img {
+    float:right;
+    max-width:400px;
+    max-height:200px;
+    margin-left:20px !important;
+}
+
+.right-float-img-400 img {
     float:right;
     max-width:400px;
     max-height:200px;
@@ -194,6 +220,13 @@ span.yellow { color:yellow; }
     float:right;
     max-width:800px;
     max-height:400px;
+    margin-left:20px !important;
+}
+
+.right-float-img-1000 img {
+    float:right;
+    max-width:1000px;
+    max-height:500px;
     margin-left:20px !important;
 }
 
