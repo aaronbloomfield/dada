@@ -55,7 +55,7 @@ Lectures (fall 2017)
 | 33  | Nov&nbsp;8  | Wednesday   | [Encryption][111] | [Encryption][111], slides 8.9 to 9.11 (end) |
 | 34  | Nov&nbsp;10 | Friday      | [Rootkits][112] | [Rootkits][112], slides 1 to 4.15 |
 | 35  | Nov&nbsp;13 | Monday      | [Rootkits][112], [Stuxnet][113] | [Rootkits][112], slides 4.15 to 5.11 (end); [Stuxnet][113], slides 1 to 4.10 |
-| 36  | Nov&nbsp;15 | Wednesday   |               |               |
+| 36  | Nov&nbsp;15 | Wednesday   | [Stuxnet][113], [Buffer overflows][114] | [Stuxnet][113], slides 5.1 to 6.6 (end); [Buffer overflows][114], slides 1 to 4.7 |
 | 37  | Nov&nbsp;17 | Friday      |               |               |
 | 38  | Nov&nbsp;20 | Monday      |               |               |
 |     | Nov&nbsp;22 | Wednesday   |               |               |
@@ -89,3 +89,4 @@ Lectures (fall 2017)
 [111]: ../slides/11-encryption.html#/
 [112]: ../slides/12-rootkits.html#/
 [113]: ../slides/13-stuxnet.html#/
+[114]: ../slides/14-buffer-overflows.html#/
