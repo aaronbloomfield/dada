@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite">
+<title>overflow.s</title>
+</head>
+<body bgcolor="white">
+<pre><tt>	.file	<font color="#FF0000">"overflow.c"</font>
+	.intel_syntax noprefix
+	.section	.rodata.str1.1,<font color="#FF0000">"aMS"</font>,@progbits,1
+.LC0:
+	.string	<font color="#FF0000">"%s"</font>
+	.text
+	.globl	do_something_with
+	.type	do_something_with, @function
+do_something_with:
+.LFB23:
+	.cfi_startproc
+	sub	rsp, 8
+	.cfi_def_cfa_offset 16
+	mov	rdx, rdi
+	mov	esi, OFFSET FLAT:.LC0
+	mov	edi, 1
+	mov	eax, 0
+	call	__printf_chk
+	add	rsp, 8
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE23:
+	.size	do_something_with, .-do_something_with
+	.globl	vulnerable
+	.type	vulnerable, @function
+vulnerable:
+.LFB24:
+	.cfi_startproc
+	sub	rsp, 120
+	.cfi_def_cfa_offset 128
+	mov	rsi, rsp
+	mov	edi, OFFSET FLAT:.LC0
+	mov	eax, 0
+	call	__isoc99_scanf
+	mov	rdi, rsp
+	call	do_something_with
+	add	rsp, 120
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE24:
+	.size	vulnerable, .-vulnerable
+	.globl	main
+	.type	main, @function
+main:
+.LFB25:
+	.cfi_startproc
+	sub	rsp, 8
+	.cfi_def_cfa_offset 16
+	mov	eax, 0
+	call	vulnerable
+	mov	eax, 0
+	add	rsp, 8
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+.LFE25:
+	.size	main, .-main
+	.ident	<font color="#FF0000">"GCC: (Ubuntu 5.4.0-6ubuntu1~16.04.5) 5.4.0 20160609"</font>
+	.section	.note.GNU-stack,<font color="#FF0000">""</font>,@progbits
+</tt></pre>
+</body>
+</html>

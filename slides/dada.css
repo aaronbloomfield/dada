@@ -249,6 +249,7 @@ span.yellow { color:yellow; }
 
 span.junkcode { color:palevioletred; }
 span.spotcode { color:springgreen; }
+span.red { color:red; }
 
 .rsa-anim img {
     border:0 !important;
