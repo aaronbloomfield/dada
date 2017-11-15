@@ -502,9 +502,10 @@ Note that the `lea` loads an negative offset, which has no 0x00 bytes
 - Examine target executable disassembly
   - Figure out how much is allocated on the stack below it, and you may know the stack start location to set return address
 - Guess: location of return address and address of maachine code
-
-
-## Guess?
+	  </textarea></section>
+	  
+	  <section data-markdown id="nopsled"><textarea data-template>
+## Guessing? Use a "NOP sled"
 - Yes -- you may not be able to determine for sure
 - We can make our shellcode easier for 'guessing'
 - Normal shell code:

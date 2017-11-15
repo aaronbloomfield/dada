@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>DADA: HW 10: Buffer Overflow</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../markdown.css" type="text/css" />
+</head>
+<body>
+<h1 id="dada-hw-10-buffer-overflow">DADA: HW 10: Buffer Overflow</h1>
+<p><a href="index.html">Go up to the main DADA homeworks page</a> (<a href="index.md">md</a>)</p>
+<h3 id="introduction">Introduction</h3>
+<p>In this assignment, you learn and demonstrate how buffer overflow vulnerabilities can be exploited. Assignment Resources</p>
+<ul>
+<li><a href="../slides/14-buffer-overflows.html#/">The slides about buffer overflows</a></li>
+<li>The articles <a href="http://dl.acm.org/citation.cfm?id=1096000.1096004&amp;coll=portal&amp;dl=ACM">Detection and Prevention of Stack Buffer Overflow Attacks</a> (VPN may be required off-campus) and <a href="http://phrack.org/issues/49/14.html">Smashing the Stack for Fun and Profit</a></li>
+<li>The binary to attack: dumbledore.exe, which can be found in the Resources section of Collab</li>
+<li>Please ask any clarifying questions on Piazza.</li>
+</ul>
+<h3 id="assignment-details">Assignment details</h3>
+<ol style="list-style-type: decimal">
+<li><p>Your submission on the assignment must work in a 64-bit Ubuntu 16.04 LTS environment like you installed on your VM. This is the environment where we will test your submitted code.</p></li>
+<li><p>Ubuntu (and most current Linux environments) have <a href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">ASLR (Address Space Layout Randomization)</a> enabled as a mitigation against buffer overflow and similar exploits. For this assignment, you will work with this feature disabled. To turn it off run the command:</p>
+<pre><code>setarch x86_64 -v -RL bash</code></pre>
+<p>This will run a shell (i.e. command prompt) with ASLR disabled. It does <strong>not</strong> affect any other shells. We also have provided you a binary without other mitigations that would usually be used these days including non-executable stacks and stack canaries. Later in the semester we will talk about these mitigations and how they can be defeated.</p></li>
+<li><p>Examine the supplied <code>dumbledore.exe</code> file. It contains an obvious buffer overrun vulnerability in the <code>GetGradeFromInput</code> function, which calls the C standard library function <code>gets</code>. <code>gets</code>, as its manpage documents, does not check the length of the buffer supplied as an argument as is unsafe.</p></li>
+<li><p>Create a file name data.txt containing your name and run <code>dumbledore.exe</code></p>
+<pre><code>./dumbledore.exe &lt; data.txt
+Thank you, Aaron Bloomfield.
+I recommend that you get a grade of F on this assignment.</code></pre></li>
+<li><p>Your goal is to produce an input file so that the output of the program execution is as follows:</p>
+<pre><code>./dumbledore.exe &lt;data.txt
+Thank you, Aaron Bloomfield.
+I recommend that you get a grade of A on this assignment.</code></pre></li>
+<li>To do this, you will use the stack smashing technique we discussed in class. There are several strategies to write the machine code run by this attack, which have extensive hints below:
+<ol style="list-style-type: decimal">
+<li>The first is to call a convenient <code>PrintGradeAndExit</code> function in the supplied executable. To do this, you should be careful to set the stack pointer is less than the address of your machine code, so this function does not corrupt your machine code/data when it executes. This is probably the <strong>easiest</strong> solution.</li>
+<li>The second is to write code that directly prints out the string, without calling any application functions. We give examples of how to make direct calls to the operating system to print strings and to exit below. A challenge with this approach is that you cannot include the newline character directly in the middle of your attack string.</li>
+<li>The third is to use shellcode that actually executes a shell, and then send commands to print out the appropriate strings in from that shell (for example using &quot;echo&quot;). A challenge with this approach is that the supplied application does buffered I/O -- if input is available, it will read in (from the OS) more than just the one line you input, assuming it will be needed later by the application anyways. This means that when the newly executed shell tries to read its input, some bytes after the buffer overflowing line may have already been consumed.</li>
+</ol></li>
+<li><p>Note that the location of the stack pointer can vary slightly when your environment changes. See the section &quot;Variations in the location of the stack pointer&quot; under hints below. Because of this, you should plan on using a <a href="../slides/14-buffer-overflows.html#/nopsled">NOP sled</a> so you don't have to precisely predict the address of the stack pointer.</p></li>
+<li><p>Rather than submit the input file alone, we'd like you to submit a C program <code>attack.c</code>, that will generate the input. This C file can include comments that explain how the exploit works (which might any sort of partial credit/figuring out if our test environment diagrees with your environment/etc. possible). An example file which produces a normal (non-exploit input) is:</p>
+<pre><code>#include &lt;stdio.h&gt;
+int main(void) {
+    /* Just have the name */
+    printf(&quot;Thomas Jefferson\n&quot;);
+    return 0;
+}</code></pre>
+<p>This would be used to run the program like</p>
+<pre><code> $ ./attack-program.exe &gt; data.txt
+ $ ./dumbledore.exe &lt; data.txt
+ Thank you, Thomas Jefferson.
+ I recommend that you get a grade of F on this assignment.</code></pre></li>
+</ol>
+<h3 id="tips">Tips</h3>
+<p>You will find it <strong><em>very confusing</em></strong> if you are not running your commands from a shell started with <code>setarch x86_64 -RL bash</code>. In particular, the stack will have inconsistent addresses, and your program will just segfault every time.</p>
+<h4 id="disassembly-and-debugging">Disassembly and Debugging</h4>
+<ol style="list-style-type: decimal">
+<li><p>A useful starting point is using <code>objdump</code> to disassemble the executable file.</p></li>
+<li><p>Using the debugger <code>gdb</code> can be helpful for debugging and refining your buffer overflow payload. See <a href="http://aaronbloomfield.github.io/pdr/docs/gdb_summary.html">this page</a> of useful GDB commands. But see the warning below about the debugger's environment slightly changing the location of the stack pointer.</p></li>
+<li><p>In particular, after looking over <code>objdump</code> output, a good second step is running the program in GDB to find the address of the stack pointer at a relevant time.</p></li>
+<li><p>Since we tell you the buffer overflow occurs in <code>gets</code>, it is helpful to find the call to <code>gets</code> and examine the state of the program at that time in the debugger.</p></li>
+<li><p>Drawing a picture of the state of the stack is helpful.</p></li>
+</ol>
+<h4 id="variations-in-the-location-of-the-stack-pointer">Variations in the location of the stack pointer</h4>
+<ol style="list-style-type: decimal">
+<li><p>The stack can start at slightly different locations depending on how the program is run. One cause of this is that Linux stores program arguments and &quot;environment variables&quot; on the stack, so the location on the stack pointer on entry to main depends how much space these take up.</p>
+<p>Environment variables include things like information about the terminal the program is being run in. You can see a list of environment variables by running printenv. Note that the shell commonly sets environment variables depending on what program is being run like <code>_=/usr/bin/printenv</code> or <code>OLDPWD</code>.</p></li>
+<li><p>For example, the program</p>
+<pre><code>int main(void) {
+   int x;
+   printf(&quot;%p\n&quot;, &amp;x);
+}</code></pre>
+<p>has different output on my system depending on the environment variables:</p>
+<pre><code>$ setarch x86_64 -RL bash
+$ ./stackloc # run normally
+0x7ffffffffe034
+$ env - ./stackloc # run with no enviornment variables
+0x7ffffffffed84
+$ gdb ./stackloc
+...
+(gdb) run
+0x7ffffffffe004</code></pre></li>
+<li><p>A particular case where this is a problem is running the program in the debugger versus not. The debugger may set a few environment variables itself, and when you run the program in the debugger, it may set</p></li>
+<li><p>The best way to avoid problems with the stack starting in different locations is to use a <a href="../slides/14-buffer-overflows.html#/nopsled">NOP sled</a>. Please place a large string of NOPs before your exploit code and try to &quot;aim&quot; the return address in the middle of this string. This will prevent you from being sensitive to small differences in the location of the stack. We've made the buffer that is overflowed particularly large to make a NOP sled more reliable.</p></li>
+<li><p>An encoding for a 1-byte NOP instruction on x86 and x64 is 0x90.</p></li>
+<li><p>You could also try to figure out how to keep the debugger from changing the enviornment (likely with some <code>unset env</code> commands), but this is less preferable, because it means your exploit is less reliable.</p></li>
+</ol>
+<h4 id="shellcode-production">Shellcode production</h4>
+<ol style="list-style-type: decimal">
+<li><p>You can run <code>objdump</code> on <code>.o</code> files. I would recommend using <code>objdump -dr file.o</code>, which will show disassembly and unresolved relocations, so you can tell if you accidentally generated machine code which needs the linker to complete it. (Recall that relocations are addresses the linker needs to fill in later.)</p></li>
+<li><p>On 64-bit x86, you can use RIP-relative addressing (that is, program counter-relative addressing) to load addresses within your machine code without worrying about the location at which your machine code is placed in memory:</p>
+<pre><code>code:
+   movq value(%rip), %rax
+   leaq value(%rip), %rbx
+   ...
+value:
+   .quad 42</code></pre>
+<p>will place the value 42 in %rax and the address of the value 42 in %rax. But, unlike not using (%rip), the resulting machine code will not have any depenencies on the memory addresses eventually assigned to code and value. It will only depend on how far apart code and value are in memory.</p>
+<p>Note that if you choose to do this, nasm will become difficult to use (it doesn't interact well with rip). You can program in AT&amp;T syntax (shown above) and use <code>as</code> to compile the assembly.</p>
+<p>Other techniques for finding the address of your code include using a sequence like:</p>
+<pre><code>    call next
+next: 
+    popq %rax</code></pre>
+<p>to load the current program counter into <code>%rax</code>. The <code>call</code> instruction uses an address relative to the current program counter, so the resulting machine code does not include hard-coded addresses.</p></li>
+<li><p>Since <code>gets</code> reads until a newline, you need to make sure your machine code does not contain newlines.</p></li>
+<li><p>The <code>objcopy</code> utility can be used to extract a particular section of an object file. For example</p>
+<pre><code>objcopy -O binary --only-section=.text compiled_code.o compiled_code.raw</code></pre>
+<p>will take the <code>.text</code> section of the object file <code>compiled_code.o</code> and put it in <code>compiled_code.raw</code>. (<code>compiled_code.o</code> might be a file generated by <code>gcc -c some_assembly_file.s</code>.) You might then look at the resulting file with a tool like <code>ghex</code> or <code>od</code> to extract the machine code in an less cluttered way than looking at the <code>objdump</code> output.</p></li>
+</ol>
+<h4 id="running-an-executable-function">Running an executable function</h4>
+<ol style="list-style-type: decimal">
+<li><p>The executable contains <code>PrintGradeAndExit</code> function. To figure out what the arugments mean, figure out what the arguments of its call to <code>printf</code> are.</p></li>
+<li><p>A challenge with calling the <code>PrintGradeAndExit</code> function is that our machine code and data is on the stack and could be corrupted by our call to <code>PrintGradeAndExit</code> if we are not careful. To avoid this, you can explicitly set the stack pointer. For example, you might use</p>
+<pre><code>leaq label-0x100(%rip), %rsp</code></pre>
+<p>to set the stack pointer to point 0x100 bytes before a label in your shellcode. (<code>label-0x100</code> is assembly syntax for <code>0x100</code> bytes before <code>label</code>.)</p></li>
+<li><p>Recall that the <code>pushq</code> then <code>ret</code> allows you to jump to an location from machine code without worrying about where that machine code ends up relatively in memory.</p></li>
+</ol>
+<h4 id="alternate-printexit">Alternate print/exit</h4>
+<ol style="list-style-type: decimal">
+<li><p>If you don't call <code>PrintGradeAndExit</code>, you could instead print out the output you want directly, then exit. This is more realistic but a little more challenging.</p></li>
+<li><p>Instead of including a newline in your buffer overflow, you can, instead, include code to compute a newline (e.g., by adding or subtracting from another value) or to copy one from elsewhere in the application.</p></li>
+<li><p>To print something out from your machine code, you could call the <code>printf@plt</code> &quot;stub&quot; (hard-coding its address) or make a write() system call directly. An example assembly snippet to make a write system call is:</p>
+<pre><code>mov $1, %eax /* system call number 1 = write */
+mov $1, %edi /* arg 1: file descriptor number 1 = &quot;standard output&quot; */
+lea string, %rsi /* arg 2: pointer to string */
+mov $length_of_string, %rdx /* arg 3: length of string */
+syscall</code></pre></li>
+<li><p>If you decide that your attack code should exit directly, you can do this by caling the <code>exit@plt</code> &quot;stub&quot; or by making an <code>exit_group</code> system call directly. An example assembly snippet to make an <code>exit_group</code> system call is:</p>
+<pre><code>mov $231, %eax /* system call number 231 = exit_group */
+xor %rdi, %rdi /* arg 1: exit code = 0 */
+syscall</code></pre></li>
+</ol>
+<h4 id="executing-a-shell">Executing a shell</h4>
+<ol style="list-style-type: decimal">
+<li><p>You can find an example of shellcode that runs runs the <code>execve</code> system call to execute <code>/bin/sh</code> in <a href="http://shell-storm.org/shellcode/">this archive of shellcode</a>. Note that some of the shellcode you find may make assumptions about the initial contents of registers or location of the stack pointer. If you use prebuilt shellcode like this, you <strong>must</strong> clearly cite its source.</p></li>
+<li><p>On Linux, <code>execve</code> <strong><em>replaces</em></strong> the current program with the executed program. The new program inherits the same input and output as the prior program.</p></li>
+<li><p>Standard I/O functions read ahead in their input. For example, <code>gets</code> may read part of the next line, saving it in a buffer for future calls to <code>gets</code> or other <code>&lt;stdio.h&gt;</code> functions. These buffers are <strong>not</strong> passed to the new program by <code>execve</code>. To compensate for this, you may need to include padding in your input.</p></li>
+<li><p>You can print out a string from the shell using the echo command.</p></li>
+<li><p>By default, the shell won't print out a command-prompt when its input is not a terminal.</p></li>
+</ol>
+<h3 id="submission">Submission</h3>
+<p>Submit a C file called <code>attack.c</code>, which will produce to stdout a data.txt that will cause the supplied program to output your name and a recommendation for a grade of A. Make sure you C file includes comments that describe how it works and any special resources you used. Also submit a <code>Makefile</code> that will compile this program. The executable that <code>attack.c</code> compiles to <strong><em>MUST</em></strong> be named <code>attack</code>!</p>
+<h3 id="credit">Credit</h3>
+<p>This assignment was adopted from Charles Reiss' fall 2017 assignment, which was adapted from Jack Davidson's fall 2016 assignment, which was adopted from one given previously by Andrew Appel in Princeton's COS 217.</p>
+</body>
+</html>
