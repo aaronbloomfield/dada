@@ -247,8 +247,26 @@ span.yellow { color:yellow; }
     word-wrap: normal;
 }
 
+.reveal pre.codesmall {
+    font-size: 18px;
+    max-height: 700px;
+    background-color:dimgray;
+    border-radius:7px;
+    box-shadow: 5px 5px 5px black;
+    font-family: monospace;
+    padding: 5px;
+    overflow: auto;
+    word-wrap: normal;
+}
+
+span.darkgray { color:darkgray; }
+span.coral { color:coral; }
+span.lightskyblue { color:lightskyblue; }
+span.darkkhaki { color:darkkhaki; }
+span.palevioletred { color:palevioletred; }
 span.junkcode { color:palevioletred; }
 span.spotcode { color:springgreen; }
+span.springgreen { color:springgreen; }
 span.red { color:red; }
 
 .rsa-anim img {
