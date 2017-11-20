@@ -18,7 +18,7 @@ Assignment Resources
 
 1. Like the buffer overflow assignment, this assignment is likely to be very sensitive to the exact environemnt used. Your exploit must work on the Ubuntu 16.04 LTS environment with the exact executable file we provide.
 
-2. The executable you must exploit is located on Collab in the Resources section. It will ask for your name, then ask you to confirm the name after printing it out. This first printing out will use code like:
+2. The executable you must exploit is located on Collab in the Resources section, and is named `format-string-vulnerability.exe`. It will ask for your name, then ask you to confirm the name after printing it out. This first printing out will use code similar to the following:
 ```
 printf("The name entered was ");
 printf(name);
@@ -93,4 +93,17 @@ This garbled output is a normal consequence of the attack and expected in your s
 
 ### Submission
 
-Submit a C file called `attack-format-string.c`, which will produce to stdout an input for the `format-string-vulnerability.exe` that will cause the supplied to output your name and a recommendation for a grade of A.  Also submit a `Makefile` that will compile it to `attack-format-string.exe`.
+Submit a C file called `attack-format-string.c`, which will produce to stdout an input for the `format-string-vulnerability.exe` that will cause the supplied to output your name and a recommendation for a grade of A.  Also submit a `Makefile` that will compile it to `attack-format-string.exe`, as the compilation command will just be `make`.
+
+After compilation, we will run your code as follows:
+
+```
+./attack-format-string.exe > attack-format-string.out
+./format-string-vulnerability.exe < attack-format-string.out
+```
+
+Alternatively, you should be able to run your code as follows also:
+
+```
+./attack-format-string.exe  | ./format-string-vulnerability.exe
+```

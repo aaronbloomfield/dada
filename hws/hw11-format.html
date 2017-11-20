@@ -22,7 +22,7 @@
 <h3 id="details">Details</h3>
 <ol style="list-style-type: decimal">
 <li><p>Like the buffer overflow assignment, this assignment is likely to be very sensitive to the exact environemnt used. Your exploit must work on the Ubuntu 16.04 LTS environment with the exact executable file we provide.</p></li>
-<li><p>The executable you must exploit is located on Collab in the Resources section. It will ask for your name, then ask you to confirm the name after printing it out. This first printing out will use code like:</p>
+<li><p>The executable you must exploit is located on Collab in the Resources section, and is named <code>format-string-vulnerability.exe</code>. It will ask for your name, then ask you to confirm the name after printing it out. This first printing out will use code similar to the following:</p>
 <pre><code>printf(&quot;The name entered was &quot;);
 printf(name);
 printf(&quot;.\n&quot;);</code></pre>
@@ -70,6 +70,11 @@ $</code></pre>
 <li><p>To see if you're overwriting the correct location, you can try replacing the %n you're using to write a value with something like <code>%016lx</code> to see the address you would end up writing to. (Be careful not to change where the address is relative to the start of the string when you do so.)</p></li>
 </ol>
 <h3 id="submission">Submission</h3>
-<p>Submit a C file called <code>attack-format-string.c</code>, which will produce to stdout an input for the <code>format-string-vulnerability.exe</code> that will cause the supplied to output your name and a recommendation for a grade of A. Also submit a <code>Makefile</code> that will compile it to <code>attack-format-string.exe</code>.</p>
+<p>Submit a C file called <code>attack-format-string.c</code>, which will produce to stdout an input for the <code>format-string-vulnerability.exe</code> that will cause the supplied to output your name and a recommendation for a grade of A. Also submit a <code>Makefile</code> that will compile it to <code>attack-format-string.exe</code>, as the compilation command will just be <code>make</code>.</p>
+<p>After compilation, we will run your code as follows:</p>
+<pre><code>./attack-format-string.exe &gt; attack-format-string.out
+./format-string-vulnerability.exe &lt; attack-format-string.out</code></pre>
+<p>Alternatively, you should be able to run your code as follows also:</p>
+<pre><code>./attack-format-string.exe  | ./format-string-vulnerability.exe</code></pre>
 </body>
 </html>
