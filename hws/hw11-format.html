@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>DADA: HW 10: Format Print Attack</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../markdown.css" type="text/css" />
+</head>
+<body>
+<h1 id="dada-hw-10-format-print-attack">DADA: HW 10: Format Print Attack</h1>
+<p><a href="index.html">Go up to the main DADA homeworks page</a> (<a href="index.md">md</a>)</p>
+<h3 id="introduction">Introduction</h3>
+<p>In this assignment, you learn and demonstrate how format string vulnerabilities can be exploited. Assignment Resources</p>
+<h3 id="resources">Resources</h3>
+<ul>
+<li>The <a href="../slides/15-exploits.html#/thirdgen">course slides on format string vulnerabilities</a></li>
+<li><a href="https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/format/formatstring-1.2.pdf">This article</a>, &quot;Exploiting Format String Vulnerabilities&quot; by scut / team teso. Beware of the differences between 32 and 64-bit X86 when using this article.</li>
+<li><a href="http://www.infond.fr/2010/07/tutorial-exploitation-format-string.html">This tutorial</a>. Beware of the differences between 32 and 64-bit X86 when using this article.</li>
+</ul>
+<h3 id="details">Details</h3>
+<ol style="list-style-type: decimal">
+<li><p>Like the buffer overflow assignment, this assignment is likely to be very sensitive to the exact environemnt used. Your exploit must work on the Ubuntu 16.04 LTS environment with the exact executable file we provide.</p></li>
+<li><p>The executable you must exploit is located on Collab in the Resources section. It will ask for your name, then ask you to confirm the name after printing it out. This first printing out will use code like:</p>
+<pre><code>printf(&quot;The name entered was &quot;);
+printf(name);
+printf(&quot;.\n&quot;);</code></pre>
+<p>You will exploit this <code>printf(name)</code> call. After asking for the name, and printing it out again, the program will ask to confirm it. If you do not confirm it, then the program will ask again for the input.</p></li>
+<li><p>After inputting a name and confirming your input, the program will output your grade. By default, it will output a recommendation of F. For example if <code>name.txt</code> contains:</p>
+<pre><code>Class-Skipping Wizard
+yes</code></pre>
+<p>then an example run of the program would look like:</p>
+<pre><code>$ ./format-string-vulnerability &lt;name.txt
+Enter name:
+The name you entered was Class-Skipping Wizard.
+Is this correct? (y/n) Thank you, Class-Skipping Wizard.
+I recommend that you get a grade of F on this assignment.</code></pre>
+<p>(The values supplied by the input file will not be visible.)</p></li>
+<li><p>Your goal is to generate a C program attack-format-string.c that produces an input that will cause the program to output at the end:</p>
+<pre><code>Thank you, NAME.
+I recommend that you get a grade of A on this assignment.</code></pre>
+<p>With NAME replaced with your name. To do this, the easiest way will be to include an entry of the exploit string, then not confirm it as correct and enter your correct name. Your exploit string can overwrite the stored default letter grade, which is in a global variable called <code>defaultLetterGrade</code>.</p>
+<p>Your C file should include comments explaining any unusual values you needed to compute.</p></li>
+<li><p>Because of how the format string vulernability works, it is likely that there will be garbled output before the output with a recommendation of A. For example, a successful attack might look like:</p>
+<pre><code>$ ./attack-format-string.exe &gt; attack_string.txt
+$ ./format-string-vulnerability.exe &lt; attack_string.txt
+Enter name: The name you entered was (?0 Tp ` ? ?   ? ? @ ? H  ?d 1073859552 1073856500 1073945512.
+Is this correct? (y/n)
+Enter name: The name you entered was Ron Weasley.
+Is this correct? (y/n) Thank you, Ron Weasley.
+I recommend that you get a grade of A on this assignment.
+$</code></pre>
+<p>This garbled output is a normal consequence of the attack and expected in your solution. Your exact garbled output will look different.</p></li>
+<li><p>Using the hints below is strongly recommended.</p></li>
+</ol>
+<h3 id="hints">Hints</h3>
+<ol style="list-style-type: decimal">
+<li><p>The supplied executable contains a global variable called <code>defaultLetterGrade</code>. This is, by far, the easiest target for your format string exploit.</p></li>
+<li><p>Since we have not removed the symbol table from the supplied executable, you can get a list of the addresses of global variables and functions with <code>objdump --syms format-string-vulnerability.exe</code>.</p></li>
+<li><p>The <code>printf()</code> without a format string is one of the ones in <code>ReadName()</code>. Fortunately for you, the name is first read into a buffer on the stack. You should take advantage of this in your exploit.</p></li>
+<li><p>You should try to figure out what is on the stack during the offending call to printf in <code>ReadName()</code>.</p></li>
+<li><p>You can use a pattern like repeated &quot;%016lx %016lx ...&quot; (or &quot;%lx %lx %lx ...&quot; for a shorter format string) to examine the stack above the call to <code>printf()</code>. A good first step is finding out how far down the stack the temporary buffer containing your format string is stored. Note that <code>printf()</code> will read values on the stack from the beginning until the end of the buffer on the stack.</p></li>
+<li><p>When examining the stack, you can put a distinctive pattern in your buffer to help you figure out where it is located in the <code>printf()</code> output.</p></li>
+<li><p>Recall that on x86-64 Linux, the second through sixth arguments to <code>printf()</code> will come from registers, not the stack. You will need to put something in your format string to skip over these.</p></li>
+<li><p><code>%c</code> or <code>%d</code> or pretty much any format specifier in a format string will consume one argument. Even though it only looks for a single character or int , according to the x86-64 calling conventions, these arguments use an entire 8 bytes on the stack.</p></li>
+<li><p>Something like `%.100u' will output 100 characters without requiring 100 characters in your format string.</p></li>
+<li><p>Knowing the ASCII code for A will be helpful.</p></li>
+<li><p>Your exploit string will probably contain <code>\0</code> characters because most addresses contain 0 bytes. This is fine (<code>fgets()</code> can read those characters), but to output it from your C program, you might find it it easier like <code>fwrite()</code> instead of something like <code>printf()</code>. Note that this means that you likely need to place any addresses at the end of your format string.</p></li>
+<li><p>To see if you're overwriting the correct location, you can try replacing the %n you're using to write a value with something like <code>%016lx</code> to see the address you would end up writing to. (Be careful not to change where the address is relative to the start of the string when you do so.)</p></li>
+</ol>
+<h3 id="submission">Submission</h3>
+<p>Submit a C file called <code>attack-format-string.c</code>, which will produce to stdout an input for the <code>format-string-vulnerability.exe</code> that will cause the supplied to output your name and a recommendation for a grade of A. Also submit a <code>Makefile</code> that will compile it to <code>attack-format-string.exe</code>.</p>
+</body>
+</html>
