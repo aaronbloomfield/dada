@@ -43,7 +43,7 @@ I recommend that you get a grade of A on this assignment.</code></pre>
 <p>With NAME replaced with your name. To do this, the easiest way will be to include an entry of the exploit string, then not confirm it as correct and enter your correct name. Your exploit string can overwrite the stored default letter grade, which is in a global variable called <code>defaultLetterGrade</code>.</p>
 <p>Your C file should include comments explaining any unusual values you needed to compute.</p></li>
 <li><p>Because of how the format string vulernability works, it is likely that there will be garbled output before the output with a recommendation of A. For example, a successful attack might look like:</p>
-<pre><code>$ ./attack-format-string.exe &gt; attack_string.txt
+<pre><code>$ ./attack-format-string &gt; attack_string.txt
 $ ./format-string-vulnerability.exe &lt; attack_string.txt
 Enter name: The name you entered was (?0 Tp ` ? ?   ? ? @ ? H  ?d 1073859552 1073856500 1073945512.
 Is this correct? (y/n)
@@ -70,11 +70,11 @@ $</code></pre>
 <li><p>To see if you're overwriting the correct location, you can try replacing the %n you're using to write a value with something like <code>%016lx</code> to see the address you would end up writing to. (Be careful not to change where the address is relative to the start of the string when you do so.)</p></li>
 </ol>
 <h3 id="submission">Submission</h3>
-<p>Submit a C file called <code>attack-format-string.c</code>, which will produce to stdout an input for the <code>format-string-vulnerability.exe</code> that will cause the supplied to output your name and a recommendation for a grade of A. Also submit a <code>Makefile</code> that will compile it to <code>attack-format-string.exe</code>, as the compilation command will just be <code>make</code>.</p>
+<p>Submit a C file called <code>attack-format-string.c</code>, which will produce to stdout an input for the <code>format-string-vulnerability.exe</code> that will cause the supplied to output your name and a recommendation for a grade of A. Also submit a <code>Makefile</code> that will compile it to <code>attack-format-string</code>, as the compilation command will just be <code>make</code>.</p>
 <p>After compilation, we will run your code as follows:</p>
-<pre><code>./attack-format-string.exe &gt; attack-format-string.out
+<pre><code>./attack-format-string &gt; attack-format-string.out
 ./format-string-vulnerability.exe &lt; attack-format-string.out</code></pre>
 <p>Alternatively, you should be able to run your code as follows also:</p>
-<pre><code>./attack-format-string.exe  | ./format-string-vulnerability.exe</code></pre>
+<pre><code>./attack-format-string  | ./format-string-vulnerability.exe</code></pre>
 </body>
 </html>

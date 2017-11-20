@@ -52,7 +52,7 @@ With NAME replaced with your name. To do this, the easiest way will be to includ
 
 5. Because of how the format string vulernability works, it is likely that there will be garbled output before the output with a recommendation of A. For example, a successful attack might look like:
 ```
-$ ./attack-format-string.exe > attack_string.txt
+$ ./attack-format-string > attack_string.txt
 $ ./format-string-vulnerability.exe < attack_string.txt
 Enter name: The name you entered was (?0 Tp ` ? ?   ? ? @ ? H  ?d 1073859552 1073856500 1073945512.
 Is this correct? (y/n)
@@ -93,17 +93,17 @@ This garbled output is a normal consequence of the attack and expected in your s
 
 ### Submission
 
-Submit a C file called `attack-format-string.c`, which will produce to stdout an input for the `format-string-vulnerability.exe` that will cause the supplied to output your name and a recommendation for a grade of A.  Also submit a `Makefile` that will compile it to `attack-format-string.exe`, as the compilation command will just be `make`.
+Submit a C file called `attack-format-string.c`, which will produce to stdout an input for the `format-string-vulnerability.exe` that will cause the supplied to output your name and a recommendation for a grade of A.  Also submit a `Makefile` that will compile it to `attack-format-string`, as the compilation command will just be `make`.
 
 After compilation, we will run your code as follows:
 
 ```
-./attack-format-string.exe > attack-format-string.out
+./attack-format-string > attack-format-string.out
 ./format-string-vulnerability.exe < attack-format-string.out
 ```
 
 Alternatively, you should be able to run your code as follows also:
 
 ```
-./attack-format-string.exe  | ./format-string-vulnerability.exe
+./attack-format-string  | ./format-string-vulnerability.exe
 ```
