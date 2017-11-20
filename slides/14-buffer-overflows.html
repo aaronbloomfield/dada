@@ -558,6 +558,7 @@ We put all that together, and we get:
 
 ## No execution on the stack
 - Modern hardware (and OSes) will not allow execution of code on the stack
+  - Well, [sometimes](https://it.slashdot.org/story/17/11/17/207239/windows-8-and-later-fail-to-properly-apply-aslr)
 - The computer has to switch over to 'legacy' virtual memory mode that doesn't have this feature
 - Disable with the `-L` flag to `setarch`
   - More on this in a bit
