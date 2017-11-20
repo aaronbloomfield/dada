@@ -57,9 +57,9 @@ Lectures (fall 2017)
 | 35  | Nov&nbsp;13 | Monday      | [Rootkits][112], [Stuxnet][113] | [Rootkits][112], slides 4.15 to 5.11 (end); [Stuxnet][113], slides 1 to 4.10 |
 | 36  | Nov&nbsp;15 | Wednesday   | [Stuxnet][113], [Buffer overflows][114] | [Stuxnet][113], slides 5.1 to 6.6 (end); [Buffer overflows][114], slides 1 to 4.7 |
 | 37  | Nov&nbsp;17 | Friday      | [Buffer overflows][114] | [Buffer overflows][114], slides 4.7 to 5.6 (end) |
-| 38  | Nov&nbsp;20 | Monday      |               |               |
-|     | Nov&nbsp;22 | Wednesday   |               |               |
-|     | Nov&nbsp;24 | Friday      |               |               |
+| 38  | Nov&nbsp;20 | Monday      | [Exploits][115] | [Exploits][115], slides 5.1 to 5.23 |
+|     | Nov&nbsp;22 | Wednesday   | no class (Thanksgiving break) | no class (Thanksgiving break) |
+|     | Nov&nbsp;24 | Friday      | no class (Thanksgiving break) | no class (Thanksgiving break) |
 | 39  | Nov&nbsp;27 | Monday      |               |               |
 | 40  | Nov&nbsp;29 | Wednesday   |               |               |
 | 41  | Dec&nbsp;1  | Friday      |               |               |
@@ -90,3 +90,4 @@ Lectures (fall 2017)
 [112]: ../slides/12-rootkits.html#/
 [113]: ../slides/13-stuxnet.html#/
 [114]: ../slides/14-buffer-overflows.html#/
+[115]: ../slides/15-exploits.html#/
