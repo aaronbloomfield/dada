@@ -60,7 +60,7 @@ Lectures (fall 2017)
 | 38  | Nov&nbsp;20 | Monday      | [Exploits][115] | [Exploits][115], slides 5.1 to 5.23 |
 |     | Nov&nbsp;22 | Wednesday   | no class (Thanksgiving break) | no class (Thanksgiving break) |
 |     | Nov&nbsp;24 | Friday      | no class (Thanksgiving break) | no class (Thanksgiving break) |
-| 39  | Nov&nbsp;27 | Monday      |               |               |
+| 39  | Nov&nbsp;27 | Monday      | [Exploits][115] | [Exploits][115], slides 5.17 to 5.28 |
 | 40  | Nov&nbsp;29 | Wednesday   |               |               |
 | 41  | Dec&nbsp;1  | Friday      |               |               |
 | 42  | Dec&nbsp;4  | Monday      |               |               |
