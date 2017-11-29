@@ -69,7 +69,7 @@ While I have tried this on my computer, I can make no guarantees about the safet
 
 The instructions are repeated below, and you can download the source code from Collab; the file is called `evilize-0.2.zip`.
 
-Your task is to create two binary executables, `good` and `evil`, that have the same MD5 hash.  Those executables should print something relevant (i.e., something "good" and something "evil") - it can be interesting quotes, good/evil instructions, etc.  __IT SHOULD NOT DO ANYTHING MALICIOUS__, as that would be a violation of your [Ethics honor pledge](../uva/ethics-pledge.pdf).  It should print something good/evil, not __do__ something good/evil.  Find some interesting quotes to entertain us!
+Your task is to create two binary executables, `good` and `evil`, that have the same MD5 hash.  Those executables should print something relevant (i.e., something "good" and something "evil") - it can be interesting quotations, good/evil instructions, etc.  __IT SHOULD NOT DO ANYTHING MALICIOUS__, as that would be a violation of your [Ethics honor pledge](../uva/ethics-pledge.pdf).  It should print something good/evil, not __do__ something good/evil.  Find some interesting quotations to entertain us!
 
 The binary executables should be Linux binary executables, as we will be running them on a 64 bit Linux system.  As long as they are elf executables (32 bit or 64 bit) created in a Linux environment, you are fine.  If you use any obscure libraries, you should check with me first to make sure that they will run.
 
