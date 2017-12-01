@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DADA: Course Reflection</title>
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="reveal.js/css/theme/black.css">
+  <link rel="stylesheet" href="dada.css">
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section data-markdown id="cover"><script type="text/template">
+# CS 4630
+&nbsp;
+### Defense Against the Dark Arts
+&nbsp;
+<center><small>[Aaron Bloomfield](http://www.cs.virginia.edu/~asb) / [aaron@virginia.edu](mailto:aaron@virginia.edu) / [@bloomfieldaaron](http://twitter.com/bloomfieldaaron)</small></center>
+<center><small>Repository: [github.com/aaronbloomfield/dada](http://github.com/aaronbloomfield/dada) / [&uarr;](index.html) / <a href="?print-pdf"><img class="print" width="20" src="images/print-icon.png"></a></small></center>
+&nbsp;  
+&nbsp;
+## Course Reflection
+  </script></section>
+
+	<section data-markdown><textarea data-template>
+# Contents
+&nbsp;  
+[Dark Arts in a Modern Context](#/today)  
+[Course Reflection](#/reflection)  
+	</textarea></section>
+
+	<section>
+      
+	  <section data-markdown id="today"><textarea data-template>
+# Dark Arts in a Modern Context
+A series of (mostly unrelated) topics relating to computing security
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Privacy and the 4th amendment
+- "The right of the people to be secure in their persons, houses, papers, and effects, against unreasonable searches and seizures, shall not be violated, and no warrants shall issue, but upon probable cause, supported by oath or affirmation, and particularly describing the place to be searched, and the persons or things to be seized."
+
+
+## Privacy and the 4th amendment
+- 1967: Katz v. United States created a two-part test:
+  - Gov't can't contravene someone's subjective expectation of privacy without a warrant
+  - That expectation of privacy must be what society recognizes as reasonable
+- In today's information age, what is a "reasonable" expectation of privacy?
+  - For Facebook?  For financial data?  
+  - What about email: gmail's content-driven ads?
+  - What about with the (well-known) warrant-less wiretapping by the NSA?
+
+
+## Reasonable privacy
+- Would you like a camera in your bedroom controlled by a for-profit data-mining company?
+- Enter Amazon's [Echo look](https://www.amazon.com/gp/product/B0186JAEWK) and the [Echo show](https://www.amazon.com/dp/B01J24C0TI)
+  - It's always on
+  - It has a microphone that's always on also...
+  - Like anything else on the 'net, it's hackable
+- Some have opined that Amazon wants you to start getting comfortable with such a camera in your bedroom
+- Sources [vice.com](https://motherboard.vice.com/en_us/article/ez3qzk/amazon-echo-look-bedroom-camera), [popularmechanices.com](http://www.popularmechanics.com/technology/gadgets/news/a26223/amazon-echo-look-announcement/), [theverge.com](https://www.theverge.com/2017/7/6/15924120/amazon-echo-look-review-camera-clothes-style)
+
+
+## Encrypted Hard Drives
+- If you have an encrypted hard drive, and the gov't has a (valid) search warrant...
+  - You can't refuse on 1st amendment (free speech) grounds 
+  - Analogy: you can't refuse to unlock a door on your house if the police have a (valid) search warrant based on free speech grounds
+	- Granted, they have battering rams...
+
+
+## Encrypted Hard Drives
+- What about the 5th amendment (can't force self-incrimination)?
+  - This *sometimes* can work
+  - That amendment only applies to *testimonials*, not actions
+	- But is forcing you to decrypt your hard drive an action or a testimonial
+- That depends on the *foregone conclusion doctrine*
+  - If the gov't already knows what is there (at the time of the attempted search!), then it's an action; if not, it's a testimonial
+
+
+## Foregone Conclusion Doctrine
+- In USA vs. Fricosu (2012), the defendant was forced to decrypt
+  - Fricosu admitted on a recorded phone call that there was "stuff" on the machine
+- In USA vs. Doe (2012), the defendant was *not* forced to decrypt
+  - The gov't didn't know what was there
+  - The court rejected the notion "that simply because the devices were encrypted necessarily means that Doe was trying to hide something"
+- Sources: [WaPo](https://www.washingtonpost.com/news/volokh-conspiracy/wp/2016/06/07/the-fifth-amendment-limits-on-forced-decryption-and-applying-the-foregone-conclusion-doctrine/), [EFF](https://www.eff.org/deeplinks/2012/03/tale-two-encryption-cases)
+
+
+## [SOPA](https://en.wikipedia.org/wiki/Stop_Online_Piracy_Act) & [PIPA](https://en.wikipedia.org/wiki/PROTECT_IP_Act)
+- They were House and Senate bills, respectively, in 2012 that focused on digital security
+- Crated by people who didn't understand computers, they would have:
+  - Made sites responsible for *user content* (reviews, postings, etc.)
+	- Just the existence of such content would allow the gov't to revoke the *domain* by updating the DNS
+	- This would prevent secure DNS encryption, which would allow easy spoofing of *any* domain
+
+
+## [CISPA](https://en.wikipedia.org/wiki/Cyber_Intelligence_Sharing_and_Protection_Act): SOPA take 2
+- Wary of what happened to SOPA, lawmakers are treading much more carefully
+  - It has gone through multiple revisions prior
+- This bill allows sharing (between the gov't and security companies) of personal information
+- But what is "personal information" is vague
+  - Which means the gov't can interpret it to mean just about anything
+- It is supported by a number of tech titans (MS, Facebook, IBM, etc.)
+  - But roundly criticized by privacy advocates
+
+
+## [CISPA](https://en.wikipedia.org/wiki/Cyber_Intelligence_Sharing_and_Protection_Act): SOPA take 2
+- Status:
+  - Passed in the house in 2012, but not passed in the Senate
+  - Reintroduced in the house in 2013, and passed; not voted upon in the Senate
+  - In 2014, a similar bill (CISA) was introduced in the Senate, but not passed
+  - Reintroduced yet again in January 2015, and referred to committee
+  - Hidden (and passed!) in the federal budget passed in December 2015
+
+
+## [Compliance with Court Orders Act of 2016](https://techcrunch.com/2016/04/13/burr-feinstein-encryption-bill-is-officially-here-in-all-its-scary-glory/)
+- They are still at it...
+- Only a bill, and (currently) not expected to go anywhere
+- It would require all "communications services" to put back doors in their software
+- Because what could go wrong with that?
+
+
+## Malware as model pandemics
+- Consider a virtual outbreak
+  - Either malware or biological
+  - How does it spread?  How fast?  With what vector?
+- Such studies can be used to model real pandemics (such as swine flu)
+- Consider the [Corrupted Blood incident](https://en.wikipedia.org/wiki/Corrupted_Blood_incident) on World of Warcraft
+  - Can this reliably be replicated?
+
+
+## Blaming the victim
+- Good security is, quite frankly, often beyond the knowledge or willingness of the 'typical' computer user
+  - Different passwords, understanding malware, phishing attacks, knowing about e-mail attachment issues - the list goes on and on
+- Yet the defense that software companies always make is the same
+  - "The systems were not patched"
+  - Blaming the victim!
+- This is an unhelpful way to think of security
+
+
+## Blaming the victim
+- Many things are often beyond the knowledge or willingness of the 'typical' user
+  - Remembering annual appointments (postcards!)
+  - Regular oil changes (the post-it with the mileage)
+  - Regular smoke alarm battery changes (beeping)
+- Goal: assume the user is clueless, and do the security properly anyway
+  - MS's automated patch install
+  - Regular backups (Time Machine)
+
+
+## BitArmor guarantee
+- BitArmor sells encryption and data management technologies
+- "If your company has to publicly report a breach while your data is protected by BitArmor, we'll refund the purchase price of your software. It's that simple. No gimmicks, no hassles."
+- Translation: if your data gets breached, and you suffer public humiliation, we'll give you your money back
+
+
+## Storm worm profit estimates
+- Researchers infiltrated and monitored the [Storm worm](https://en.wikipedia.org/wiki/Storm_Worm) in 2007
+  - After 26 days, and 350M e-mails, only 28 sales resulted (mostly for male enhancement)
+    - Average price: $100
+  - Profits were estimated at $2,731.88
+	- Just over $100 per day
+  - This was with 1.5% of the Storm botnet
+  - Extrapolating, that's about $7,000 per day with the entire Storm botnet, if you could utilize all that capacity
+
+
+## CAPTCHA
+- A contrived acronym for "Completely Automated Public Turing test to tell Computers and Humans Apart"
+- The idea: a "simple" test for humans, but "impossible" for automated scripts
+- Solutions:
+  - Botnets!
+  - Human bank of CAPTCHA operators
+  - [Have a lot of people solve it in another context](http://www.pcmag.com/article2/0,2704,2210674,00.asp)
+
+
+## ReCAPTCHA
+- Used to digitize books!
+- The same creators created a system to tag all of Google's images
+- And the creators of DuoLingo
+
+
+## [USB Pineapple](https://hakshop.com/products/wifi-pineapple)
+<!-- .slide: class="right-float-img-800" -->
+![usb pineapple](https://cdn.shopify.com/s/files/1/0068/2142/products/nano1_1bb4f835-cdc1-424b-9d4f-3a03863fde71_1024x1024.jpg)
+- A $100 WiFi device
+- Allows a MITM
+- Can view other WiFi data
+  - Even if *encrypted*
+
+
+## How it works
+- It connects to a WiFi network, and then scans the WiFi signals sent from local computers
+- Your computer has "saved" networks that you have used before
+  - To see if one of them is present, it has to broadcast that SSID
+  - The Pineapple sees this, then presents that SSID
+  - Your password is automatically accepted
+- It will now do a man-in-the-middle attack for all your data
+  - Although this won't defeat https
+</textarea></section>
+
+	</section>
+	
+	<section>
+      
+	  <section data-markdown id="reflection"><textarea data-template>
+# Course Reflection
+	  </textarea></section>
+	  
+	  <section data-markdown data-separator="^\n$"><textarea data-template>
+## Course Objectives
+- Understand the nature and types of viruses (and other malware), and how they are threats to computer systems.
+- Learn the techniques used to prevent, detect, repair, and defend against viruses and worms.
+- Learn to use program binary examination tools to detect malicious code.
+- Understand the ethical issues surrounding computer security violations.
+
+
+## What was new this semester
+- I haven't taught this course during a fall or spring semester since 2009
+  - Only summers since then
+- All slides were converted to [reveal.js](https://revealjs.com/?#/)
+  - This took quite some time...
+- Putting all the course content [online](https://github.com/aaronbloomfield/dada) under a CC BY-SA license
+- Some of the homeworks
+  - We can only do about 7 in a summer term
+- Conversion of assembly to 64-bit (from 32-bit)
+
+
+## Homework thoughts
+- HW 1: Virtual Machine
+- HW 2: x64 assembly
+- HW 3: binary tricky jump
+- HW 4: lex and recognizing viruses
+- HW 5: obfuscating x64 assembly code
+- HW 6: binary lex
+- HW 7: SQL Injection & XSS
+- HW 8: RSA
+- HW 9: Hashes
+- HW 10: buffer overflow
+- HW 11: format string vulnerability
+
+
+## What didn't work well
+- Grading was a bit slow (sorry!)
+- Homework difficulty was not as even as I would have liked
+- The "badness of the day" took too much time away from the course content
+- Not having a movie day...
+
+
+## What did work well
+- The homeworks, even those that were bumpy
+  - Especially RSA!
+  - And the newer ones (buffer overflow, format print attacks, etc.)
+- The submission system
+- Office hours, for the most part
+- The small class size
+
+
+## Changes in the future
+- The topics in DADA are going to get re-aligned to synchronize between now 4 different instructors and two more security classes
+  - One of which is CS 4760: Network Security (formerly CS 4501) by Ahmed Ibrahim in the spring!
+- A third security course should be offered next fall
+- The ability to receive a letter of completion that you have taken a "certified" cybersecurity curriculum
+
+
+## Let me know your comments!
+- Please send me your feedback!
+- Either by e-mail or anonymously or on the course surveys
+- And please fill out the course surveys!
+	</textarea></section>
+
+	<section>
+<h2>Have a great winter break!</h2>
+<img class="stretch" src="http://www.adamfishercox.com/calvinandhobbes/pageimages/laststrip.png" alt="calvin and hobbes" style="width:100%;background-color:white">
+</section>
+	  
+      </section>
+      
+    </div>
+  </div>
+  <script src="reveal.js/lib/js/head.min.js"></script> 
+  <script src="reveal.js/js/reveal.js"></script>
+  <script src="settings.js"></script> 
+</body>
+</html>
