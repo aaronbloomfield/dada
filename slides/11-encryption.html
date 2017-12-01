@@ -538,6 +538,7 @@ public class BigPrime {
   - ... but we aren't going to go over them in this course
 - One easy way to do this: make $e$ be a prime number
   - It only has to be relatively prime to $(p-1)(q-1)$, but it can be fully prime
+- $e$ should be a bit smaller than $n$ (maybe by a factor of 10 or 100 or so)
 
 
 ## Key generation, step 2
@@ -555,10 +556,9 @@ public class BigPrime {
 - Compute d such that:
   - $d \* e \equiv 1 (\text{mod } (p-1)(q-1))$
   - Rephrased: $d\*e \text{ mod } (p-1)(q-1) = 1$
-  - $d$ should be a bit smaller than $n$ (maybe by a factor of 10 or 100 or so)
 - There are algorithms to do this efficiently...
   - ... but we aren't going to go over them
-- We choose $d = 4669$
+- We determine $d = 4669$
   - $4669\*85 \text{ mod } 10176 = 1$
 
 

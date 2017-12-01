@@ -61,9 +61,9 @@ Lectures (fall 2017)
 |     | Nov&nbsp;22 | Wednesday   | no class (Thanksgiving break) | no class (Thanksgiving break) |
 |     | Nov&nbsp;24 | Friday      | no class (Thanksgiving break) | no class (Thanksgiving break) |
 | 39  | Nov&nbsp;27 | Monday      | [Exploits][115] | [Exploits][115], slides 5.17 to 5.28 |
-| 40  | Nov&nbsp;29 | Wednesday   |               |               |
-| 41  | Dec&nbsp;1  | Friday      |               |               |
-| 42  | Dec&nbsp;4  | Monday      |               |               |
+| 40  | Nov&nbsp;29 | Wednesday   | [Exploits][115] | [Exploits][115], slides 1 to 6.5 except 5.1 to 5.28 |
+| 41  | Dec&nbsp;1  | Friday      | [Course reflection][116] | [Course reflection][116], slides 1 to 4.9 (end) |
+| 42  | Dec&nbsp;4  | Monday      | Final exam | Final exam |
 |     | Dec&nbsp;6  | Wednesday   |               |               |
 |     | Dec&nbsp;8  | Friday      |               |               |
 |     | Dec&nbsp;11 | Monday      |               |               |
@@ -91,3 +91,4 @@ Lectures (fall 2017)
 [113]: ../slides/13-stuxnet.html#/
 [114]: ../slides/14-buffer-overflows.html#/
 [115]: ../slides/15-exploits.html#/
+[116]: ../slides/course-reflection.html#/
