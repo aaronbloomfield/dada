@@ -65,6 +65,11 @@ This garbled output is a normal consequence of the attack and expected in your s
 
 6. Using the hints below is strongly recommended.
 
+### Note
+
+You are welcome to start with the example from the [course slides on format string vulnerabilities](../slides/15-exploits.html#/thirdgen) -- specifically, the [exploitable.c](../slides/code/exploits/exploitable.c) ([html](../slides/code/exploits/exploitable.c.html)) file that has the vulnerability, and the [attack.c](../slides/code/exploits/attack.c) ([html](../slides/code/exploits/attack.c.html)) file that supplies the exploit.  Note, however, that the exploitable program there was compiled with different compiler flags than the executable provided for this homework.  This means that there are *extra* values on the stack between where one would expect the 7th parameter to start and where the input buffer (which is really a local variable in the caller) really is.  How many spots is for you to figure out...
+
+
 ### Hints
 
 1. The supplied executable contains a global variable called `defaultLetterGrade`. This is, by far, the easiest target for your format string exploit.

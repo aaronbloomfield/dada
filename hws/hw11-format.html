@@ -54,6 +54,8 @@ $</code></pre>
 <p>This garbled output is a normal consequence of the attack and expected in your solution. Your exact garbled output will look different.</p></li>
 <li><p>Using the hints below is strongly recommended.</p></li>
 </ol>
+<h3 id="note">Note</h3>
+<p>You are welcome to start with the example from the <a href="../slides/15-exploits.html#/thirdgen">course slides on format string vulnerabilities</a> -- specifically, the <a href="../slides/code/exploits/exploitable.c">exploitable.c</a> (<a href="../slides/code/exploits/exploitable.c.html">html</a>) file that has the vulnerability, and the <a href="../slides/code/exploits/attack.c">attack.c</a> (<a href="../slides/code/exploits/attack.c.html">html</a>) file that supplies the exploit. Note, however, that the exploitable program there was compiled with different compiler flags than the executable provided for this homework. This means that there are <em>extra</em> values on the stack between where one would expect the 7th parameter to start and where the input buffer (which is really a local variable in the caller) really is. How many spots is for you to figure out...</p>
 <h3 id="hints">Hints</h3>
 <ol style="list-style-type: decimal">
 <li><p>The supplied executable contains a global variable called <code>defaultLetterGrade</code>. This is, by far, the easiest target for your format string exploit.</p></li>
