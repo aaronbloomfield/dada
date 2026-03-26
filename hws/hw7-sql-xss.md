@@ -127,7 +127,7 @@ egrep "\[a-z\]\[4\]\[4\]+" tcpdump.txt
 
 This takes in the regular expression \[a-z\]\[4\]\[4\]+, and searches for all occurrences of it in the file (there are 20).  Make sure you put your double quotes around the regular expression.
 
-Lastly, note that 'sextans' is the name of one of my routers (all my machines are named after constellations).  So when you see data being transfered between sextans and another host, that's between my computer and said host.
+Lastly, note that 'sextans' is the name of one of my routers (all my machines are named after constellations).  So when you see data being transferred between sextans and another host, that's between my computer and said host.
 
 Honor pledge details: you are given permission to search the tcpdump.txt file to answer the above questions for this assignment.  After that, you will need to delete the file.
 
