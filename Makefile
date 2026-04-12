@@ -9,3 +9,6 @@ touchall:
 
 clean:
 	/bin/rm -rf *~ */*~ */*/*~
+
+all-source-highlight:
+	custom-source-highlight.sh */*/*.c */*/*/*.c */*/*/*.s

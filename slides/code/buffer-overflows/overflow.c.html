@@ -1,33 +1,33 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html lang='en'>
-<head>
+<head><meta name='description' content='This page contains the source code for the slides/code/buffer-overflows/overflow.c file'>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="GENERATOR" content="GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite">
-<title>./slides/code/buffer-overflows/overflow.c</title>
+<title>Source code for slides/code/buffer-overflows/overflow.c (via source-highlight)</title>
 </head>
 <body bgcolor="white">
-<main><pre><tt><b><font color="#000080">#include</font></b> <font color="#EF0000">&lt;stdio.h&gt;</font>
+<main><h1>Source code for slides/code/buffer-overflows/overflow.c (via source-highlight)</h1><pre><tt><b><font color="#000080">#include</font></b> <font color="#DF0000">&lt;stdio.h&gt;</font>
 
-<font color="#008A00">void</font> <b><font color="#000000">do_something_with</font></b><font color="#990000">(</font><font color="#008A00">char</font> <font color="#990000">*</font>buffer<font color="#990000">)</font> <font color="#EF0000">{</font>
-  <b><font color="#000000">printf</font></b> <font color="#990000">(</font><font color="#EF0000">"%s"</font><font color="#990000">,</font> buffer<font color="#990000">);</font>
-<font color="#EF0000">}</font>
+<font color="#008A00">void</font> <b><font color="#000000">do_something_with</font></b><font color="#990000">(</font><font color="#008A00">char</font> <font color="#990000">*</font>buffer<font color="#990000">)</font> <font color="#DF0000">{</font>
+  <b><font color="#000000">printf</font></b> <font color="#990000">(</font><font color="#DF0000">"%s"</font><font color="#990000">,</font> buffer<font color="#990000">);</font>
+<font color="#DF0000">}</font>
 
-<font color="#008A00">void</font> <b><font color="#000000">vulnerable</font></b><font color="#990000">()</font> <font color="#EF0000">{</font>
+<font color="#008A00">void</font> <b><font color="#000000">vulnerable</font></b><font color="#990000">()</font> <font color="#DF0000">{</font>
     <font color="#008A00">char</font> buffer<font color="#990000">[</font><font color="#993399">100</font><font color="#990000">];</font>
 	
     <i><font color="#9A1900">/* read string from stdin */</font></i>
-    <b><font color="#000000">scanf</font></b><font color="#990000">(</font><font color="#EF0000">"%s"</font><font color="#990000">,</font> buffer<font color="#990000">);</font>
+    <b><font color="#000000">scanf</font></b><font color="#990000">(</font><font color="#DF0000">"%s"</font><font color="#990000">,</font> buffer<font color="#990000">);</font>
 	
     <b><font color="#000000">do_something_with</font></b><font color="#990000">(</font>buffer<font color="#990000">);</font>
-<font color="#EF0000">}</font>
+<font color="#DF0000">}</font>
 
-<font color="#008A00">int</font> <b><font color="#000000">main</font></b><font color="#990000">()</font> <font color="#EF0000">{</font>
+<font color="#008A00">int</font> <b><font color="#000000">main</font></b><font color="#990000">()</font> <font color="#DF0000">{</font>
   <b><font color="#000000">vulnerable</font></b><font color="#990000">();</font>
   <b><font color="#0000FF">return</font></b> <font color="#993399">0</font><font color="#990000">;</font>
-<font color="#EF0000">}</font>
+<font color="#DF0000">}</font>
 </tt></pre></main>
 </body>
 </html>

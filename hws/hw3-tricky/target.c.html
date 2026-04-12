@@ -1,20 +1,20 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html lang='en'>
-<head>
+<head><meta name='description' content='This page contains the source code for the hws/hw3-tricky/target.c file'>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="GENERATOR" content="GNU source-highlight 3.1.9
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite">
-<title>./hws/hw3-tricky/target.c</title>
+<title>Source code for hws/hw3-tricky/target.c (via source-highlight)</title>
 </head>
 <body bgcolor="white">
-<main><pre><tt><i><font color="#9A1900">// Program written by Charles Reiss</font></i>
+<main><h1>Source code for hws/hw3-tricky/target.c (via source-highlight)</h1><pre><tt><i><font color="#9A1900">// Program written by Charles Reiss</font></i>
 
 <b><font color="#000080">#define</font></b> _GNU_SOURCE
-<b><font color="#000080">#include</font></b> <font color="#EF0000">&lt;stdio.h&gt;</font>
-<b><font color="#000080">#include</font></b> <font color="#EF0000">&lt;stdlib.h&gt;</font>
-<b><font color="#000080">#include</font></b> <font color="#EF0000">&lt;time.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#DF0000">&lt;stdio.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#DF0000">&lt;stdlib.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#DF0000">&lt;time.h&gt;</font>
 
 <b><font color="#000080">#define</font></b> SIZE <font color="#993399">994</font>
 
@@ -23,74 +23,74 @@ http://www.gnu.org/software/src-highlite">
 
 <b><font color="#000080">#define</font></b> <font color="#008080">NOINLINE</font> <b><font color="#000000">__attribute__</font></b><font color="#990000">((</font>noinline<font color="#990000">))</font>
 
-<b><font color="#000000">__asm__</font></b><font color="#990000">(</font><font color="#EF0000">"\</font>
-<font color="#EF0000">nop</font><font color="#CC33CC">\n</font><font color="#EF0000">\</font>
-<font color="#EF0000">.align 256</font><font color="#CC33CC">\n</font><font color="#EF0000">\</font>
-<font color="#EF0000">"</font><font color="#990000">);</font>
+<b><font color="#000000">__asm__</font></b><font color="#990000">(</font><font color="#DF0000">"\</font>
+<font color="#DF0000">nop</font><font color="#CC33CC">\n</font><font color="#DF0000">\</font>
+<font color="#DF0000">.align 256</font><font color="#CC33CC">\n</font><font color="#DF0000">\</font>
+<font color="#DF0000">"</font><font color="#990000">);</font>
 
 NOINLINE
-<font color="#008A00">int</font> <b><font color="#000000">InitApplication</font></b><font color="#990000">()</font> <font color="#EF0000">{</font>
-    <b><font color="#000000">puts</font></b><font color="#990000">(</font><font color="#EF0000">"Initialize application."</font><font color="#990000">);</font>
+<font color="#008A00">int</font> <b><font color="#000000">InitApplication</font></b><font color="#990000">()</font> <font color="#DF0000">{</font>
+    <b><font color="#000000">puts</font></b><font color="#990000">(</font><font color="#DF0000">"Initialize application."</font><font color="#990000">);</font>
     <b><font color="#000000">srand48</font></b><font color="#990000">(</font><b><font color="#000000">time</font></b><font color="#990000">(</font><font color="#993399">0</font><font color="#990000">));</font>
-    <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> i <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> i <font color="#990000">&lt;</font> SIZE <font color="#990000">*</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>i<font color="#990000">)</font> <font color="#EF0000">{</font>
+    <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> i <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> i <font color="#990000">&lt;</font> SIZE <font color="#990000">*</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>i<font color="#990000">)</font> <font color="#DF0000">{</font>
         matrix<font color="#990000">[</font>i<font color="#990000">]</font> <font color="#990000">=</font> <b><font color="#000000">drand48</font></b><font color="#990000">();</font>
-    <font color="#EF0000">}</font>
-    <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> i <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> i <font color="#990000">&lt;</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>i<font color="#990000">)</font> <font color="#EF0000">{</font>
-        <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> j <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> j <font color="#990000">&lt;</font> SIZE <font color="#990000">-</font> <font color="#993399">1</font><font color="#990000">;</font> <font color="#990000">++</font>j<font color="#990000">)</font> <font color="#EF0000">{</font>
+    <font color="#DF0000">}</font>
+    <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> i <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> i <font color="#990000">&lt;</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>i<font color="#990000">)</font> <font color="#DF0000">{</font>
+        <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> j <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> j <font color="#990000">&lt;</font> SIZE <font color="#990000">-</font> <font color="#993399">1</font><font color="#990000">;</font> <font color="#990000">++</font>j<font color="#990000">)</font> <font color="#DF0000">{</font>
             matrix<font color="#990000">[</font>i <font color="#990000">*</font> SIZE <font color="#990000">+</font> j<font color="#990000">]</font> <font color="#990000">+=</font> <font color="#990000">(</font><font color="#008A00">double</font><font color="#990000">)</font> i<font color="#990000">;</font>
-        <font color="#EF0000">}</font>
-    <font color="#EF0000">}</font>
+        <font color="#DF0000">}</font>
+    <font color="#DF0000">}</font>
     <b><font color="#0000FF">return</font></b> <font color="#993399">0</font><font color="#990000">;</font>
-<font color="#EF0000">}</font>
+<font color="#DF0000">}</font>
 
 NOINLINE
-<font color="#008A00">double</font> <b><font color="#000000">ExecApplication</font></b><font color="#990000">(</font><font color="#008A00">int</font> x<font color="#990000">)</font> <font color="#EF0000">{</font>
-    <b><font color="#000000">puts</font></b><font color="#990000">(</font><font color="#EF0000">"Begin application execution."</font><font color="#990000">);</font>
-    <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> iteration <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> iteration <font color="#990000">&lt;</font> <font color="#993399">4</font><font color="#990000">;</font> <font color="#990000">++</font>iteration<font color="#990000">)</font> <font color="#EF0000">{</font>
-        <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> i <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> i <font color="#990000">&lt;</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>i<font color="#990000">)</font> <font color="#EF0000">{</font>
-            <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> j <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> j <font color="#990000">&lt;</font> SIZE <font color="#990000">-</font> x<font color="#990000">;</font> <font color="#990000">++</font>j<font color="#990000">)</font> <font color="#EF0000">{</font>
+<font color="#008A00">double</font> <b><font color="#000000">ExecApplication</font></b><font color="#990000">(</font><font color="#008A00">int</font> x<font color="#990000">)</font> <font color="#DF0000">{</font>
+    <b><font color="#000000">puts</font></b><font color="#990000">(</font><font color="#DF0000">"Begin application execution."</font><font color="#990000">);</font>
+    <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> iteration <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> iteration <font color="#990000">&lt;</font> <font color="#993399">4</font><font color="#990000">;</font> <font color="#990000">++</font>iteration<font color="#990000">)</font> <font color="#DF0000">{</font>
+        <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> i <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> i <font color="#990000">&lt;</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>i<font color="#990000">)</font> <font color="#DF0000">{</font>
+            <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> j <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> j <font color="#990000">&lt;</font> SIZE <font color="#990000">-</font> x<font color="#990000">;</font> <font color="#990000">++</font>j<font color="#990000">)</font> <font color="#DF0000">{</font>
                 matrix<font color="#990000">[</font>i <font color="#990000">*</font> SIZE <font color="#990000">+</font> j<font color="#990000">]</font> <font color="#990000">=</font> <font color="#990000">(</font>
                     matrix<font color="#990000">[</font>j <font color="#990000">*</font> SIZE <font color="#990000">+</font> i<font color="#990000">]</font> <font color="#990000">+</font>
                     matrix<font color="#990000">[(</font>j <font color="#990000">+</font> x<font color="#990000">)</font> <font color="#990000">*</font> SIZE <font color="#990000">+</font> i<font color="#990000">]</font>
                 <font color="#990000">)</font> <font color="#990000">/</font> <font color="#993399">2</font><font color="#990000">.;</font>
-            <font color="#EF0000">}</font>
-        <font color="#EF0000">}</font>
-    <font color="#EF0000">}</font>
+            <font color="#DF0000">}</font>
+        <font color="#DF0000">}</font>
+    <font color="#DF0000">}</font>
     <font color="#008A00">double</font> temp <font color="#990000">=</font> <font color="#993399">0.0</font><font color="#990000">;</font>
-    <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> i <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> i <font color="#990000">&lt;</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>i<font color="#990000">)</font> <font color="#EF0000">{</font>
-        <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> j <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> j <font color="#990000">&lt;</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>j<font color="#990000">)</font> <font color="#EF0000">{</font>
+    <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> i <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> i <font color="#990000">&lt;</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>i<font color="#990000">)</font> <font color="#DF0000">{</font>
+        <b><font color="#0000FF">for</font></b> <font color="#990000">(</font><font color="#008A00">int</font> j <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> j <font color="#990000">&lt;</font> SIZE<font color="#990000">;</font> <font color="#990000">++</font>j<font color="#990000">)</font> <font color="#DF0000">{</font>
             temp <font color="#990000">+=</font> matrix<font color="#990000">[</font>i <font color="#990000">*</font> SIZE <font color="#990000">+</font> j<font color="#990000">];</font>
-        <font color="#EF0000">}</font>
-    <font color="#EF0000">}</font>
+        <font color="#DF0000">}</font>
+    <font color="#DF0000">}</font>
     result <font color="#990000">=</font> temp<font color="#990000">;</font>
     <b><font color="#0000FF">return</font></b> result<font color="#990000">;</font>
-<font color="#EF0000">}</font>
+<font color="#DF0000">}</font>
 
 NOINLINE
-<font color="#008A00">int</font> <b><font color="#000000">TerminateApplication</font></b><font color="#990000">()</font> <font color="#EF0000">{</font>
-    <b><font color="#000000">puts</font></b><font color="#990000">(</font><font color="#EF0000">"Terminate application."</font><font color="#990000">);</font>
-    <b><font color="#0000FF">if</font></b> <font color="#990000">(</font>result <font color="#990000">&gt;</font> <font color="#993399">0</font><font color="#990000">)</font> <font color="#EF0000">{</font>
+<font color="#008A00">int</font> <b><font color="#000000">TerminateApplication</font></b><font color="#990000">()</font> <font color="#DF0000">{</font>
+    <b><font color="#000000">puts</font></b><font color="#990000">(</font><font color="#DF0000">"Terminate application."</font><font color="#990000">);</font>
+    <b><font color="#0000FF">if</font></b> <font color="#990000">(</font>result <font color="#990000">&gt;</font> <font color="#993399">0</font><font color="#990000">)</font> <font color="#DF0000">{</font>
         <b><font color="#0000FF">return</font></b> <font color="#993399">0</font><font color="#990000">;</font>
-    <font color="#EF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#EF0000">{</font>
+    <font color="#DF0000">}</font> <b><font color="#0000FF">else</font></b> <font color="#DF0000">{</font>
         <b><font color="#0000FF">return</font></b> <font color="#990000">-</font><font color="#993399">1</font><font color="#990000">;</font>
-    <font color="#EF0000">}</font>
-<font color="#EF0000">}</font>
+    <font color="#DF0000">}</font>
+<font color="#DF0000">}</font>
 
 NOINLINE
-<font color="#008A00">int</font> <b><font color="#000000">DoApplication</font></b><font color="#990000">(</font><font color="#008A00">int</font> x<font color="#990000">)</font> <font color="#EF0000">{</font>
+<font color="#008A00">int</font> <b><font color="#000000">DoApplication</font></b><font color="#990000">(</font><font color="#008A00">int</font> x<font color="#990000">)</font> <font color="#DF0000">{</font>
     <b><font color="#000000">InitApplication</font></b><font color="#990000">();</font>
     <b><font color="#000000">ExecApplication</font></b><font color="#990000">(</font>x<font color="#990000">);</font>
     <b><font color="#0000FF">return</font></b> <b><font color="#000000">TerminateApplication</font></b><font color="#990000">();</font>
-<font color="#EF0000">}</font>
+<font color="#DF0000">}</font>
 
-<font color="#008A00">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#008A00">int</font> argc<font color="#990000">,</font> <font color="#008A00">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#EF0000">{</font>
+<font color="#008A00">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#008A00">int</font> argc<font color="#990000">,</font> <font color="#008A00">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#DF0000">{</font>
     <font color="#008A00">int</font> x <font color="#990000">=</font> <font color="#993399">1</font><font color="#990000">;</font>
-    <b><font color="#0000FF">if</font></b> <font color="#990000">(</font>argc <font color="#990000">&gt;</font> <font color="#993399">1</font><font color="#990000">)</font> <font color="#EF0000">{</font>
+    <b><font color="#0000FF">if</font></b> <font color="#990000">(</font>argc <font color="#990000">&gt;</font> <font color="#993399">1</font><font color="#990000">)</font> <font color="#DF0000">{</font>
         x <font color="#990000">=</font> <b><font color="#000000">atoi</font></b><font color="#990000">(</font>argv<font color="#990000">[</font><font color="#993399">0</font><font color="#990000">]);</font>
-    <font color="#EF0000">}</font> 
+    <font color="#DF0000">}</font> 
     <b><font color="#000000">DoApplication</font></b><font color="#990000">(</font>x<font color="#990000">);</font>
     <b><font color="#0000FF">return</font></b> <font color="#993399">0</font><font color="#990000">;</font>
-<font color="#EF0000">}</font>
+<font color="#DF0000">}</font>
 </tt></pre></main>
 </body>
 </html>
