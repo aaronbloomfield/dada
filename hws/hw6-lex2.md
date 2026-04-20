@@ -35,7 +35,7 @@ You will submit filter.c or filter.cpp for this part.
 
 ## Part 2: Writing some x64 code
 
-Write some x64 code that has five assembly patterns to search for.  You can take the main.cpp and x64.s from [HW 5: obfuscation](hw5-obfuscation.md) ([html](hw5-obfuscation.html)).  Your program doesn't have to do anything, really, but must not take in any input.  The goal here is for you to be able to specify the exact assembly opcodes in your x64.s file.  You can just have your main.ccp print out "hello world" or similar, as long as it is linked (via the Makefile) with x64.s.  You should include the three patterns from [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)) (interrupt hook with eax, interrupt hook with ebx, and a tricky jump), as well as the two others that you are going to create in part 3.
+Write some x64 code that has five assembly patterns to search for.  You can take the main.cpp and x64.s from [HW 5: obfuscation](hw5-obfuscation.md) ([html](hw5-obfuscation.html)).  Your program doesn't have to do anything, really, but must not take in any input.  The goal here is for you to be able to specify the exact assembly opcodes in your x64.s file.  You can just have your main.cpp print out "hello world" or similar, as long as it is linked (via the Makefile) with x64.s.  You should include the three patterns from [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)) (interrupt hook with eax, interrupt hook with ebx, and a tricky jump), as well as the two others that you are going to create in part 3.
 
 You may want to read ahead to part 3 to determine the other two patterns (or you can come back to this part to put them in).
 

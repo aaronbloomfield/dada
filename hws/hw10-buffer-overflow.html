@@ -117,7 +117,7 @@ pointer.</p></li>
 a C program <code>attack.c</code>, that will generate the input. This C
 file can include comments that explain how the exploit works (which
 might any sort of partial credit/figuring out if our test environment
-diagrees with your environment/etc. possible). An example file which
+disagrees with your environment/etc. possible). An example file which
 produces a normal (non-exploit input) is:</p></li>
 </ol>
 <pre><code>#include &lt;stdio.h&gt;
@@ -180,7 +180,7 @@ variables:</p>
 <pre><code>$ setarch x86_64 -RL bash
 $ ./stackloc # run normally
 0x7ffffffffe034
-$ env - ./stackloc # run with no enviornment variables
+$ env - ./stackloc # run with no environment variables
 0x7ffffffffed84
 $ gdb ./stackloc
 ...
@@ -202,7 +202,7 @@ NOP sled more reliable.</p></li>
 <li><p>An encoding for a 1-byte NOP instruction on x86 and x64 is
 0x90.</p></li>
 <li><p>You could also try to figure out how to keep the debugger from
-changing the enviornment (likely with some <code>unset env</code>
+changing the environment (likely with some <code>unset env</code>
 commands), but this is less preferable, because it means your exploit is
 less reliable.</p></li>
 </ol>
@@ -221,7 +221,7 @@ code is placed in memory:
 <code>code:        movq value(%rip), %rax        leaq value(%rip), %rbx        ... value:        .quad 42</code>
 will place the value 42 in %rax and the address of the value 42 in %rax.
 But, unlike not using (%rip), the resulting machine code will not have
-any depenencies on the memory addresses eventually assigned to code and
+any dependencies on the memory addresses eventually assigned to code and
 value. It will only depend on how far apart code and value are in
 memory.</p>
 <p>Note that if you choose to do this, nasm will become difficult to use
@@ -253,7 +253,7 @@ than looking at the <code>objdump</code> output.</p>
 function</h3>
 <ol type="1">
 <li><p>The executable contains <code>PrintGradeAndExit</code> function.
-To figure out what the arugments mean, figure out what the arguments of
+To figure out what the arguments mean, figure out what the arguments of
 its call to <code>printf</code> are.</p></li>
 <li><p>A challenge with calling the <code>PrintGradeAndExit</code>
 function is that our machine code and data is on the stack and could be
@@ -291,7 +291,7 @@ mov $length_of_string, %rdx /* arg 3: length of string */
 syscall</code></pre>
 <ol start="4" type="1">
 <li>If you decide that your attack code should exit directly, you can do
-this by caling the <code>exit@plt</code> “stub” or by making an
+this by calling the <code>exit@plt</code> “stub” or by making an
 <code>exit_group</code> system call directly. An example assembly
 snippet to make an <code>exit_group</code> system call is:</li>
 </ol>
@@ -305,8 +305,8 @@ syscall</code></pre>
 href="http://shell-storm.org/shellcode/">this archive of shellcode</a>.
 Note that some of the shellcode you find may make assumptions about the
 initial contents of registers or location of the stack pointer. If you
-use prebuilt shellcode like this, you <strong>must</strong> clearly cite
-its source.</p></li>
+use pre-built shellcode like this, you <strong>must</strong> clearly
+cite its source.</p></li>
 <li><p>On Linux, <code>execve</code> <strong><em>replaces</em></strong>
 the current program with the executed program. The new program inherits
 the same input and output as the prior program.</p></li>

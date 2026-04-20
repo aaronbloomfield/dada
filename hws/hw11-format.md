@@ -16,7 +16,7 @@ Assignment Resources
 
 ## Details
 
-1. Like the buffer overflow assignment, this assignment is likely to be very sensitive to the exact environemnt used. Your exploit must work on the Ubuntu 16.04 LTS environment with the exact executable file we provide.
+1. Like the buffer overflow assignment, this assignment is likely to be very sensitive to the exact environment used. Your exploit must work on the Ubuntu 16.04 LTS environment with the exact executable file we provide.
 
 2. The executable you must exploit is located on Collab in the Resources section, and is named `format-string-vulnerability.exe`. It will ask for your name, then ask you to confirm the name after printing it out. This first printing out will use code similar to the following:
 ```
@@ -50,7 +50,7 @@ With NAME replaced with your name. To do this, the easiest way will be to includ
 
     Your C file should include comments explaining any unusual values you needed to compute.
 
-5. Because of how the format string vulernability works, it is likely that there will be garbled output before the output with a recommendation of A. For example, a successful attack might look like:
+5. Because of how the format string vulnerability works, it is likely that there will be garbled output before the output with a recommendation of A. For example, a successful attack might look like:
 ```
 $ ./attack-format-string > attack_string.txt
 $ ./format-string-vulnerability.exe < attack_string.txt

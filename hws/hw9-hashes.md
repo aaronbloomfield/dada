@@ -43,7 +43,7 @@ The program should write its output to a file named `output.txt`, which should c
 
 - The contents of the original file in their entirety (it will only be printable ASCII characters)
 - A message of your own (make it something witty, funny, or otherwise interesting for us to read).
-- A reasonable amout of PRINTABLE ASCII characters (decimal values 32 - 127) to the end of the input file (reasonable means 10 or less) so that the new output file will have the same CRC as the passed desired CRC value.
+- A reasonable amount of PRINTABLE ASCII characters (decimal values 32 - 127) to the end of the input file (reasonable means 10 or less) so that the new output file will have the same CRC as the passed desired CRC value.
 
 Note that there are differences in text files between Linux and Windows platforms (see [here](http://en.wikipedia.org/wiki/Newline) for details); this program will be run in (and graded in) a Linux environment.
 

@@ -20,6 +20,6 @@ Language specific information: note that the compilation command is dependent on
 - C: typically compiled with `gcc *.c`; thus files can be named anything with a .c extension.  The server has gcc version 5.4.0.
 - C++: typically compiled with "g++ *.cpp"; thus files can be named anything with a .cpp extension.  The server has g++ version 5.4.0.
 - Java: typically compiled with `javac Main.java`; thus, the primary file must be Main.java.  Java is OpenJDK version 1.8.0.
-- Python: no compilation, due to being an interpreted language; tyipcally executed with `python main.py`, so make sure you name your file correctly.  The system has Python version 2.7.12 (run via `python main.py`) and Python version 3.5.2 (run via `python3 main.py`).
+- Python: no compilation, due to being an interpreted language; typically executed with `python main.py`, so make sure you name your file correctly.  The system has Python version 2.7.12 (run via `python main.py`) and Python version 3.5.2 (run via `python3 main.py`).
 - PHP: no compilation, due to being an interpreted language; typically executed with `php main.php`, so make sure you name your file correctly.  The first line in your program should be `<?php` and not `#!/usr/bin/php`.  PHP version 7.0.22.
 - Ruby: no compilation, due to being an interpreted language; typically executed with `ruby main.rb`, so make sure you name your file correctly.  The Ruby version installed is ruby 2.3.1.

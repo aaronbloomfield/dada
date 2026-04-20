@@ -82,7 +82,7 @@ Start:         ; virus code body
 ```
 
 
-## Cascade Virus Walkthrough
+## Cascade Virus Walk-through
 - Setting up the indices:
 ```
  lea  si,Start  ; start of encrypted code 
@@ -93,7 +93,7 @@ Start:         ; virus code body
 - Virus uses hex offsets; we show "Start" to make it more readable
 
 
-## Cascade Virus Walkthrough
+## Cascade Virus Walk-through
 - Stack pointer used as counter
 ```
 mov  sp,0682h  ; length of encrypted code (1666 bytes)
@@ -104,7 +104,7 @@ mov  sp,0682h  ; length of encrypted code (1666 bytes)
 - However, this line of code is a distinctive pattern (signature) for this virus
 
 
-## Cascade Virus Walkthrough
+## Cascade Virus Walk-through
 - The XOR encryption lines:
 ```
 xor  [si],si   ; xor code with its address
@@ -117,7 +117,7 @@ xor  [si],sp   ; xor code with its inverse index
     - IMPORTANT: Even the hex patterns are file-dependent, because they depend on addresses
 
 
-## Cascade Virus Walkthrough
+## Cascade Virus Walk-through
 - Increment counters/indices and loop:
 ```
 inc  si        ; increment address pointer
@@ -178,7 +178,7 @@ mov  sp,0682h  ; length of encrypted code (1666 bytes)
 	- Proprietary
 
 
-## Advanted compiler tools
+## Advanced compiler tools
 - Phoenix, from Microsoft, could be used to dump the code after the decryption has occurred
 	- Still need to black-box or sandbox the application to prevent damage
 - SDT (software dynamic translation, or run-time compilation) decodes a program into a buffer as it runs
@@ -383,7 +383,7 @@ Start:          ; encrypted virus body starts here
 - The 1260 decryptor has three instruction groups, with 3, 2, and 2 instructions, respectively
 - The groups were the opcodes that could be permuted without changing the decryption result
 	- i.e. there is no inter-instruction dependence among the instructions inside a group
-- So, the reorderings within the groups produce 3! \* 2! \* 2! = 24 variants
+- So, the re-orderings within the groups produce 3! \* 2! \* 2! = 24 variants
 - This gives a multiplicative factor of 24 to apply to all variants that can be produced using junk instructions
 
 
@@ -392,7 +392,7 @@ Start:          ; encrypted virus body starts here
 - However, there are far more possibilities than these three locations, as each location can hold from zero to 39 instructions
 	- 39-byte junk inst. limit (imposed by Washburn)
 	- Shortest x86 instructions take 1 byte; most are 2-3
-	- Let's guess that the replicator will choose ~15 junk instructions totalling 39 bytes
+	- Let's guess that the replicator will choose ~15 junk instructions totaling 39 bytes
 	- 11 locations are possible throughout the decryptor
 
 
@@ -663,7 +663,7 @@ End:              jmp Instr5        junk
 - EPO, metamorphic, a bit of everything
 - First virus to include a code integrator (Mistfall)
 	- Takes apart PE files, inserts it's code inside, reassembles it
-	  - The reassembly properly fixes the jumps, reloation data, etc.
+	  - The reassembly properly fixes the jumps, relocation data, etc.
 - Szor takes 4 full pages to describe all the things that this virus can do
 	- http://vil.nai.com/vil/content/v_99382.htm 
 

@@ -50,7 +50,7 @@ as:</p>
 ret</code></pre>
 <p>This can be encoded on x86-64 using only six bytes, and the encoding
 does not change based on where the push instruction is placed. This
-makes it easy to compute the machine code seperately from inserting it
+makes it easy to compute the machine code separately from inserting it
 somewhere, and so has been commonly seen in viruses.</p>
 <p>One could also implement a “tricky jump” by inserting a conventional
 jump instruction:</p>
@@ -100,8 +100,8 @@ You have been infected with a virus!
 Begin application execution.
 Terminate application.</code></pre>
 <p>Note: add the second line <em>exactly</em> as is, as the auto-grading
-scripts will be looking for that line. If you add extra spaces, speling
-mistakes, different punctionation, etc., you will lose points!</p>
+scripts will be looking for that line. If you add extra spaces, spelling
+mistakes, different punctuation, etc., you will lose points!</p>
 <p>You will use the “tricky jump” method of infection. The push version
 is probably the easiest to use, but you may use any technique. To
 simplify this assignment:</p>
@@ -169,11 +169,11 @@ executable, and we will expect the result to be a file named
 <li><p>You should use the utility objdump to examine the executable
 <code>target.exe</code>. The option <code>--disassemble</code> is
 useful. In particular, you need to determine the starting address of the
-virus code. The dissasembly will also help you determine the opcodes of
+virus code. The disassembly will also help you determine the opcodes of
 the instructions that you need to insert (i.e., a <code>push</code>
 instruction and a <code>ret</code> instruction). You may wish to consult
 the objdump manual (<code>man objdump</code>).</p></li>
-<li><p>Identify where the constant stings “Initialize appliation” and
+<li><p>Identify where the constant stings “Initialize application” and
 “Begin application execution” are referenced to locate relevant parts of
 the application code.</p></li>
 <li><p>Look for a large area of <code>nop</code> opcodes in the
@@ -250,8 +250,8 @@ infection is small.</p></li>
 need to open files in binary mode, next text mode.</p></li>
 <li><p>The virus code we’ve given finishes by returning with a
 <code>ret</code> instruction. (This is actually by returning from
-<code>puts()</code>.) So whereever you insert the virus function needs
-to be a place where it is safe to return from. If you are experiencing a
+<code>puts()</code>.) So wherever you insert the virus function needs to
+be a place where it is safe to return from. If you are experiencing a
 segfault after the virus code prints out its message, this is the most
 likely reason why.</p></li>
 </ol>

@@ -152,7 +152,7 @@ sub edi, 4
 	  <section data-markdown data-separator="^\n$"><textarea data-template>
 
 ## The problem specified
-- Let's analyize a simple obfuscation: an arbitrary number of increments followed by an equal number of decrements
+- Let's analyze a simple obfuscation: an arbitrary number of increments followed by an equal number of decrements
   - The net effect is zero!
 - Start with a series of increments
   - `inc rax`; `add rax, 1`; `sub rax, -1`; etc.
@@ -225,7 +225,7 @@ sub edi, 4
 ## Trivial Obfuscations
 - Adding NOPs
   - `nop`, `add rax, 0`, `imul rax, 1`, `xchg rax, rax`, etc.
-- Moidfying a register that is never used
+- Modifying a register that is never used
 
 
 ## Simple algorithmic obfuscations

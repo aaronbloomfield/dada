@@ -45,7 +45,7 @@ I recommend that you get a grade of A on this assignment.
 
 7. Note that the location of the stack pointer can vary slightly when your environment changes. See the section "Variations in the location of the stack pointer" under hints below. Because of this, you should plan on using a [NOP sled](../slides/14-buffer-overflows.html#/nopsled) so you don't have to precisely predict the address of the stack pointer.
 
-8. Rather than submit the input file alone, we'd like you to submit a C program `attack.c`, that will generate the input. This C file can include comments that explain how the exploit works (which might any sort of partial credit/figuring out if our test environment diagrees with your environment/etc. possible). An example file which produces a normal (non-exploit input) is:
+8. Rather than submit the input file alone, we'd like you to submit a C program `attack.c`, that will generate the input. This C file can include comments that explain how the exploit works (which might any sort of partial credit/figuring out if our test environment disagrees with your environment/etc. possible). An example file which produces a normal (non-exploit input) is:
 ```
 #include <stdio.h>
 int main(void) {
@@ -96,7 +96,7 @@ has different output on my system depending on the environment variables:
 $ setarch x86_64 -RL bash
 $ ./stackloc # run normally
 0x7ffffffffe034
-$ env - ./stackloc # run with no enviornment variables
+$ env - ./stackloc # run with no environment variables
 0x7ffffffffed84
 $ gdb ./stackloc
 ...
@@ -110,7 +110,7 @@ $ gdb ./stackloc
 
 5. An encoding for a 1-byte NOP instruction on x86 and x64 is 0x90.
 
-6. You could also try to figure out how to keep the debugger from changing the enviornment (likely with some `unset env` commands), but this is less preferable, because it means your exploit is less reliable.
+6. You could also try to figure out how to keep the debugger from changing the environment (likely with some `unset env` commands), but this is less preferable, because it means your exploit is less reliable.
 
 ### Shellcode production
 
@@ -125,7 +125,7 @@ code:
 value:
        .quad 42
 ```
-will place the value 42 in %rax and the address of the value 42 in %rax. But, unlike not using (%rip), the resulting machine code will not have any depenencies on the memory addresses eventually assigned to code and value. It will only depend on how far apart code and value are in memory.
+will place the value 42 in %rax and the address of the value 42 in %rax. But, unlike not using (%rip), the resulting machine code will not have any dependencies on the memory addresses eventually assigned to code and value. It will only depend on how far apart code and value are in memory.
 
 	Note that if you choose to do this, nasm will become difficult to use (it doesn't interact well with rip).  You can program in AT&T syntax (shown above) and use `as` to compile the assembly.
 
@@ -147,7 +147,7 @@ will take the `.text` section of the object file `compiled_code.o` and put it in
 
 ### Running an executable function
 
-1. The executable contains `PrintGradeAndExit` function. To figure out what the arugments mean, figure out what the arguments of its call to `printf` are.
+1. The executable contains `PrintGradeAndExit` function. To figure out what the arguments mean, figure out what the arguments of its call to `printf` are.
 
 2. A challenge with calling the `PrintGradeAndExit` function is that our machine code and data is on the stack and could be corrupted by our call to `PrintGradeAndExit` if we are not careful. To avoid this, you can explicitly set the stack pointer. For example, you might use
 ```
@@ -172,7 +172,7 @@ mov $length_of_string, %rdx /* arg 3: length of string */
 syscall
 ```
 
-4. If you decide that your attack code should exit directly, you can do this by caling the `exit@plt` "stub" or by making an `exit_group` system call directly. An example assembly snippet to make an `exit_group` system call is:
+4. If you decide that your attack code should exit directly, you can do this by calling the `exit@plt` "stub" or by making an `exit_group` system call directly. An example assembly snippet to make an `exit_group` system call is:
 ```
 mov $231, %eax /* system call number 231 = exit_group */
 xor %rdi, %rdi /* arg 1: exit code = 0 */
@@ -181,7 +181,7 @@ syscall
 
 ### Executing a shell
 
-1. You can find an example of shellcode that runs runs the `execve` system call to execute `/bin/sh` in [this archive of shellcode](http://shell-storm.org/shellcode/). Note that some of the shellcode you find may make assumptions about the initial contents of registers or location of the stack pointer. If you use prebuilt shellcode like this, you **must** clearly cite its source.
+1. You can find an example of shellcode that runs runs the `execve` system call to execute `/bin/sh` in [this archive of shellcode](http://shell-storm.org/shellcode/). Note that some of the shellcode you find may make assumptions about the initial contents of registers or location of the stack pointer. If you use pre-built shellcode like this, you **must** clearly cite its source.
 
 2. On Linux, `execve` ***replaces*** the current program with the executed program. The new program inherits the same input and output as the prior program.
 

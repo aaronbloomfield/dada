@@ -17,7 +17,7 @@ A "tricky jump" can be efficiently implemented (only six bytes) as:
 pushq $AddressOfVirusFunction
 ret
 ```
-This can be encoded on x86-64 using only six bytes, and the encoding does not change based on where the push instruction is placed. This makes it easy to compute the machine code seperately from inserting it somewhere, and so has been commonly seen in viruses.
+This can be encoded on x86-64 using only six bytes, and the encoding does not change based on where the push instruction is placed. This makes it easy to compute the machine code separately from inserting it somewhere, and so has been commonly seen in viruses.
 
 One could also implement a "tricky jump" by inserting a conventional jump instruction:
 ```
@@ -55,7 +55,7 @@ Begin application execution.
 Terminate application.
 ```
 
-Note: add the second line *exactly* as is, as the auto-grading scripts will be looking for that line.  If you add extra spaces, speling mistakes, different punctionation, etc., you will lose points!
+Note: add the second line *exactly* as is, as the auto-grading scripts will be looking for that line.  If you add extra spaces, spelling mistakes, different punctuation, etc., you will lose points!
 
 You will use the "tricky jump" method of infection. The push version is probably the easiest to use, but you may use any technique. To simplify this assignment:
 
@@ -95,9 +95,9 @@ When we run your program, we will put the specified `target.exe` in the same dir
 
 ## Methodology and Hints
 
-1. You should use the utility objdump to examine the executable `target.exe`. The option `--disassemble` is useful. In particular, you need to determine the starting address of the virus code. The dissasembly will also help you determine the opcodes of the instructions that you need to insert (i.e., a `push` instruction and a `ret` instruction). You may wish to consult the objdump manual (`man objdump`).
+1. You should use the utility objdump to examine the executable `target.exe`. The option `--disassemble` is useful. In particular, you need to determine the starting address of the virus code. The disassembly will also help you determine the opcodes of the instructions that you need to insert (i.e., a `push` instruction and a `ret` instruction). You may wish to consult the objdump manual (`man objdump`).
 
-2. Identify where the constant stings "Initialize appliation" and "Begin application execution" are referenced to locate relevant parts of the application code.
+2. Identify where the constant stings "Initialize application" and "Begin application execution" are referenced to locate relevant parts of the application code.
 
 3. Look for a large area of `nop` opcodes in the disassembly to determine where to insert the virus code. Record the address of this location in memory to generate the "tricky jump" code you will insert elsewhere in the executable.
 
@@ -144,4 +144,4 @@ When we run your program, we will put the specified `target.exe` in the same dir
 
 10. We are reading and writing binary files, not text files. You may need to open files in binary mode, next text mode.
 
-11. The virus code we've given finishes by returning with a `ret` instruction. (This is actually by returning from `puts()`.) So whereever you insert the virus function needs to be a place where it is safe to return from. If you are experiencing a segfault after the virus code prints out its message, this is the most likely reason why.
+11. The virus code we've given finishes by returning with a `ret` instruction. (This is actually by returning from `puts()`.) So wherever you insert the virus function needs to be a place where it is safe to return from. If you are experiencing a segfault after the virus code prints out its message, this is the most likely reason why.
