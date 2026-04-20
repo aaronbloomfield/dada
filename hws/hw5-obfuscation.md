@@ -6,7 +6,7 @@ DADA: HW 5: Obfuscating x64 assembly code
 In the last homework, we saw how to recognize a virus pattern.  While the patterns we found were very common patterns (a tricky jump and an interrupt hook), longer patterns can recognize a specific virus.  This homework will write an obfuscator, which will take x64 code and modify it so that it can *not* be recognized in such a manner.  Your program will read in an x64 assembly file, add obfuscation to the program, and print the output.
 
 
-### Program requirements
+## Program requirements
 
 The program can be written in any language that you would like, with the following restrictions:
 
@@ -40,7 +40,7 @@ These restrictions should allow for easy reading of the x64 assembly input.  The
 The output of your program should be an obfuscated x64 program __THAT COMPUTES THE EXACT SAME RESULT__.  Comments should not be output, and you are free to output blank lines or not (it's probably easier to not output them).  We are going to run the output of your code through NASM, so it needs to compile.  Furthermore, your output should conform to the x64 formatting guidelines above, as we will try to run your code through your program a second time.
 
 
-### Sample execution
+## Sample execution
 
 You can start with the sample code provided in [CS 2150 lab 8 (x64, part 1)](http://aaronbloomfield.github.io/pdr/labs/lab08-64bit/index.html): Makefile, main.cpp, and vecsum.s.  However, the vecsum.s has to be modified to conform to the above guidelines (reformatting of comments and removal of colons; all x64 opcodes stayed the same).  Below is the vecsum.s file properly formatted, but without any comments:
 
@@ -87,7 +87,7 @@ done:
 Note that in the above program the obfuscations are clearly labeled.  Not only are you *not* expected to do that, but it will be impractical when you are doing more advanced obfuscations.  We did it here for clarity in understanding the program that resulted.
 
 
-### Tips and Tricks
+## Tips and Tricks
 
 - To deal with leading and trailing white space on a line, use `trim()` (or the equivalent in your language of choice).
 - To easily parse the parts of a line that contains an x64 opcode, use `split()` or `explode()` (or the equivalent in your language of choice).
@@ -98,7 +98,7 @@ Note that in the above program the obfuscations are clearly labeled.  Not only a
 - Using randomization is going to be necessary, otherwise it will just create another x64 program pattern to match exactly.
 
 
-### Types of obfuscations
+## Types of obfuscations
 
 The program above has as simple obfuscations as there can be: there are three types of NOPs: `nop` itself, adding zero, and multiplying by 1.  You can imagine a bunch of other NOPs: subtracting 0, exchanging (`xchg` opcode) a register with itself, etc.  In each one, a random register can be chosen, which could be any of the x64 registers.  One option would be to have a percentage chance to put such a nop after each line (that is not a `ret` or `cmp`).
 
@@ -109,7 +109,7 @@ Your job is to implement more complicated obfuscation.  In the program above, th
 It is likely that you will need to generate more complicated assembly routines to demonstrate your code obfuscation - you will be submitting these as well.
 
 
-### How to run assembly
+## How to run assembly
 
 There are three different platforms that people are using: Windows, Mac OS X, and Linux.  As a result, there are differences in how to compile and run x64 assembly.
 
@@ -118,7 +118,7 @@ __YOUR SUBMITTED PROGRAM MUST RUN ON A 64 BIT LINUX MACHINE!__ And must be compi
 You can look at [CS 2150 lab 8 (x64, part 1)](http://aaronbloomfield.github.io/pdr/labs/lab08-64bit/index.html), which discusses the various ways to compile x64 for the various platforms.
 
 
-### Register usage
+## Register usage
 
 Your obfuscations may need to use temporary registers for their computations.  One way to do this is to trace the registers throughout the execution of the program and see which ones are not being used, but this is beyond the scope of this homework.
 
@@ -127,7 +127,7 @@ For this homework, you can safely assume that you may use the rcx, r8, and r9 re
 Note that you will have to assure that your provided assembly code (in x64.s and whatever you test with) also does not use these registers.
 
 
-### Submission requirements
+## Submission requirements
 
 You should submit the following files.  __BE SURE TO NAME THEM PROPERLY__, including capitalization - otherwise, can can't call our testing scripts on your code, and we'll just give you a zero.  For example, we will assume that your assembly file is called `x64.s`, your C++ file `main.cpp`.  Your sample C++/assembly file needs to compile to an `x64` executable (not `a.out`!).  The submission system will call `make` to compile everything.
 
@@ -137,7 +137,7 @@ You should submit the following files.  __BE SURE TO NAME THEM PROPERLY__, inclu
 - `Makefile`: this should compile BOTH the main.cpp/x64.s program (into an executable named 'x64') and, if necessary, your obfuscation program (only C, C++, and Java need to do this compilation step; Python, Ruby, and PHP do not).  When you submit it, it __MUST CALL g++ WITH THE -m64 FLAG__.  See above for details, and see below for a sample Makefile.
 - `readme.pdf`: this file should describe the obfuscation techniques that you use, and where we would find them in the file.  We realize that you can't specify exactly where (due to the fact that your program will have randomization), but give us as good an idea as you can.  And see [How to create a PDF file].  Note that we will not know about an obfuscation technique unless it is listed here!
 
-### Grading guidelines
+## Grading guidelines
 
 Obfuscations types will yield the following points:
 
@@ -158,14 +158,14 @@ This has the net effect of requiring at least two complicated algorithmic implem
 ***NOTE:*** if your obfuscated code doesn't compile, then you will get a very low score.  Anybody can scramble a program so that it doesn't compile.  It will be far better to provide a small number of obfuscations that work properly rather than a lot that do not work.
 
 
-### Execution
+## Execution
 
 We are going to run your obfuscator on your provided source code (x64.s), and compile the result along with your main.cpp, and make sure that it works the same way that your original (un-obfuscated) x64.s and main.cpp worked.
 
 We are also going to obfuscate our own assembly code.  In particular, we are going to obfuscate our code *multiple times* -- meaning we will take the output of our obfuscated assembly code and run it through the obfuscator again and again.  It should produce the same result each time.
 
 
-### Makefile
+## Makefile
 
 Below is a sample Makefile for an obfuscator written in C++.  You are certainly welcome to use a more complicated Makefile; this is the minimum required for this assignment.
 

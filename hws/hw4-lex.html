@@ -30,7 +30,7 @@
 recognizing viruses</h1>
 <p><a href="index.html">Go up to the main DADA homeworks page</a> (<a
 href="index.md">md</a>)</p>
-<h3 id="introduction">Introduction</h3>
+<h2 id="introduction">Introduction</h2>
 <p>This assignment will teach you to recognize assembly language code
 patterns unique to viruses using regular expressions. The regular
 expressions will be defined using flex, a modern version of the well
@@ -41,7 +41,7 @@ VirtualBox image. Although most viruses are for the Windows platform,
 for reasons described in class, we are using the Linux platform to make
 this assignment easier to perform. However, we will be examining Windows
 executable files.</p>
-<h3 id="virus-code-patterns">Virus Code Patterns</h3>
+<h2 id="virus-code-patterns">Virus Code Patterns</h2>
 <p>This assignment will focus on the recognition of just two assembly
 language code patterns that are not common in legitimate application
 code, but are common in the viruses we have studied in recent
@@ -81,7 +81,7 @@ particular registers used; however, the register initialized with the
 value 4Ch must be the same register used in the ensuing instruction as
 the pointer to memory, else this code would not fit the pattern of an
 interrupt hook.</p>
-<h3 id="using-flex-on-dumpbin-output">Using flex on dumpbin output</h3>
+<h2 id="using-flex-on-dumpbin-output">Using flex on dumpbin output</h2>
 <ol type="1">
 <li><p>The code we are looking at is a disassembly of a PE32 file. The
 text disassembly of the file is done by a Windows utility called
@@ -122,7 +122,7 @@ page. You should get some output of detected patterns.</p></li>
 <li><p>Create a Makefile that will compile your code upon entering
 ‘make’. The executable should be called ‘a.out’.</p></li>
 </ol>
-<h3 id="item-to-submit">Item to Submit</h3>
+<h2 id="item-to-submit">Item to Submit</h2>
 <p>In addition to your Makefile, the one code file is called
 <code>patterns.l</code>. It should read in the virus file from standard
 input, and write all output to standard output. You should be able to

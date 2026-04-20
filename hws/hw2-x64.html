@@ -29,7 +29,7 @@
 <h1 id="dada-hw-2-x64-assembly">DADA: HW 2: x64 assembly</h1>
 <p><a href="index.html">Go up to the main DADA homeworks page</a> (<a
 href="index.md">md</a>)</p>
-<h3 id="introduction">Introduction</h3>
+<h2 id="introduction">Introduction</h2>
 <p>This assignment will refresh your knowledge of x86 assembly language
 (which you will have to analyze in all the virus detection assignments
 later in this semester), expose you to the “tricky jump” style of code
@@ -46,7 +46,7 @@ code may have to call <code>_foo()</code> instead of <code>foo()</code>
 - try each one to see which one works. When you submit it, it should
 <strong>not</strong> have the underscore. The binary analysis will have
 to be done under the reference platform of 64-bit Linux.</p>
-<h3 id="part-1-x86-code">Part 1: x86 code</h3>
+<h2 id="part-1-x86-code">Part 1: x86 code</h2>
 <ul>
 <li>Read the <a href="../docs/tricky-jump.html">tricky jump document</a>
 (<a href="../docs/tricky-jump.md">md</a>)</li>
@@ -94,7 +94,7 @@ int  main () {
   cout &lt;&lt; &quot;volume: &quot; &lt;&lt; vol &lt;&lt; endl;
   return 0;
 }</code></pre>
-<h3 id="part-2-analysis">Part 2: analysis</h3>
+<h2 id="part-2-analysis">Part 2: analysis</h2>
 <p>The questions to answer are below. There are a number of command-line
 tools that can be used to generate these answers, which are listed by
 each question. You can type <code>man foo</code> at the Linux command
@@ -144,8 +144,8 @@ questions above (you can from the web page copy of this assignment) and
 type your answers below each question. Below each answer, copy and paste
 the specific portions of the tools output that were used to answer the
 question.</p>
-<h3 id="part-3-detecting-tricky-jumps">Part 3: detecting tricky
-jumps</h3>
+<h2 id="part-3-detecting-tricky-jumps">Part 3: detecting tricky
+jumps</h2>
 <p>Write a separate C or C++ program that takes in, as the input, an
 objdump from the above executable. It should read it in as standard
 input - we are not dealing with file input and output. First, you may
@@ -170,7 +170,7 @@ found”.</p>
 solution was about 20 lines.</p>
 <p>Your Makefile MUST generate an executable called <code>tricky</code>!
 Anything else will not be graded!</p>
-<h3 id="part-4-makefile">Part 4: Makefile</h3>
+<h2 id="part-4-makefile">Part 4: Makefile</h2>
 <p>You will need to create a Makefile that will compile the programs.
 There are three <strong>required</strong> aspects to the Makefile.</p>
 <ul>
@@ -189,8 +189,8 @@ different, as long as your Makefile can compile both of them. We just
 have to be able to reasonably tell which source code file name is which.
 But the executables need to be named exactly the same as specified
 herein.</p>
-<h3 id="notes-on-interpreting-the-objdump-file">Notes on interpreting
-the objdump file</h3>
+<h2 id="notes-on-interpreting-the-objdump-file">Notes on interpreting
+the objdump file</h2>
 <p>This section (and some of the questions for analysis.pdf) was taken
 with permission from Charles Reiss (original was <a
 href="https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/re.html">here</a>).</p>
@@ -328,7 +328,7 @@ its primary use is to support thread-local storage, as occurs briefly in
 the assembly in this assignment. It is, still, however, universally
 present on x86 and is entangled with x86’s implementation of kernel mode
 and exceptions.</p>
-<h3 id="items-to-submit">Items to Submit</h3>
+<h2 id="items-to-submit">Items to Submit</h2>
 <p>These files need to be submitted to the HW 2 assignment via the
 course tools submission.</p>
 <ul>

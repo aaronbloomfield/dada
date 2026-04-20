@@ -3,7 +3,7 @@ DADA: HW 8: RSA
 
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 
-### Purpose 
+## Purpose 
 
 This assignment will focus on the implementation and the vulnerabilities of the RSA algorithm. Specifically, you will have to implement RSA key generation, RSA encryption and decryption, a man‐in‐the‐middle attack, and cracking of RSA messages. 
 
@@ -11,13 +11,13 @@ The intent is to implement this in Java, since the JDK provides the functionalit
 
 As Java is meant to be cross-platform, there is no specific reference platform for this assignment.  We will be using Java 1.8 to compile and run your program.
 
-### Prerequisites to Review 
+## Prerequisites to Review 
 
 You should be familiar with both how the RSA algorithm works, as well as the man‐in‐the‐middle attack. These were both discussed in [the encryption lecture](../slides/11-encryption.html#/), and more details are available online (see the [Wikipedia article on RSA](http://en.wikipedia.org/wiki/RSA). Keep in mind, however, that the Wikipedia page uses different variable names than what the lecture used. For the man‐in‐the‐middle attack, see [here](http://en.wikipedia.org/wiki/Man_in_the_middle_attack).  You will also want to reference the [Java SDK documentation](https://docs.oracle.com/javase/8/docs/api/), specifically the [java.math.BigInteger class](https://docs.oracle.com/javase/8/docs/api/java/math/BigInteger.html).
 
 This assignment uses the MD5 hashing algorithm.  We realize that it is not cryptographically secure, but we will continue to use it for this assignment, as it will be easier to use than the more secure algorithms for the purposes of the work herein.
 
-### Assignment Details 
+## Assignment Details 
 
 For this assignment, you must implement five aspects of the RSA algorithm. This assignment is to be done in Java, as you will need to use the BigInteger class. Your class should be called RSA, and should be in a file called RSA.java. All other necessary classes should be in that file (you can have multiple classes in a single Java file, but only one public class). 
 
@@ -34,7 +34,7 @@ The `main()` method should call the appropriate methods as indicated by the comm
 For this homework, we are focusing on the RSA algorithmic implementations, and not network issues. Thus, your communicating parties will store their data (keys, messages, etc.) in files. The communication between the communicating parties will be by writing to, and then reading from, the given files. While the other part of the key is easily available (the files are all in the same directory), you obviously can't use the private key for cracking the message.
 
 
-### Command line parameters 
+## Command line parameters 
 
 The program will take in a number of command‐line parameters.  Note that the command-line parameters are parsed __in order__ - this means that if you call `java RSA -keygen 10 -verbose`, you will not get any verbosity, as that parameter was specified *after* the `-keygen` parameter was given.  We provide a sample `main()` method, below, that provides skeleton code to handle these parameters.
 
@@ -116,7 +116,7 @@ chmod 755 sample-usage.sh
 
 While we are not going to try to break your program with strange combinations of command line parameters (trying to decrypt but not specifying a key), we would encourage you to put some sanity error‐checking code in there for your own sanity while developing the program.
 
-### Some Java code
+## Some Java code
 
 We are providing two methods for you to use in your homework.
 
@@ -187,7 +187,7 @@ Some notes on this `main()` method:
 - When converting a series of characters to a number, you should first convert it to a byte array (the `String getBytes()` method does this).  At this point, you have a numerical representation for each character in the string.  Multiply the current value by 256, and add the byte value of the next character; repeat until you have encoded the right number of characters (as determined by your block size).  Your number will need to be in a `BigInteger`.
 - To figure out your block size (which we'll call *b*) -- which is the number of characters you can encode in one block -- let *x* be the number of bits in *n* (found via the BigInteger `bitLength() method)`.  Divide *x-1* by 8 (the minus one is important here to prevent rounding issues).  The 8 is equivalent to log<sub>2</sub>*n*/8, which is equivalent to log<sub>2</sub>*n*/log<sub>2</sub>256, the latter of which is what was mentioned in class.  As mentioned below, you can assume that we will always use keys that support a block size of at least 2.
 
-### Interoperability
+## Interoperability
 
 We want to be sure that we can all encode and decode each other's messages.  To that extent, we have a few requirements for the files produced.
 
@@ -201,7 +201,7 @@ __File names:__ The key filenames will be named \<foo\>-public.key, \<foo\>-priv
 
 __Other:__ All files (messages, keys, ciphertext, what‐not) will have only printable ASCII characters, so you need not worry about binary files.   But there may be whitespace as well: newlines, tabs, linefeeds, etc.  Make sure that your code does not have UTF-8 characters in it!  Given a file, you can tell what type of characters it has via the `file foo.txt` command.
 
-### Examples
+## Examples
 
 Here is a private key generated via the above requirements; you can name this file `test-private.key`:
 
@@ -239,7 +239,7 @@ This was encrypted with the command: `java RSA -key test -input plaintext.txt -o
 
 If your code follows these conventions, then you should be able to properly decrypt that message with the following command: `java RSA -key test -input ciphertext.txt -output plaintext.txt -decrypt`.
 
-### Submission requirements
+## Submission requirements
 
 You should submit two files: `RSA.java`, which contains all your Java code, and a shell script named `man‐in‐the‐middle‐attack.sh`.  The compilation command will be `javac *.java`, so your RSA.java should have only one public class called `RSA`, and not be in a package.
 

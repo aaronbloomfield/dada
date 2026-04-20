@@ -4,14 +4,14 @@ DADA: HW 9: Hashes
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 
 
-### Purpose
+## Purpose
 
 In this assignment, you will be examining some of the issues surrounding hashes and their security applications.
 
 Note that due to the time issues related to task 2, there will be no extensions granted on this assignment.  Task 2 will take some hours of the computer thinking, and if you wait to the last minute to start, you will end up with a late assignment.
 
 
-### Task 1: CRC insecurity
+## Task 1: CRC insecurity
 
 Your job is to write a C/C++ program (necessary for speed reasons) that, when given an input file and a CRC checksum, will modify that message, and ensure that the modified version matches the CRC checksum.
 
@@ -59,7 +59,7 @@ A few hints:
 Your program source code must be in a `crc.cpp` file, and the binary must be called `crc`.  See the Makefile section, below.
 
 
-### Task 2: MD5 collisions
+## Task 2: MD5 collisions
 
 How easy is it to create a malicious program with a specific MD5 hash?  In this part we'll find out.
 
@@ -133,7 +133,7 @@ Check the MD5 checksums of the files "good" and "evil"; they should be the same.
 Run the programs "good" and "evil" - they should exhibit the two different behaviors that you programmed in step 2. 
 
 
-### Task 3: Implement SHA-1
+## Task 3: Implement SHA-1
 
 Although [SHA-1](http://en.wikipedia.org/wiki/Sha-1|text=SHA-1) is not used as much in practice these days, we are going to implement it.  This will give you the idea as to how a more secure hash function works, without having to deal with the complexity of the [SHA-2](http://en.wikipedia.org/wiki/Sha-2|text=SHA-2) family of hash functions.
 
@@ -162,7 +162,7 @@ A few useful tidbits to keep in mind:
 Note that there will be partial credit for this part, so if you implement it, but it's somewhat off (meaning you think you have it correct, but the hash result is wrong), you will get a good amount of credit.  The point here is not for you to spend 10 hours debugging your algorithm.
 
 
-### Task 4: Miscellaneous write-up
+## Task 4: Miscellaneous write-up
 
 There are a few questions to answer, and they should be in a `misc.pdf` file.  Again, we are not looking for quantity, only quality; each one can reasonably be answered in 4 lines or less (assuming those 4 lines are correct, of course).
 
@@ -171,7 +171,7 @@ There are a few questions to answer, and they should be in a `misc.pdf` file.  A
 - What is a dictionary attack?  When is it used?
 
 
-### Submission
+## Submission
 
 The files that you need to submit are:
 

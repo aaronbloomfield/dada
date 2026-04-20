@@ -3,7 +3,7 @@ DADA: HW 1: Virtual Machine
 
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 
-### Introduction
+## Introduction
 
 VirtualBox is a free program that allows you to run another operating system on your machine without needing to reinstall anything.  You have to install the VirtualBox client, which installs like any other program and is available for many different platforms (Windows, Mac, Linux).  We provide you with a pre-configured VirtualBox image that contains an Ubuntu Linux installation that you can use for this course.
 
@@ -11,7 +11,7 @@ The homework part of this is at the end of this document.
 
 Parts of this document were inspired by, or copied with permission from, a similar homework by Charles Reiss (original was [here](https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/vm.html)).
 
-### Quick start
+## Quick start
 
 - A bit of terminology: the 'host' machine is the physical computer (laptop, desktop, etc.) that you are using.  The 'guest' machine is the virtual machine that is running in VirtualBox, and is often just called the 'guest operating system'.
     - You are welcome to try this on a netbook host machine, but the computing power of a netbook may not be enough
@@ -30,14 +30,14 @@ Parts of this document were inspired by, or copied with permission from, a simil
 - The login is 'student' (although you'll probably click on the 'L33t Hax0r' button on the login screen), and the password is 'password'.  You can click on the command-prompt icon on the bottom toolbar to get a terminal window.
     - The documentation is available online in either [HTML format](http://www.virtualbox.org/manual/UserManual.html) or [PDF format](http://download.virtualbox.org/virtualbox/UserManual.pdf), although most of the salient details are listed on this page.
 
-### Notes
+## Notes
 
 - No root password is set (you can use `sudo` instead); to change the root password, run `sudo passwd`.
 - The 'host key' is defined by your host machine's operating system (it's the right control button under Linux, for example).  This key is used for a number of contexts, including un-capturing the mouse.  To have VirtualBox warn you about what the host key is, you can reset all warnings via the VirtualBox help menu, and it will warn you about this at boot-up.  It may also be listed in the lower-right of the VirtualBox window.
 - We did not install the latest version of Ubuntu, but instead installed the Long-Term Support (LTS) version, which is 16.04.  The difference is that the LTS versions are supported for far longer (3 years or so) than the non-LTS versions (which are only supported for a year or so).  For this class, there won't be a noticeable difference between 16.04 and more recent versions.
 - Sound and network should work automatically, as the VirtualBox program will connect those to your host machine's sound and network device drivers.
 
-### VT-x support
+## VT-x support
 
 For 64-bit VMs, VirtualBox requires some hardware support from your processor. This support is present on almost all processors made recently (including all laptop or desktop processors introduced by Intel since 2013). However, some computer manufacturers disable this support by default. When they do this, you can usually re-enable the feature in BIOS or "the Setup Utility".
 
@@ -49,7 +49,7 @@ If you have trouble setting getting 64-bit VMs to work on your machine, please d
 
 In the unlikely event that you have a laptop that does not support running 64-bit VMs with VirtualBox, we will make alternate arrangements such as making the assignments only use 32-bit, or finding a way for you to do the assignments by remote logging into lab machines.
 
-### How-Tos
+## How-Tos
 
 - To load a terminal (a.k.a. command prompt): it's towards the bottom of the menu on the left-hand launcher column.
 - To load emacs: it's also in the menu on the left-hand launcher column, right above the terminal launcher icon
@@ -61,7 +61,7 @@ In the unlikely event that you have a laptop that does not support running 64-bi
 - Make emacs show one screen (and not be a split-screen): press control-x then press '1' (this should not be necessary, by the way)
 
 
-### Transferring files back and forth
+## Transferring files back and forth
 
 A few options:
 
@@ -77,12 +77,12 @@ A few options:
     - at that point, the standard dropbox registration wizard will appear
 
 
-### Image creation details
+## Image creation details
 
 [Here](../docs/virtualbox-image-details.html) ([md](../docs/virtualbox-image-details.md)) are the details of how the image was created.
 
 
-### C exercise
+## C exercise
 
 - Open a terminal window.
 - Open a text editor, such as gedit or emacs, and create a file called hello_world.c in your home directory containing the following:
@@ -106,6 +106,6 @@ A few options:
 - Submit the screen shot via Collab as your submission for this assignment.
 
 
-### Items to submit
+## Items to submit
 
 Just the screen shot taken as the last step of the above section.  To make it viable for us to grade, please name it hw1.png or hw1.jpg (but make sure that the file type matches the extension).

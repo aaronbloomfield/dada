@@ -3,7 +3,7 @@ DADA: HW 3: Tricky Jump
 
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 
-### Introduction
+## Introduction
 
 This assignment will explore what it takes to create a stealthy virus that employs a "tricky jump." A tricky jump is a form of hijacking in which a jump is inserted to call some virus code. The jump is inserted in such a way that after the virus code runs, the program continues normal execution, thereby maintaining stealth.
 
@@ -11,7 +11,7 @@ This program ***MUST*** run on the [VirtualBox image](../docs/virtualbox-image-d
 
 This homework was taken, with permission, from [a homework created by Charles Reiss](https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/tricky.html), which was taken -- again, with permission -- from one created by Jack Davidson.
 
-### Task
+## Task
 A "tricky jump" can be efficiently implemented (only six bytes) as:
 ```
 pushq $AddressOfVirusFunction
@@ -82,7 +82,7 @@ Also, answer the following questions:
 
 3. If your infect.c has a hard-coded offset or something similar, how would you automate finding the location in `target.exe` to overwrite with a tricky jump so that it would work on other target programs? (For this question, ignore the problem of fixing the inserted "virus" code to work in other executables.)
 
-### Submission
+## Submission
 Submit the following files:
 
 - Your `infect.c` or `infect.cpp` (we don't care if you do it in C or C++, but it must be in one of those)
@@ -93,7 +93,7 @@ The names matter, as the autograder will mark points off if they are not what is
 
 When we run your program, we will put the specified `target.exe` in the same directory as the `a.out` executable, and we will expect the result to be a file named `target-infected.exe`.
 
-### Methodology and Hints
+## Methodology and Hints
 
 1. You should use the utility objdump to examine the executable `target.exe`. The option `--disassemble` is useful. In particular, you need to determine the starting address of the virus code. The dissasembly will also help you determine the opcodes of the instructions that you need to insert (i.e., a `push` instruction and a `ret` instruction). You may wish to consult the objdump manual (`man objdump`).
 

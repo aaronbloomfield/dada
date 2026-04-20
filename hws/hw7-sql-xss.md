@@ -4,14 +4,14 @@ DADA: HW 7: SQL Injection & XSS
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 
 
-### Introduction
+## Introduction
 
 There are three parts to this assignment.  As part of this assignment, you will have to create a document, called websecurity.pdf, and submit that file.  We aren't looking for any fancy write-up - just an explanation of what you did, and the results you got.  That being said, it should be legible.  So make sure you indicate what answers are for what questions, etc.
 
 Your final report should be a PDF file.  It need not be long, but it must answer the questions posed below.
 
 
-### Part 1: SQL Injection Attack
+## Part 1: SQL Injection Attack
 
 First, you should be familiar with SQL and SQL injection attacks.  For review, look at the first half of the [SQL & XSS slide set](..//slides/10-sql-and-xss.html#/).
 
@@ -33,7 +33,7 @@ Honor pledge details: you are given permission to execute an SQL injection attac
 
 Lastly, please note that all entries are logged (and are not logged in the DB!).  Thus, if the DB is later erased, we can verify that you did (or did not!) properly execute the SQL injection attack.
 
-### Part 2: Cross-site Scripting (XSS) Attack
+## Part 2: Cross-site Scripting (XSS) Attack
 
 **NOTE:** Some modern browsers have anti-XSS capability built in that prevents this type of attack.  So if things are working, try a different browser.  Chrome, in particular, does not work well with this type of attack, but Firefox is fine.
 
@@ -68,7 +68,7 @@ A few notes:
 
 Honor pledge details: you are given permission to execute XSS attacks against this particular URL for this assignment.
 
-### Part 3: Packet Sniffing
+## Part 3: Packet Sniffing
 
 For this part, we are going to 'listen' to network traffic, and see what interesting information we can find.  We will use a UNIX utility called tcpdump.  This utility will print out all the network traffic on a given interface.  tcpdump must be run as root; thus, you probably cannot run it on any UVa server.  You can download the tcpdump.zip file from Collab's resources -- that file is NOT in this repo due to it's size.  This file contains a dump of a tcpdump session.  We will be analyzing this file.
 
@@ -131,6 +131,6 @@ Lastly, note that 'sextans' is the name of one of my routers (all my machines ar
 
 Honor pledge details: you are given permission to search the tcpdump.txt file to answer the above questions for this assignment.  After that, you will need to delete the file.
 
-### Submission
+## Submission
 
 You should submit a file called websecurity.pdf.  Answers to all the above questions should be in that file.

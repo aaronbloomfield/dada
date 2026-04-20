@@ -3,18 +3,18 @@ DADA: HW 10: Format Print Attack
 
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 
-### Introduction
+## Introduction
 
 In this assignment, you learn and demonstrate how format string vulnerabilities can be exploited.
 Assignment Resources
 
-### Resources
+## Resources
 
 - The [course slides on format string vulnerabilities](../slides/15-exploits.html#/thirdgen)
 - [This article](https://www.cs.virginia.edu/~cr4bd/4630/S2017/assignments/format/formatstring-1.2.pdf), "Exploiting Format String Vulnerabilities" by scut / team teso. Beware of the differences between 32 and 64-bit X86 when using this article.
 - [This tutorial](http://www.infond.fr/2010/07/tutorial-exploitation-format-string.html). Beware of the differences between 32 and 64-bit X86 when using this article.
 
-### Details
+## Details
 
 1. Like the buffer overflow assignment, this assignment is likely to be very sensitive to the exact environemnt used. Your exploit must work on the Ubuntu 16.04 LTS environment with the exact executable file we provide.
 
@@ -65,12 +65,12 @@ This garbled output is a normal consequence of the attack and expected in your s
 
 6. Using the hints below is strongly recommended.
 
-### Note
+## Note
 
 You are welcome to start with the example from the [course slides on format string vulnerabilities](../slides/15-exploits.html#/thirdgen) -- specifically, the [exploitable.c](../slides/code/exploits/exploitable.c) ([html](../slides/code/exploits/exploitable.c.html)) file that has the vulnerability, and the [attack.c](../slides/code/exploits/attack.c) ([html](../slides/code/exploits/attack.c.html)) file that supplies the exploit.  Note, however, that the exploitable program there was compiled with different compiler flags than the executable provided for this homework.  This means that there are *extra* values on the stack between where one would expect the 7th parameter to start and where the input buffer (which is really a local variable in the caller) really is.  How many spots is for you to figure out...
 
 
-### Hints
+## Hints
 
 1. The supplied executable contains a global variable called `defaultLetterGrade`. This is, by far, the easiest target for your format string exploit.
 
@@ -96,7 +96,7 @@ You are welcome to start with the example from the [course slides on format stri
 
 1. To see if you're overwriting the correct location, you can try replacing the %n you're using to write a value with something like `%016lx` to see the address you would end up writing to. (Be careful not to change where the address is relative to the start of the string when you do so.)
 
-### Submission
+## Submission
 
 Submit a C file called `attack-format-string.c`, which will produce to stdout an input for the `format-string-vulnerability.exe` that will cause the supplied to output your name and a recommendation for a grade of A.  Also submit a `Makefile` that will compile it to `attack-format-string`, as the compilation command will just be `make`.
 

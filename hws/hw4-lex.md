@@ -3,13 +3,13 @@ DADA: HW 4: Lex and recognizing viruses
 
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 
-### Introduction
+## Introduction
 
 This assignment will teach you to recognize assembly language code patterns unique to viruses using regular expressions.  The regular expressions will be defined using flex, a modern version of the well known utility lex. The assignment will serve as a basis for expansion in future assignments.
 
 The reference platform for this project is the 64-bit Linux VirtualBox image.  Although most viruses are for the Windows platform, for reasons described in class, we are using the Linux platform to make this assignment easier to perform.  However, we will be examining Windows executable files.
 
-### Virus Code Patterns
+## Virus Code Patterns
 
 This assignment will focus on the recognition of just two assembly language code patterns that are not common in legitimate application code, but are common in the viruses we have studied in recent lectures.
 
@@ -33,7 +33,7 @@ mov dword ptr [eax], edx
 
 In this example, register edx has already been initialized with the address of the virus-supplied interrupt handler, and it is being written into the IVT entry at address 4Ch. We are not concerned with the particular registers used; however, the register initialized with the value 4Ch must be the same register used in the ensuing instruction as the pointer to memory, else this code would not fit the pattern of an interrupt hook.
 
-### Using flex on dumpbin output
+## Using flex on dumpbin output
 
 1. The code we are looking at is a disassembly of a PE32 file.  The text disassembly of the file is done by a Windows utility called `dumpbin`, which is similar in principle to the `objdump` file on Linux.  Since you may not have a Windows machine, we are providing the output in a [patterns.dumpbin.txt](patterns.dumpbin.txt) file
 
@@ -45,7 +45,7 @@ In this example, register edx has already been initialized with the address of t
 
 6. Create a Makefile that will compile your code upon entering 'make'.  The executable should be called 'a.out'.
 
-### Item to Submit
+## Item to Submit
 
 In addition to your Makefile, the one code file is called `patterns.l`.  It should read in the virus file from standard input, and write all output to standard output.  You should be able to compile and run your code with the following commands (which should be in your Makefile):
 

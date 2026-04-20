@@ -29,7 +29,7 @@
 <h1 id="dada-hw-6-binary-lex">DADA: HW 6: “Binary” Lex</h1>
 <p><a href="index.html">Go up to the main DADA homeworks page</a> (<a
 href="index.md">md</a>)</p>
-<h3 id="introduction">Introduction</h3>
+<h2 id="introduction">Introduction</h2>
 <p>This assignment is an extension of <a href="hw4-lex.md">HW 4: Lex</a>
 (<a href="hw4-lex.html">html</a>). You will write a Lex pattern to
 recognize the same patterns in HW 4, plus two more, but this time in
@@ -38,7 +38,7 @@ recognize the same patterns in HW 4, plus two more, but this time in
 VirtualBox image. Although most viruses are for the Windows platform,
 for reasons described in class, we are using the Linux platform to make
 this assignment easier to perform.</p>
-<h3 id="part-1-binary-code">Part 1: Binary Code</h3>
+<h2 id="part-1-binary-code">Part 1: Binary Code</h2>
 <p>One can certainly write a program to analyze binary code. However,
 this is very time consuming – and can be quite frustrating. Instead, we
 will recognize the virus patterns from a stream of ASCII hex digits.
@@ -64,7 +64,7 @@ arbitrarily large, so do not buffer the input before outputting it.</p>
 binary, but a representation of the binary code – hence why the word
 binary was expressed in quotes above.</p>
 <p>You will submit filter.c or filter.cpp for this part.</p>
-<h3 id="part-2-writing-some-x64-code">Part 2: Writing some x64 code</h3>
+<h2 id="part-2-writing-some-x64-code">Part 2: Writing some x64 code</h2>
 <p>Write some x64 code that has five assembly patterns to search for.
 You can take the main.cpp and x64.s from <a href="hw5-obfuscation.md">HW
 5: obfuscation</a> (<a href="hw5-obfuscation.html">html</a>). Your
@@ -81,8 +81,8 @@ patterns (or you can come back to this part to put them in).</p>
 <p>You will submit main.cpp and x64.s for this part. The Makefile,
 described below, will compile these into a executable called
 <code>x64</code>.</p>
-<h3 id="part-3-determining-the-patterns-to-find">Part 3: Determining the
-patterns to find</h3>
+<h2 id="part-3-determining-the-patterns-to-find">Part 3: Determining the
+patterns to find</h2>
 <p>The next step is to figure out which <em>hex</em> patterns you will
 need to scan for. In other words, you will need to determine what the
 hex patterns are for the three provided patterns that you want to search
@@ -107,7 +107,7 @@ same line.</p>
 look at. Please also include the nasm opcodes so that we know what hex
 digits go with which opcode patterns.</p>
 <p>You will submit patterns.txt for this part.</p>
-<h3 id="part-4-binary-lex-scanner">Part 4: “Binary” Lex scanner</h3>
+<h2 id="part-4-binary-lex-scanner">Part 4: “Binary” Lex scanner</h2>
 <p>Using flex, you will write a scanner to detect the a total of five
 patterns in the provided input stream. Your code will be in a scanner.l
 flex file, which will be compiled into a <code>scanner</code> executable
@@ -124,7 +124,7 @@ is found, you should print out which pattern, the byte number (from the
 beginning of the file), and the particular hex pattern that was
 matched.</p>
 <p>You will submit scanner.l for this part.</p>
-<h3 id="part-5-makefile">Part 5: Makefile</h3>
+<h2 id="part-5-makefile">Part 5: Makefile</h2>
 <p>You will need to include a Makefile, which will compile your three
 programs. Part 1 should compile into an executable named
 <code>filter</code>, part 2 into an executable named <code>x64</code>,
@@ -135,7 +135,7 @@ at the Makefile from <a href="hw5-obfuscation.md">HW 5: obfuscation</a>
 (<a href="hw5-obfuscation.html">html</a>) for some ideas (but you don’t
 need a <code>make run</code> target for this homework).</p>
 <p>You will submit a Makefile for this part.</p>
-<h3 id="items-to-submit">Items to submit</h3>
+<h2 id="items-to-submit">Items to submit</h2>
 <p>The files you should submit are:</p>
 <ul>
 <li>filter.c or filter.cpp from part 1</li>

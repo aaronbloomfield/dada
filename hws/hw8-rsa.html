@@ -29,7 +29,7 @@
 <h1 id="dada-hw-8-rsa">DADA: HW 8: RSA</h1>
 <p><a href="index.html">Go up to the main DADA homeworks page</a> (<a
 href="index.md">md</a>)</p>
-<h3 id="purpose">Purpose</h3>
+<h2 id="purpose">Purpose</h2>
 <p>This assignment will focus on the implementation and the
 vulnerabilities of the RSA algorithm. Specifically, you will have to
 implement RSA key generation, RSA encryption and decryption, a
@@ -40,7 +40,7 @@ if you want to use another language!</p>
 <p>As Java is meant to be cross-platform, there is no specific reference
 platform for this assignment. We will be using Java 1.8 to compile and
 run your program.</p>
-<h3 id="prerequisites-to-review">Prerequisites to Review</h3>
+<h2 id="prerequisites-to-review">Prerequisites to Review</h2>
 <p>You should be familiar with both how the RSA algorithm works, as well
 as the man‐in‐the‐middle attack. These were both discussed in <a
 href="../slides/11-encryption.html#/">the encryption lecture</a>, and
@@ -59,7 +59,7 @@ class</a>.</p>
 not cryptographically secure, but we will continue to use it for this
 assignment, as it will be easier to use than the more secure algorithms
 for the purposes of the work herein.</p>
-<h3 id="assignment-details">Assignment Details</h3>
+<h2 id="assignment-details">Assignment Details</h2>
 <p>For this assignment, you must implement five aspects of the RSA
 algorithm. This assignment is to be done in Java, as you will need to
 use the BigInteger class. Your class should be called RSA, and should be
@@ -138,7 +138,7 @@ communication between the communicating parties will be by writing to,
 and then reading from, the given files. While the other part of the key
 is easily available (the files are all in the same directory), you
 obviously can’t use the private key for cracking the message.</p>
-<h3 id="command-line-parameters">Command line parameters</h3>
+<h2 id="command-line-parameters">Command line parameters</h2>
 <p>The program will take in a number of command‐line parameters. Note
 that the command-line parameters are parsed <strong>in order</strong> -
 this means that if you call <code>java RSA -keygen 10 -verbose</code>,
@@ -306,7 +306,7 @@ combinations of command line parameters (trying to decrypt but not
 specifying a key), we would encourage you to put some sanity
 error‐checking code in there for your own sanity while developing the
 program.</p>
-<h3 id="some-java-code">Some Java code</h3>
+<h2 id="some-java-code">Some Java code</h2>
 <p>We are providing two methods for you to use in your homework.</p>
 <p>The first provided method we are supplying will take a byte array
 (which is returned by Java’s MessageDigest routines), and convert it to
@@ -398,7 +398,7 @@ log<sub>2</sub><em>n</em>/log<sub>2</sub>256, the latter of which is
 what was mentioned in class. As mentioned below, you can assume that we
 will always use keys that support a block size of at least 2.</li>
 </ul>
-<h3 id="interoperability">Interoperability</h3>
+<h2 id="interoperability">Interoperability</h2>
 <p>We want to be sure that we can all encode and decode each other’s
 messages. To that extent, we have a few requirements for the files
 produced.</p>
@@ -437,7 +437,7 @@ worry about binary files. But there may be whitespace as well: newlines,
 tabs, linefeeds, etc. Make sure that your code does not have UTF-8
 characters in it! Given a file, you can tell what type of characters it
 has via the <code>file foo.txt</code> command.</p>
-<h3 id="examples">Examples</h3>
+<h2 id="examples">Examples</h2>
 <p>Here is a private key generated via the above requirements; you can
 name this file <code>test-private.key</code>:</p>
 <pre><code>2276590825355545213479073
@@ -466,7 +466,7 @@ with the above private key; you can name this
 <p>If your code follows these conventions, then you should be able to
 properly decrypt that message with the following command:
 <code>java RSA -key test -input ciphertext.txt -output plaintext.txt -decrypt</code>.</p>
-<h3 id="submission-requirements">Submission requirements</h3>
+<h2 id="submission-requirements">Submission requirements</h2>
 <p>You should submit two files: <code>RSA.java</code>, which contains
 all your Java code, and a shell script named
 <code>man‐in‐the‐middle‐attack.sh</code>. The compilation command will

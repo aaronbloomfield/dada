@@ -37,7 +37,7 @@ homework will write an obfuscator, which will take x64 code and modify
 it so that it can <em>not</em> be recognized in such a manner. Your
 program will read in an x64 assembly file, add obfuscation to the
 program, and print the output.</p>
-<h3 id="program-requirements">Program requirements</h3>
+<h2 id="program-requirements">Program requirements</h2>
 <p>The program can be written in any language that you would like, with
 the following restrictions:</p>
 <ul>
@@ -112,7 +112,7 @@ probably easier to not output them). We are going to run the output of
 your code through NASM, so it needs to compile. Furthermore, your output
 should conform to the x64 formatting guidelines above, as we will try to
 run your code through your program a second time.</p>
-<h3 id="sample-execution">Sample execution</h3>
+<h2 id="sample-execution">Sample execution</h2>
 <p>You can start with the sample code provided in <a
 href="http://aaronbloomfield.github.io/pdr/labs/lab08-64bit/index.html">CS
 2150 lab 8 (x64, part 1)</a>: Makefile, main.cpp, and vecsum.s. However,
@@ -161,7 +161,7 @@ done:
 Not only are you <em>not</em> expected to do that, but it will be
 impractical when you are doing more advanced obfuscations. We did it
 here for clarity in understanding the program that resulted.</p>
-<h3 id="tips-and-tricks">Tips and Tricks</h3>
+<h2 id="tips-and-tricks">Tips and Tricks</h2>
 <ul>
 <li>To deal with leading and trailing white space on a line, use
 <code>trim()</code> (or the equivalent in your language of choice).</li>
@@ -184,7 +184,7 @@ commands (much less any that modify the condition codes) between a
 <li>Using randomization is going to be necessary, otherwise it will just
 create another x64 program pattern to match exactly.</li>
 </ul>
-<h3 id="types-of-obfuscations">Types of obfuscations</h3>
+<h2 id="types-of-obfuscations">Types of obfuscations</h2>
 <p>The program above has as simple obfuscations as there can be: there
 are three types of NOPs: <code>nop</code> itself, adding zero, and
 multiplying by 1. You can imagine a bunch of other NOPs: subtracting 0,
@@ -205,7 +205,7 @@ obfuscation techniques that we discussed in lecture.</p>
 <p>It is likely that you will need to generate more complicated assembly
 routines to demonstrate your code obfuscation - you will be submitting
 these as well.</p>
-<h3 id="how-to-run-assembly">How to run assembly</h3>
+<h2 id="how-to-run-assembly">How to run assembly</h2>
 <p>There are three different platforms that people are using: Windows,
 Mac OS X, and Linux. As a result, there are differences in how to
 compile and run x64 assembly.</p>
@@ -216,7 +216,7 @@ compiles it into 64 bit assembly).</p>
 href="http://aaronbloomfield.github.io/pdr/labs/lab08-64bit/index.html">CS
 2150 lab 8 (x64, part 1)</a>, which discusses the various ways to
 compile x64 for the various platforms.</p>
-<h3 id="register-usage">Register usage</h3>
+<h2 id="register-usage">Register usage</h2>
 <p>Your obfuscations may need to use temporary registers for their
 computations. One way to do this is to trace the registers throughout
 the execution of the program and see which ones are not being used, but
@@ -233,7 +233,7 @@ subroutines that have more than three parameters.</p>
 <p>Note that you will have to assure that your provided assembly code
 (in x64.s and whatever you test with) also does not use these
 registers.</p>
-<h3 id="submission-requirements">Submission requirements</h3>
+<h2 id="submission-requirements">Submission requirements</h2>
 <p>You should submit the following files. <strong>BE SURE TO NAME THEM
 PROPERLY</strong>, including capitalization - otherwise, can can’t call
 our testing scripts on your code, and we’ll just give you a zero. For
@@ -275,7 +275,7 @@ program will have randomization), but give us as good an idea as you
 can. And see [How to create a PDF file]. Note that we will not know
 about an obfuscation technique unless it is listed here!</li>
 </ul>
-<h3 id="grading-guidelines">Grading guidelines</h3>
+<h2 id="grading-guidelines">Grading guidelines</h2>
 <p>Obfuscations types will yield the following points:</p>
 <ul>
 <li>trivial obfuscations (such as the x64 example given above): 2
@@ -311,7 +311,7 @@ compile, then you will get a very low score. Anybody can scramble a
 program so that it doesn’t compile. It will be far better to provide a
 small number of obfuscations that work properly rather than a lot that
 do not work.</p>
-<h3 id="execution">Execution</h3>
+<h2 id="execution">Execution</h2>
 <p>We are going to run your obfuscator on your provided source code
 (x64.s), and compile the result along with your main.cpp, and make sure
 that it works the same way that your original (un-obfuscated) x64.s and
@@ -321,7 +321,7 @@ we are going to obfuscate our code <em>multiple times</em> – meaning we
 will take the output of our obfuscated assembly code and run it through
 the obfuscator again and again. It should produce the same result each
 time.</p>
-<h3 id="makefile">Makefile</h3>
+<h2 id="makefile">Makefile</h2>
 <p>Below is a sample Makefile for an obfuscator written in C++. You are
 certainly welcome to use a more complicated Makefile; this is the
 minimum required for this assignment.</p>

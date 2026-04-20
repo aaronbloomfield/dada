@@ -4,14 +4,14 @@ DADA: HW 6: "Binary" Lex
 [Go up to the main DADA homeworks page](index.html) ([md](index.md))
 
 
-### Introduction
+## Introduction
 
 This assignment is an extension of [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)).  You will write a Lex pattern to recognize the same patterns in HW 4, plus two more, but this time in "binary" form.
 
 The reference platform for this project is the 64-bit Linux VirtualBox image.  Although most viruses are for the Windows platform, for reasons described in class, we are using the Linux platform to make this assignment easier to perform.
 
 
-### Part 1: Binary Code
+## Part 1: Binary Code
 
 One can certainly write a program to analyze binary code.  However, this is very time consuming -- and can be quite frustrating.  Instead, we will recognize the virus patterns from a stream of ASCII hex digits.  This part of the assignment is to be able to produce that stream.
 
@@ -33,7 +33,7 @@ The next programs will analyze this stream of data, which is not true binary, bu
 You will submit filter.c or filter.cpp for this part.
 
 
-### Part 2: Writing some x64 code
+## Part 2: Writing some x64 code
 
 Write some x64 code that has five assembly patterns to search for.  You can take the main.cpp and x64.s from [HW 5: obfuscation](hw5-obfuscation.md) ([html](hw5-obfuscation.html)).  Your program doesn't have to do anything, really, but must not take in any input.  The goal here is for you to be able to specify the exact assembly opcodes in your x64.s file.  You can just have your main.ccp print out "hello world" or similar, as long as it is linked (via the Makefile) with x64.s.  You should include the three patterns from [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)) (interrupt hook with eax, interrupt hook with ebx, and a tricky jump), as well as the two others that you are going to create in part 3.
 
@@ -42,7 +42,7 @@ You may want to read ahead to part 3 to determine the other two patterns (or you
 You will submit main.cpp and x64.s for this part.  The Makefile, described below, will compile these into a executable called `x64`.
 
 
-### Part 3: Determining the patterns to find
+## Part 3: Determining the patterns to find
 
 The next step is to figure out which *hex* patterns you will need to scan for.  In other words, you will need to determine what the hex patterns are for the three provided patterns that you want to search for, plus two more.  The three known patterns are the ones from [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)): an interrupt hook with eax, an interrupt hook with ebx, and a tricky jump.
 
@@ -57,7 +57,7 @@ You will need to put these patterns in a patterns.txt file for us to look at.  P
 You will submit patterns.txt for this part.
 
 
-### Part 4: "Binary" Lex scanner
+## Part 4: "Binary" Lex scanner
 
 Using flex, you will write a scanner to detect the a total of five patterns in the provided input stream.  Your code will be in a scanner.l flex file, which will be compiled into a `scanner` executable in the same manner as in [HW 4: Lex](hw4-lex.md) ([html](hw4-lex.html)) (specifically, don't include a `main()`, compile with `flex scanner.l` and then `gcc -o scanner lex.yy.c -lfl`).  Your program will be run as follows:
 
@@ -72,14 +72,14 @@ Thus, make sure your filter program from part 1 works!  When a pattern is found,
 You will submit scanner.l for this part.
 
 
-### Part 5: Makefile
+## Part 5: Makefile
 
 You will need to include a Makefile, which will compile your three programs.  Part 1 should compile into an executable named `filter`, part 2 into an executable named `x64`, and part 4 into an executable named `scanner` (there is no program to compile for part 3).  Please ensure that the executable names are correct, as those are the programs we are going to run!  You can look at the Makefile from [HW 5: obfuscation](hw5-obfuscation.md) ([html](hw5-obfuscation.html)) for some ideas (but you don't need a `make run` target for this homework).
 
 You will submit a Makefile for this part.
 
 
-### Items to submit
+## Items to submit
 
 The files you should submit are:
 

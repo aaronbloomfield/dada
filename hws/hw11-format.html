@@ -30,10 +30,10 @@
 Attack</h1>
 <p><a href="index.html">Go up to the main DADA homeworks page</a> (<a
 href="index.md">md</a>)</p>
-<h3 id="introduction">Introduction</h3>
+<h2 id="introduction">Introduction</h2>
 <p>In this assignment, you learn and demonstrate how format string
 vulnerabilities can be exploited. Assignment Resources</p>
-<h3 id="resources">Resources</h3>
+<h2 id="resources">Resources</h2>
 <ul>
 <li>The <a href="../slides/15-exploits.html#/thirdgen">course slides on
 format string vulnerabilities</a></li>
@@ -47,7 +47,7 @@ href="http://www.infond.fr/2010/07/tutorial-exploitation-format-string.html">Thi
 tutorial</a>. Beware of the differences between 32 and 64-bit X86 when
 using this article.</li>
 </ul>
-<h3 id="details">Details</h3>
+<h2 id="details">Details</h2>
 <ol type="1">
 <li><p>Like the buffer overflow assignment, this assignment is likely to
 be very sensitive to the exact environemnt used. Your exploit must work
@@ -112,7 +112,7 @@ different.</p>
 <ol start="6" type="1">
 <li>Using the hints below is strongly recommended.</li>
 </ol>
-<h3 id="note">Note</h3>
+<h2 id="note">Note</h2>
 <p>You are welcome to start with the example from the <a
 href="../slides/15-exploits.html#/thirdgen">course slides on format
 string vulnerabilities</a> – specifically, the <a
@@ -127,7 +127,7 @@ for this homework. This means that there are <em>extra</em> values on
 the stack between where one would expect the 7th parameter to start and
 where the input buffer (which is really a local variable in the caller)
 really is. How many spots is for you to figure out…</p>
-<h3 id="hints">Hints</h3>
+<h2 id="hints">Hints</h2>
 <ol type="1">
 <li><p>The supplied executable contains a global variable called
 <code>defaultLetterGrade</code>. This is, by far, the easiest target for
@@ -176,7 +176,7 @@ replacing the %n you’re using to write a value with something like
 careful not to change where the address is relative to the start of the
 string when you do so.)</p></li>
 </ol>
-<h3 id="submission">Submission</h3>
+<h2 id="submission">Submission</h2>
 <p>Submit a C file called <code>attack-format-string.c</code>, which
 will produce to stdout an input for the
 <code>format-string-vulnerability.exe</code> that will cause the
