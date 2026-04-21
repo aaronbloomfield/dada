@@ -383,7 +383,7 @@ http://www.gnu.org/software/src-highlite">
 	<font color="#990000">(</font>yytext_ptr<font color="#990000">)</font> <font color="#990000">=</font> yy_bp<font color="#990000">;</font> <font color="#990000">\</font>
 	yyleng <font color="#990000">=</font> <font color="#990000">(</font>size_t<font color="#990000">)</font> <font color="#990000">(</font>yy_cp <font color="#990000">-</font> yy_bp<font color="#990000">);</font> <font color="#990000">\</font>
 	<font color="#990000">(</font>yy_hold_char<font color="#990000">)</font> <font color="#990000">=</font> <font color="#990000">*</font>yy_cp<font color="#990000">;</font> <font color="#990000">\</font>
-	<font color="#990000">*</font>yy_cp <font color="#990000">=</font> <font color="#DF0000">'</font><font color="#CC33CC">\0</font><font color="#DF0000">'</font><font color="#990000">;</font> <font color="#990000">\</font>
+	<font color="#990000">*</font>yy_cp <font color="#990000">=</font> <font color="#DF0000">'</font><font color="#C431C4">\0</font><font color="#DF0000">'</font><font color="#990000">;</font> <font color="#990000">\</font>
 	<font color="#990000">(</font>yy_c_buf_p<font color="#990000">)</font> <font color="#990000">=</font> yy_cp<font color="#990000">;</font>
 
 <b><font color="#000080">#define</font></b> YY_NUM_RULES <font color="#993399">3</font>
@@ -588,9 +588,9 @@ http://www.gnu.org/software/src-highlite">
 		<font color="#008A00">int</font> c <font color="#990000">=</font> <font color="#DF0000">'*'</font><font color="#990000">;</font> <font color="#990000">\</font>
 		<font color="#008080">size_t</font> n<font color="#990000">;</font> <font color="#990000">\</font>
 		<b><font color="#0000FF">for</font></b> <font color="#990000">(</font> n <font color="#990000">=</font> <font color="#993399">0</font><font color="#990000">;</font> n <font color="#990000">&lt;</font> max_size <font color="#990000">&amp;&amp;</font> <font color="#990000">\</font>
-			     <font color="#990000">(</font>c <font color="#990000">=</font> <b><font color="#000000">getc</font></b><font color="#990000">(</font> yyin <font color="#990000">))</font> <font color="#990000">!=</font> EOF <font color="#990000">&amp;&amp;</font> c <font color="#990000">!=</font> <font color="#DF0000">'</font><font color="#CC33CC">\n</font><font color="#DF0000">'</font><font color="#990000">;</font> <font color="#990000">++</font>n <font color="#990000">)</font> <font color="#990000">\</font>
+			     <font color="#990000">(</font>c <font color="#990000">=</font> <b><font color="#000000">getc</font></b><font color="#990000">(</font> yyin <font color="#990000">))</font> <font color="#990000">!=</font> EOF <font color="#990000">&amp;&amp;</font> c <font color="#990000">!=</font> <font color="#DF0000">'</font><font color="#C431C4">\n</font><font color="#DF0000">'</font><font color="#990000">;</font> <font color="#990000">++</font>n <font color="#990000">)</font> <font color="#990000">\</font>
 			buf<font color="#990000">[</font>n<font color="#990000">]</font> <font color="#990000">=</font> <font color="#990000">(</font><font color="#008A00">char</font><font color="#990000">)</font> c<font color="#990000">;</font> <font color="#990000">\</font>
-		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font> c <font color="#990000">==</font> <font color="#DF0000">'</font><font color="#CC33CC">\n</font><font color="#DF0000">'</font> <font color="#990000">)</font> <font color="#990000">\</font>
+		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font> c <font color="#990000">==</font> <font color="#DF0000">'</font><font color="#C431C4">\n</font><font color="#DF0000">'</font> <font color="#990000">)</font> <font color="#990000">\</font>
 			buf<font color="#990000">[</font>n<font color="#990000">++]</font> <font color="#990000">=</font> <font color="#990000">(</font><font color="#008A00">char</font><font color="#990000">)</font> c<font color="#990000">;</font> <font color="#990000">\</font>
 		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font> c <font color="#990000">==</font> EOF <font color="#990000">&amp;&amp;</font> <b><font color="#000000">ferror</font></b><font color="#990000">(</font> yyin <font color="#990000">)</font> <font color="#990000">)</font> <font color="#990000">\</font>
 			<b><font color="#000000">YY_FATAL_ERROR</font></b><font color="#990000">(</font> <font color="#DF0000">"input in flex scanner failed"</font> <font color="#990000">);</font> <font color="#990000">\</font>
@@ -660,7 +660,7 @@ http://www.gnu.org/software/src-highlite">
 <b><font color="#000080">#define</font></b> YY_RULE_SETUP <font color="#990000">\</font>
 	<b><font color="#0000FF">if</font></b> <font color="#990000">(</font> yyleng <font color="#990000">&gt;</font> <font color="#993399">0</font> <font color="#990000">)</font> <font color="#990000">\</font>
 		YY_CURRENT_BUFFER_LVALUE<font color="#990000">-&gt;</font>yy_at_bol <font color="#990000">=</font> <font color="#990000">\</font>
-				<font color="#990000">(</font>yytext<font color="#990000">[</font>yyleng <font color="#990000">-</font> <font color="#993399">1</font><font color="#990000">]</font> <font color="#990000">==</font> <font color="#DF0000">'</font><font color="#CC33CC">\n</font><font color="#DF0000">'</font><font color="#990000">);</font> <font color="#990000">\</font>
+				<font color="#990000">(</font>yytext<font color="#990000">[</font>yyleng <font color="#990000">-</font> <font color="#993399">1</font><font color="#990000">]</font> <font color="#990000">==</font> <font color="#DF0000">'</font><font color="#C431C4">\n</font><font color="#DF0000">'</font><font color="#990000">);</font> <font color="#990000">\</font>
 	YY_USER_ACTION
 
 <i><font color="#9A1900">/** The main scanner function which does all the work.</font></i>
@@ -764,7 +764,7 @@ do_action<font color="#990000">:</font>	<i><font color="#9A1900">/* This label i
 YY_DO_BEFORE_ACTION<font color="#990000">;</font> <i><font color="#9A1900">/* set up yytext again */</font></i>
 YY_RULE_SETUP
 <b><font color="#000080">#line</font></b> <font color="#993399">3</font> <font color="#DF0000">"uva-userid.l"</font>
-<font color="#DF0000">{</font> <b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#DF0000">"Found a UVa userid: %s</font><font color="#CC33CC">\n</font><font color="#DF0000">"</font><font color="#990000">,</font>yytext<font color="#990000">);</font> <font color="#DF0000">}</font>
+<font color="#DF0000">{</font> <b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#DF0000">"Found a UVa userid: %s</font><font color="#C431C4">\n</font><font color="#DF0000">"</font><font color="#990000">,</font>yytext<font color="#990000">);</font> <font color="#DF0000">}</font>
 	YY_BREAK
 <b><font color="#0000FF">case</font></b> <font color="#993399">2</font><font color="#990000">:</font>
 <i><font color="#9A1900">/* rule 2 can match eol */</font></i>
@@ -1169,7 +1169,7 @@ ECHO<font color="#990000">;</font>
 <i><font color="#9A1900">		 */</font></i>
 		<b><font color="#0000FF">if</font></b> <font color="#990000">(</font> <font color="#990000">(</font>yy_c_buf_p<font color="#990000">)</font> <font color="#990000">&lt;</font> <font color="#990000">&amp;</font>YY_CURRENT_BUFFER_LVALUE<font color="#990000">-&gt;</font>yy_ch_buf<font color="#990000">[(</font>yy_n_chars<font color="#990000">)]</font> <font color="#990000">)</font>
 			<i><font color="#9A1900">/* This was really a NUL. */</font></i>
-			<font color="#990000">*(</font>yy_c_buf_p<font color="#990000">)</font> <font color="#990000">=</font> <font color="#DF0000">'</font><font color="#CC33CC">\0</font><font color="#DF0000">'</font><font color="#990000">;</font>
+			<font color="#990000">*(</font>yy_c_buf_p<font color="#990000">)</font> <font color="#990000">=</font> <font color="#DF0000">'</font><font color="#C431C4">\0</font><font color="#DF0000">'</font><font color="#990000">;</font>
 
 		<b><font color="#0000FF">else</font></b>
 			<font color="#DF0000">{</font> <i><font color="#9A1900">/* need more input */</font></i>
@@ -1216,10 +1216,10 @@ ECHO<font color="#990000">;</font>
 		<font color="#DF0000">}</font>
 
 	c <font color="#990000">=</font> <font color="#990000">*(</font><font color="#008A00">unsigned</font> <font color="#008A00">char</font> <font color="#990000">*)</font> <font color="#990000">(</font>yy_c_buf_p<font color="#990000">);</font>	<i><font color="#9A1900">/* cast for 8-bit char's */</font></i>
-	<font color="#990000">*(</font>yy_c_buf_p<font color="#990000">)</font> <font color="#990000">=</font> <font color="#DF0000">'</font><font color="#CC33CC">\0</font><font color="#DF0000">'</font><font color="#990000">;</font>	<i><font color="#9A1900">/* preserve yytext */</font></i>
+	<font color="#990000">*(</font>yy_c_buf_p<font color="#990000">)</font> <font color="#990000">=</font> <font color="#DF0000">'</font><font color="#C431C4">\0</font><font color="#DF0000">'</font><font color="#990000">;</font>	<i><font color="#9A1900">/* preserve yytext */</font></i>
 	<font color="#990000">(</font>yy_hold_char<font color="#990000">)</font> <font color="#990000">=</font> <font color="#990000">*++(</font>yy_c_buf_p<font color="#990000">);</font>
 
-	YY_CURRENT_BUFFER_LVALUE<font color="#990000">-&gt;</font>yy_at_bol <font color="#990000">=</font> <font color="#990000">(</font>c <font color="#990000">==</font> <font color="#DF0000">'</font><font color="#CC33CC">\n</font><font color="#DF0000">'</font><font color="#990000">);</font>
+	YY_CURRENT_BUFFER_LVALUE<font color="#990000">-&gt;</font>yy_at_bol <font color="#990000">=</font> <font color="#990000">(</font>c <font color="#990000">==</font> <font color="#DF0000">'</font><font color="#C431C4">\n</font><font color="#DF0000">'</font><font color="#990000">);</font>
 
 	<b><font color="#0000FF">return</font></b> c<font color="#990000">;</font>
 <font color="#DF0000">}</font>
@@ -1580,7 +1580,7 @@ ECHO<font color="#990000">;</font>
 
 <b><font color="#0000FF">static</font></b> <font color="#008A00">void</font> <b><font color="#000000">yy_fatal_error</font></b> <font color="#990000">(</font><font color="#008080">yyconst</font> <font color="#008A00">char</font><font color="#990000">*</font> msg <font color="#990000">)</font>
 <font color="#DF0000">{</font>
-			<font color="#990000">(</font><font color="#008A00">void</font><font color="#990000">)</font> <b><font color="#000000">fprintf</font></b><font color="#990000">(</font> stderr<font color="#990000">,</font> <font color="#DF0000">"%s</font><font color="#CC33CC">\n</font><font color="#DF0000">"</font><font color="#990000">,</font> msg <font color="#990000">);</font>
+			<font color="#990000">(</font><font color="#008A00">void</font><font color="#990000">)</font> <b><font color="#000000">fprintf</font></b><font color="#990000">(</font> stderr<font color="#990000">,</font> <font color="#DF0000">"%s</font><font color="#C431C4">\n</font><font color="#DF0000">"</font><font color="#990000">,</font> msg <font color="#990000">);</font>
 	<b><font color="#000000">exit</font></b><font color="#990000">(</font> YY_EXIT_FAILURE <font color="#990000">);</font>
 <font color="#DF0000">}</font>
 
@@ -1596,7 +1596,7 @@ ECHO<font color="#990000">;</font>
 		yytext<font color="#990000">[</font>yyleng<font color="#990000">]</font> <font color="#990000">=</font> <font color="#990000">(</font>yy_hold_char<font color="#990000">);</font> <font color="#990000">\</font>
 		<font color="#990000">(</font>yy_c_buf_p<font color="#990000">)</font> <font color="#990000">=</font> yytext <font color="#990000">+</font> yyless_macro_arg<font color="#990000">;</font> <font color="#990000">\</font>
 		<font color="#990000">(</font>yy_hold_char<font color="#990000">)</font> <font color="#990000">=</font> <font color="#990000">*(</font>yy_c_buf_p<font color="#990000">);</font> <font color="#990000">\</font>
-		<font color="#990000">*(</font>yy_c_buf_p<font color="#990000">)</font> <font color="#990000">=</font> <font color="#DF0000">'</font><font color="#CC33CC">\0</font><font color="#DF0000">'</font><font color="#990000">;</font> <font color="#990000">\</font>
+		<font color="#990000">*(</font>yy_c_buf_p<font color="#990000">)</font> <font color="#990000">=</font> <font color="#DF0000">'</font><font color="#C431C4">\0</font><font color="#DF0000">'</font><font color="#990000">;</font> <font color="#990000">\</font>
 		yyleng <font color="#990000">=</font> yyless_macro_arg<font color="#990000">;</font> <font color="#990000">\</font>
 		<font color="#DF0000">}</font> <font color="#990000">\</font>
 	<b><font color="#0000FF">while</font></b> <font color="#990000">(</font> <font color="#993399">0</font> <font color="#990000">)</font>
